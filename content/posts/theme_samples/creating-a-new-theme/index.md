@@ -1,9 +1,9 @@
 ---
 author: Michael Henderson
 date: "2014-09-28"
-displayInList: true
+displayInList: false
 displayInMenu: false
-draft: true
+draft: false
 dropCap: true
 resources:
 - name: featuredImage

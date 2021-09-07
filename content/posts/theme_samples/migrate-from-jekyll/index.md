@@ -1,8 +1,8 @@
 ---
 date: "2014-03-10"
-displayInList: true
+displayInList: false
 displayInMenu: false
-draft: true
+draft: false
 resources:
 - name: featuredImage
   src: yan-ots-257617-unsplash.jpg

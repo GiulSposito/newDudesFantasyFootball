@@ -3,9 +3,9 @@ categories:
 - Development
 - golang
 date: "2014-04-02"
-displayInList: true
+displayInList: false
 displayInMenu: false
-draft: true
+draft: false
 resources:
 - name: featuredImage
   params:

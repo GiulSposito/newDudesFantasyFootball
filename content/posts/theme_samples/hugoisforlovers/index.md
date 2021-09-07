@@ -3,7 +3,7 @@ categories:
 - Development
 - golang
 date: "2014-04-02"
-displayInList: true
+displayInList: false
 displayInMenu: false
 draft: false
 featuredImage: img/andrew-neel-609846-unsplash.jpg
