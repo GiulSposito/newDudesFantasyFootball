@@ -7,7 +7,7 @@ description: Hugo combined with the Aether theme turns easy to write markdown in
   mathmatical symobols, equations, highlighted code, tables, lists, and much more.
 displayInList: true
 displayInMenu: false
-draft: false
+draft: true
 dropCap: true
 resources:
 - name: featuredImage

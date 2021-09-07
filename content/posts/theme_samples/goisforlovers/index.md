@@ -5,7 +5,7 @@ categories:
 date: "2014-04-02"
 displayInList: true
 displayInMenu: false
-draft: false
+draft: true
 resources:
 - name: featuredImage
   params:

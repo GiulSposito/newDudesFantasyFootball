@@ -3,7 +3,7 @@ author: Michael Henderson
 date: "2014-09-28"
 displayInList: true
 displayInMenu: false
-draft: false
+draft: true
 dropCap: true
 resources:
 - name: featuredImage

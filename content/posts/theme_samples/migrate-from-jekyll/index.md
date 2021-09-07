@@ -2,7 +2,7 @@
 date: "2014-03-10"
 displayInList: true
 displayInMenu: false
-draft: false
+draft: true
 resources:
 - name: featuredImage
   src: yan-ots-257617-unsplash.jpg

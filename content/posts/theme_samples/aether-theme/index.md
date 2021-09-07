@@ -7,7 +7,7 @@ description: ' Aether is new theme for Hugo that emphasizes motion, material, an
   on the content.'
 displayInList: true
 displayInMenu: false
-draft: false
+draft: true
 dropCap: true
 resources:
 - name: featuredImage
