@@ -1,6 +1,4 @@
 ---
-categories:
-- Features
 date: "2018-12-19T10:35:35-05:00"
 description: Hugo combined with the Aether theme turns easy to write markdown into
   powerful web pages.  KaTeX, Highlight.js, and Hugo provides the ability to create

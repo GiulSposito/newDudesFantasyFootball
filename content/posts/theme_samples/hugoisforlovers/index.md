@@ -1,7 +1,4 @@
 ---
-categories:
-- Development
-- golang
 date: "2014-04-02"
 displayInList: false
 displayInMenu: false
@@ -10,11 +7,6 @@ featuredImage: img/andrew-neel-609846-unsplash.jpg
 resources:
 - name: featuredImage
   src: andrew-neel-609846-unsplash.jpg
-tags:
-- go
-- golang
-- hugo
-- development
 title: Getting Started with Hugo
 ---
 

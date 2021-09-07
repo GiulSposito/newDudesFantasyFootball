@@ -1,7 +1,4 @@
 ---
-categories:
-- Development
-- golang
 date: "2014-04-02"
 displayInList: false
 displayInMenu: false
@@ -11,12 +8,6 @@ resources:
   params:
     description: Alt description for the featured image
   src: lucas-benjamin-565254-unsplash.jpg
-tags:
-- go
-- golang
-- templates
-- themes
-- development
 title: (Hu)go Template Primer
 ---
 
