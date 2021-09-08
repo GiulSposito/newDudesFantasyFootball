@@ -19,7 +19,7 @@ It's the 7th season (SEVENTH!!!) of **"It's football, dudes!" NFL Fantasy League
 
 ## Photo Gallery
 
-### NFL Kickoff 2016
+### NFL Kickoff 2019
 ![NFL Kickoff 2016](images/IMG_7120.JPG)
 
 
