@@ -1,7 +1,7 @@
 ---
 title: "Trophy Room"
 author: "Giuliano Sposito"
-date: '2020-12-31'
+date: '2021-09-02'
 slug: it-s-football-dudes-trophy-room-2020
 displayInList: yes
 displayInMenu: yes
@@ -17,6 +17,8 @@ resources:
   params:
     description: Its football, dudes! Trophy Room
 ---
+
+Remembering our champions...
 
 <!--more-->
 
