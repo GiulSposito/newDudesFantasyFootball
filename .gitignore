@@ -6,4 +6,5 @@
 Thumbs.db
 /public/
 /resources/
-/data/ 
+/data/
+/config/
