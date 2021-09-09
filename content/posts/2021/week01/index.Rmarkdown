@@ -121,3 +121,7 @@ _Last Update: `r lubridate::now()`_
 
 - [Matchup Simulations Pre TNF](/reports/2021/dudes_simulation_v5_week1_preTNF.html)
 
+## Database
+
+- [(xlsx) Players PPR Statistics](/reports/2021/week1_full_ppr.xlsx)
+- [(xlsx) Players RAW Data](/reports/2021/week1_rawdata.xlsx)
