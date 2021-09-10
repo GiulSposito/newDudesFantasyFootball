@@ -21,7 +21,7 @@ resources:
   src: kickoff.jpg
 params:
   week: 1
-  prefix: preTNF
+  prefix: posTNF
 ---
 
 
@@ -120,6 +120,7 @@ _Last Update: `r lubridate::now()`_
 ## Simulation
 
 - [Matchup Simulations Pre TNF](/reports/2021/dudes_simulation_v5_week1_preTNF.html)
+- [Matchup Simulations Pos TNF](/reports/2021/dudes_simulation_v5_week1_posTNF.html)
 
 ## Database
 

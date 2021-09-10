@@ -146,12 +146,12 @@ scrapYahooProjection <- function(.week, .yahooCookies){
     saveRDS("./data/yahoo_players_not_imported.rds")
   
   # bind scrap do yahoo com o player id (ffa)
-  scrp %>% 
+  yahooScrap <- scrp %>% 
     inner_join(yahoo_id_map, by=c("src_id"="yahoo_id")) %>% 
     mutate(position = if_else(position=="DEF","DST",position)) %>% 
     select(data_src, id, src_id, player, position, team, everything()) %>% 
-    filter(!is.na(id)) %>% 
-    return()
+    filter(!is.na(id))
   
+  return(yahooScrap)
 }
 

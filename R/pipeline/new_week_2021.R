@@ -176,19 +176,24 @@ rmarkdown::render(
 ### Raw Export
 
 library(xlsx)
+
+if(file.exists(glue("./static/reports/2021/week{week}_full_ppr.xlsx"))){
+  file.remove(glue("./static/reports/2021/week{week}_full_ppr.xlsx"))
+}
+
 site_ptsproj %>% 
   pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>% 
   inner_join(proj_table,.,by=c("id","pos")) %>% 
-  write.xlsx(glue("./static/reports/week{week}_full_ppr.xlsx"))
+  write.xlsx(glue("./static/reports/2021/week{week}_full_ppr.xlsx"))
 
-if(file.exists(glue("./static/reports/week{week}_rawdata.xlsx"))){
-  file.remove(glue("./static/reports/week{week}_rawdata.xlsx"))
+if(file.exists(glue("./static/reports/2021/week{week}_rawdata.xlsx"))){
+  file.remove(glue("./static/reports/2021/week{week}_rawdata.xlsx"))
 }
 
 map2( names(scraps), scraps,
       function(.pos, .data){
         print(.pos)
-        write.xlsx(.data, file = glue("./static/reports/week{week}_rawdata.xlsx"),
+        write.xlsx(.data, file = glue("./static/reports/2021/week{week}_rawdata.xlsx"),
                    sheetName = .pos, append=TRUE, row.names = FALSE)
         return(.pos)
       })
