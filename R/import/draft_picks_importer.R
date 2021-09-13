@@ -1,7 +1,11 @@
 library(rvest)
 library(stringr)
+library(tidyverse)
 
-draft_file <- "./import/draft_2021_recap.html"
+# chamada dentro da página de draft recap all rounds
+# https://fantasy.nfl.com/league/3940933/draftresults?draftResultsDetail=0&draftResultsTab=round&draftResultsType=results
+
+draft_file <- "./import/draftresults.html"
 
 read_html(draft_file) %>% 
   html_nodes("a.playerName") %>% 
@@ -25,13 +29,12 @@ read_html(draft_file) %>%
   as.integer() -> teamIds
 
 draft <- tibble(
-  round       = rep(1:8,each=15),
-  pick        = 1:120,
+  round       = rep(1:15,each=14),
+  pick        = 1:210,
   player.id   = playerIds,
   player.name = playerNames,
   team.id     = teamIds,
   team.name   = teamNames
 )
 
-draft
-
+saveRDS(draft, "./export/draft_2021.rds")
