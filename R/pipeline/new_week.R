@@ -146,3 +146,26 @@ rmarkdown::render(
     params = list(week=week, prefix=prefix)
   )
  
+
+### Raw Export
+
+if(file.exists(glue("./static/exports/2021/week{week}_full_ppr.csv"))){
+  file.remove(glue("./static/exports/2021/week{week}_full_ppr.csv"))
+}
+
+site_ptsproj %>% 
+  pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>% 
+  inner_join(proj_table,.,by=c("id","pos")) %>% 
+  write_csv(glue("./static/exports/2021/week{week}_full_ppr.csv"))
+
+if(file.exists(glue("./static/exports/2021/week{week}_rawdata.xlsx"))){
+  file.remove(glue("./static/exports/2021/week{week}_rawdata.xlsx"))
+}
+
+files <- map2( names(scraps), scraps,
+               function(.pos, .data){
+                 print(.pos)
+                 write_csv(.data, file = glue("./static/exports/2021/week{week}_{.pos}_rawdata.csv"))
+                 return(glue("./static/exports/2021/week{week}_{.pos}_rawdata.csv"))
+               })
+

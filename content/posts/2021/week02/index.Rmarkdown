@@ -124,7 +124,6 @@ _Last Update: `r lubridate::now()`_
 ## Data Base
 
 - [Full PPR Projection Table](/exports/2021/week2_full_ppr.csv)
-
 - [QB Raw Data](/exports/2021/week2_QB_rawdata.csv)
 - [WR Raw Data](/exports/2021/week2_WR_rawdata.csv)
 - [RB Raw Data](/exports/2021/week2_RB_rawdata.csv)
