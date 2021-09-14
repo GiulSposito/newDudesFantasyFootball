@@ -1,7 +1,7 @@
 ---
 title: 'Week 01 | Fantasy Top Players'
 author: "Giuliano Sposito"
-date: '2021-09-14'
+date: '2021-09-12'
 slug: s21_w01_top_players
 categories:
   - ranking
