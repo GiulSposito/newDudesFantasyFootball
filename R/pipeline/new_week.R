@@ -42,6 +42,12 @@ yahooScrap <- scrapYahooProjection(week, config$yahooCokies)
 scraps <- webScraps %>% 
   addScrapTable(yahooScrap) 
 
+# checking
+scraps %>% 
+  map_df(~select(.x, data_src, team, id), .id="pos") %>% 
+  count(data_src, pos) %>% 
+  pivot_wider(names_from = "pos",values_from="n")
+
 saveScraps(week, scraps)
 
 # PROJECT FANTASY POINTS
