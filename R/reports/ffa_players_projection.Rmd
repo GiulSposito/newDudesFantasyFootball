@@ -49,21 +49,24 @@ pprojs <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
   ungroup() %>% 
   filter( !(team %in% c("FA","FA*")) )  # havia lixo em alguns
 
-ppoints <- readRDS("./data/players_points.rds") %>%
-  filter(week==.week) %>% 
-  mutate(id = as.integer(id)) %>% 
-  #filter( points !=0 ) %>% 
-  rename( pts = weekPts ) %>% 
-  select( id, week, pts) %>% 
-  group_by( id ) %>% 
-  mutate( pts.mean = median(pts, na.rm = T),
-          pts.sd   = sd(pts, na.rm=T),
-          pts.max = max(pts, na.rm=T),
-          pts.min = min(pts, na.rm = T)) %>% 
-  ungroup() 
+projections <- pprojs
 
-projections <- ppoints %>% 
-  right_join(pprojs, by = "id")
+#
+# ppoints <- readRDS("./data/players_points.rds") %>%
+#   filter(week==.week) %>% 
+#   mutate(id = as.integer(id)) %>% 
+#   #filter( points !=0 ) %>% 
+#   rename( pts = weekPts ) %>% 
+#   select( id, week, pts) %>% 
+#   group_by( id ) %>% 
+#   mutate( pts.mean = median(pts, na.rm = T),
+#           pts.sd   = sd(pts, na.rm=T),
+#           pts.max = max(pts, na.rm=T),
+#           pts.min = min(pts, na.rm = T)) %>% 
+#   ungroup() 
+# 
+# projections <- ppoints %>% 
+#   right_join(pprojs, by = "id")
   
 ```
 
