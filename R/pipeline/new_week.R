@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 2
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "preWaivers"
+prefix <- "posWaivers"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -115,14 +115,6 @@ players_stats %>%
 # salva projecoes  
 saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 
-# PROJECTION REPORT ####
-rmarkdown::render(
-  input = "./R/reports/ffa_players_projection.Rmd",
-  output_file = glue("../../{destPath}/ffa_players_projection_week{week}.html"),
-  output_format = "flex_dashboard",
-  params = list(week=week)
-)
-
 # SIMULACAO ####
 
 # calcula tabela de pontuacao para todos os jogadores usa na simulacao
@@ -137,6 +129,28 @@ ptsproj <- site_ptsproj %>% # projecao dos sites
   # %>% # erros das projecoes nas semanas passadas
   # bind_rows(pts_flcl)       # floor e ceiling da projecao dos sites
 
+###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
+
+# aplica o teste sobre os pontos calculados e coloca em formato tidy
+tidy.ttest <- function(x) broom::tidy(t.test(x))
+# versao segura que nao falha se nao der para colocar NULL
+sttest <- safely(tidy.ttest)
+
+# pega os pontos projetados (com erros) da semana em questão
+ptsproj %>% 
+  filter(week==.week) %>% 
+  select(id, data_src, pts.proj) %>%
+  # para cada jogador aninha a projecao de pontos e aplica ttest
+  group_by(id) %>% 
+  nest() %>% 
+  ungroup() %>% 
+  mutate(stats = map(data, function(.x){
+    sttest(.x$pts.proj)$result
+  })) %>% 
+  unnest(stats) %>% 
+  select(id, estimate, conf.low, conf.high) %>% 
+  saveRDS(glue("./data/dudesffa_projpoints_week{week}.rds"))
+
 # simulação das partidas
 source(glue("./R/simulation/points_simulation_v{sim.version}.R"))
 sim <- simulateGames(week, season, ptsproj, matchups_games, teams_rosters, players_stats, my_player_ids, proj_table)
@@ -144,7 +158,16 @@ sim <- simulateGames(week, season, ptsproj, matchups_games, teams_rosters, playe
 # salva resultado
 saveRDS(sim, glue("./data/simulation_v{sim.version}_week{week}_{prefix}.rds"))
 
-# # constroi o relatório
+###### render reports
+# PROJECTION REPORT ####
+rmarkdown::render(
+  input = "./R/reports/ffa_players_projection.Rmd",
+  output_file = glue("../../{destPath}/ffa_players_projection_week{week}.html"),
+  output_format = "flex_dashboard",
+  params = list(week=week)
+)
+
+
 rmarkdown::render(
   input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
   output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),

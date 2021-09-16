@@ -21,7 +21,7 @@ resources:
   src: CLEatKC.jpg
 params:
   week: 2
-  prefix: preWaivers
+  prefix: posWaivers
 ---
 
 
@@ -119,6 +119,7 @@ _Last Update: `r lubridate::now()`_
 
 ## Simulation
 
+- [Matchup Simulations Pos Waivers](/reports/2021/dudes_simulation_v5_week2_posWaivers.html)
 - [Matchup Simulations Pre Waivers](/reports/2021/dudes_simulation_v5_week2_preWaivers.html)
 
 ## Data Base

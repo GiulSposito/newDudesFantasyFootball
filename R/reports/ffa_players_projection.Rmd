@@ -5,7 +5,7 @@ output:
     orientation: columns
     vertical_layout: fill
 params:
-  week: 0
+  week: 2
 ---
 
 ```{r setup, include=FALSE}
@@ -44,12 +44,10 @@ pprojs <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
       is.na(injuryGameStatus) ~ full_name
     )
   ) %>% 
-  group_by( id ) %>% 
-  mutate( r_pos = max(ceiling, points) ) %>% # posicao do label
-  ungroup() %>% 
   filter( !(team %in% c("FA","FA*")) )  # havia lixo em alguns
 
-projections <- pprojs
+projections <- pprojs %>% 
+  inner_join(readRDS(glue("./data/dudesffa_projpoints_week{week}.rds")), by="id")
 
 #
 # ppoints <- readRDS("./data/players_points.rds") %>%
@@ -90,6 +88,9 @@ plotProjections <- function(.proj, .pos, .title, .subtitle, .slice=32) {
   nu_y <- max(proj_data$ceiling, na.rm = T) / 18
   
   proj_data %>% 
+    group_by( id ) %>% 
+    mutate( r_pos = max(ceiling, points) ) %>% # posicao do label
+    ungroup() %>% 
     ggplot(aes(team=team)) +
     geom_pointrange(aes(x=reorder(pos_rank,desc(pos_rank)),
                     y=points, 
@@ -163,6 +164,105 @@ DEF {data-navmenu="ffanalytics"}
 plotProjections(projections, "DST", "Defenses", "week 9",32)
 
 ```
+
+
+QB {data-navmenu="dudesAnalytics"}
+========================
+
+```{r qb_dfa, fig.width=10}
+
+plotDFAProjections <- function(.proj, .pos, .slice=32) {
+  require(magrittr)
+  proj_data <- .proj %>% 
+    select(id, position, pos_rank ) %>% 
+    filter(position==.pos) %>% 
+    distinct() %>% 
+    top_n(-.slice, pos_rank) %>% 
+    select(id)
+  
+  proj_data %>% 
+    inner_join(.proj, by="id") -> proj_data
+  
+  nu_y <- max(proj_data$conf.low, na.rm = T) / 18
+  
+  proj_data %>% 
+    group_by( id ) %>% 
+    mutate( r_pos = max(conf.low, points) ) %>% # posicao do label
+    ungroup() %>% 
+    ggplot(aes(team=team)) +
+    geom_pointrange(aes(x=reorder(pos_rank,desc(pos_rank)),
+                    y=estimate, 
+                    ymin=conf.low, 
+                    ymax=conf.high, 
+                    color=fantasy.team), size=1) +
+    geom_text(aes(x=reorder(pos_rank,desc(pos_rank)), 
+              y=r_pos, 
+              color=fantasy.team, 
+              label=full_name), nudge_y = nu_y, nudge_x = 0.0, size=3) +
+    scale_colour_manual(values = TEAMS_COLOR_SCALE) +
+    theme_classic() + xlab("Rank") + ylab("Points") +
+    theme( panel.grid.major.x=element_line(colour="#EEEEEE") ) +
+    scale_x_discrete(breaks = seq(1,32,4) ) +
+    coord_flip() -> g
+  
+  g %>% 
+    ggplotly() %>% 
+    return()
+  
+}
+
+plotDFAProjections(projections, "QB", 14+14+5)
+
+```
+
+WR {data-navmenu="dudesAnalytics"}
+========================
+
+```{r wr_dfa, fig.width=10}
+
+plotDFAProjections(projections, "WR",(5*16))
+
+```
+
+RB {data-navmenu="dudesAnalytics"}
+========================
+
+```{r rb_dfa, fig.width=10}
+
+plotDFAProjections(projections, "RB", (5*16))
+
+```
+
+TE {data-navmenu="dudesAnalytics"}
+========================
+
+```{r te_dfa, fig.width=10}
+
+plotDFAProjections(projections, "TE",(3*14))
+
+```
+
+
+K {data-navmenu="dudesAnalytics"}
+========================
+
+```{r k_dfa, fig.width=10}
+
+plotDFAProjections(projections, "K",(2*14))
+
+```
+
+
+DEF {data-navmenu="dudesAnalytics"}
+========================
+
+```{r def_dfa, fig.width=10}
+
+plotDFAProjections(projections, "DST",32)
+
+```
+
+
 <!--
 
 ```{r historicSharpe, eval=FALSE}
