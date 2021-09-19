@@ -21,7 +21,7 @@ resources:
   src: CLEatKC.jpg
 params:
   week: 2
-  prefix: posTNF
+  prefix: preSundayGames
 ---
 
 
@@ -119,6 +119,9 @@ _Last Update: `r lubridate::now()`_
 
 ## Simulation
 
+prSundayGames
+
+- [Matchup Simulations Pre Sunday Games](/reports/2021/dudes_simulation_v5_week2_preSundayGames.html)
 - [Matchup Simulations Pos TNF](/reports/2021/dudes_simulation_v5_week2_posTNF.html)
 - [Matchup Simulations Pre TNF](/reports/2021/dudes_simulation_v5_week2_preTNF.html)
 - [Matchup Simulations Pos Waivers](/reports/2021/dudes_simulation_v5_week2_posWaivers.html)
@@ -133,3 +136,4 @@ _Last Update: `r lubridate::now()`_
 - [TE Raw Data](/exports/2021/week2_TE_rawdata.csv)
 - [K Raw Data](/exports/2021/week2_K_rawdata.csv)
 - [DEF Raw Data](/exports/2021/week2_DST_rawdata.csv)
+ 
