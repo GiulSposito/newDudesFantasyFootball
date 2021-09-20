@@ -21,7 +21,7 @@ resources:
   src: CLEatKC.jpg
 params:
   week: 2
-  prefix: preSNF
+  prefix: preMNF
 ---
 
 
@@ -119,8 +119,7 @@ _Last Update: `r lubridate::now()`_
 
 ## Simulation
 
-prSundayGames
-
+- [Matchup Simulations Pre MNF](/reports/2021/dudes_simulation_v5_week2_preMNF.html)
 - [Matchup Simulations Pre SNF](/reports/2021/dudes_simulation_v5_week2_preSNF.html)
 - [Matchup Simulations Pre Sunday Games](/reports/2021/dudes_simulation_v5_week2_preSundayGames.html)
 - [Matchup Simulations Pos TNF](/reports/2021/dudes_simulation_v5_week2_posTNF.html)
