@@ -148,7 +148,7 @@ ptsproj %>%
     sttest(.x$pts.proj)$result
   })) %>% 
   unnest(stats) %>% 
-  select(id, estimate, conf.low, conf.high) %>% 
+  select(id, estimate, conf.low, conf.high, data) %>% 
   saveRDS(glue("./data/dudesffa_projpoints_week{week}.rds"))
 
 # simulação das partidas
