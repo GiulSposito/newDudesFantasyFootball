@@ -18,7 +18,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 2
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "preMNF"
+prefix <- "final"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -77,5 +77,19 @@ rmarkdown::render(
   output_format = "flex_dashboard",
   params = list(week=week, prefix=prefix)
 )
+
+## Extrai o ranking
+
+teams_rosters %>% 
+  select(teamId, name, imageUrl, week.stats, season.stats) %>% 
+  unnest(week.stats) %>% 
+  rename(week.pts = pts ) %>% 
+  unnest(season.stats) %>% 
+  mutate(
+    across(c(rank, divisionRank, wins, losses, ties, waiverPriority), as.integer),
+    across(c(pts, ptsAgainst), as.numeric)
+  ) %>% 
+  rename(season.pts=pts, season.ptsAgainst=ptsAgainst) %>% 
+  saveRDS(glue("./data/rank_week{week}.rds"))
 
 
