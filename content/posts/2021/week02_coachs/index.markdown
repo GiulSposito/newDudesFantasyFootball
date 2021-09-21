@@ -30,6 +30,8 @@ params:
 
 
 
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">“Lamar, do you want to go for this?”<br><br>John Harbaugh trusted his QB when it mattered most 💪<br> <a href="https://t.co/ZkP0bhiMka">pic.twitter.com/ZkP0bhiMka</a></p>&mdash; PFF (@PFF) <a href="https://twitter.com/PFF/status/1439792894462808070?ref_src=twsrc%5Etfw">September 20, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 ## Best Coachs: Roster Ranking
 
 Total de pontos que foram deixados de ganhar na melhor escalação possível, acumulado ao longo das rodadas.
