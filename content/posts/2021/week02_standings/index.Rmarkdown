@@ -1,7 +1,7 @@
 ---
 title: 'Week 02 | League Standings'
 author: "Giuliano Sposito"
-date: '2021-09-21'
+date: '2021-09-21T04:00:00-03:00'
 slug: s21_w02_standings
 categories:
 - recap

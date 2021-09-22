@@ -1,7 +1,7 @@
 ---
 title: 'Week 02 | Analytics Evaluation'
 author: "Giuliano Sposito"
-date: '2021-09-21'
+date: '2021-09-21T00:00:00-03:00'
 slug: s21_w02_eval
 categories:
   - evaluation

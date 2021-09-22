@@ -1,7 +1,7 @@
 ---
 title: 'Week 02 | Coachs and Managers'
 author: Giuliano Sposito
-date: '2021-09-21'
+date: '2021-09-21T02:00:00-03:00'
 slug: s21_w02_coachs
 categories:
   - recap
