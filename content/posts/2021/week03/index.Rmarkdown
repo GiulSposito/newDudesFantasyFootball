@@ -1,7 +1,7 @@
 ---
 title: Week 03 | Projections and Simulations
 author: Giuliano Sposito
-date: '2021-09-21'
+date: '2021-09-22'
 slug: [week-03-21-projections-and-simulation]
 categories:
 - projection
@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 3
-  prefix: preWaivers
+  prefix: posWaivers
 ---
 
 
@@ -125,8 +125,8 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations Pre Sunday Games](/reports/2021/dudes_simulation_v5_week3_preSundayGames.html)
 - [Matchup Simulations Pos TNF](/reports/2021/dudes_simulation_v5_week3_posTNF.html)
 - [Matchup Simulations Pre TNF](/reports/2021/dudes_simulation_v5_week3_preTNF.html)
-- [Matchup Simulations Pos Waivers](/reports/2021/dudes_simulation_v5_week3_posWaivers.html)
 -->
+- [Matchup Simulations Pos Waivers](/reports/2021/dudes_simulation_v5_week3_posWaivers.html)
 - [Matchup Simulations Pre Waivers](/reports/2021/dudes_simulation_v5_week3_preWaivers.html)
 
 ## Data Base
