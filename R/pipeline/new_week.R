@@ -1,7 +1,7 @@
 library(tidyverse)
 library(lubridate)
 library(glue)
-library(ffanalytics)
+devtools::load_all("C:/Projects/ffanalytics") # library(ffanalytics)
 library(flexdashboard)
 library(yaml)
 
@@ -37,7 +37,7 @@ source("./R/import/scrap_nfl_fantasy_projections.R")
 # nflScrap <- scrapNflFantasyProjection(config$authToken, config$leagueId, season, week)
 
 source("./R/import/scrap_yahoo_fantasy_projection.R")
-yahooScrap <- scrapYahooProjection(week, config$yahooCokies)
+yahooScrap <- scrapYahooProjection(week, config$yahooCookies)
 
 scraps <- webScraps %>% 
   addScrapTable(yahooScrap) 
