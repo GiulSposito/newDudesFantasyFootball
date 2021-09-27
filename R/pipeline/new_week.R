@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 3
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "preSundayGames"
+prefix <- "preMNF"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -137,6 +137,7 @@ tidy.ttest <- function(x) broom::tidy(t.test(x))
 sttest <- safely(tidy.ttest)
 
 # pega os pontos projetados (com erros) da semana em questão
+.week<-week
 ptsproj %>% 
   filter(week==.week) %>% 
   select(id, data_src, pts.proj) %>%
