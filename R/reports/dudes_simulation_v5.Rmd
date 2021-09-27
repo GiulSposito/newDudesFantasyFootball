@@ -5,8 +5,8 @@ output:
     orientation: rows
     vertical_layout: fill
 params:
-  week: 2
-  prefix: "preTNF"
+  week: 0
+  prefix: "preFIX"
 ---
 
 ```{r setup, include=FALSE}
@@ -281,7 +281,8 @@ rosters <- sim$teams %>%
 plotRoster <- function(.teamId, .rosterData) {
   
   .rosterData %>% 
-    filter(teamId==.teamId) %>% 
+    filter(teamId==.teamId, 
+           rosterSlot != "RES") %>% 
     mutate(
       # fixa posicao e slot como fatores fixo para melhorar o gráfico
       position = factor(position, levels=posLevels),
