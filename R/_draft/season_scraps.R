@@ -2,9 +2,10 @@ library(tidyverse)
 library(ffanalytics)
 
 # usual scrap
-scrp <- scrape_data(src = c("ESPN", "FantasyData", "FantasyPros", "FantasySharks", "FFToday", # "CBS", 
-                            "NumberFire", "Yahoo", "FantasyFootballNerd", "NFL", "RTSports", # "FleaFlicker"
-                            "Walterfootball", "FleaFlicker"),
+scrp <- scrape_data(
+                    # src = c("ESPN", "FantasyData", "FantasyPros", "FantasySharks", "FFToday", # "CBS", 
+                    #         "NumberFire", "Yahoo", "FantasyFootballNerd", "NFL", "RTSports", # "FleaFlicker"
+                    #         "Walterfootball", "FleaFlicker"),
                     pos = c("QB", "RB", "WR", "TE", "K", "DST"),
                     season = 2021,
                     week = 0)
@@ -50,10 +51,10 @@ season_proj <- proj %>%
 
 scrp %>% 
   addScrapTable(yScrp) %>% 
-  saveRDS("./data/season_scrap.rds")
+  saveRDS("./data/season_scrap_w3.rds")
 
 season_proj %>% 
-  saveRDS("./data/season_projtable.rds")
+  saveRDS("./data/season_projtable_w3.rds")
 
 season_proj %>% 
   filter(avg_type=="average") %>% 
