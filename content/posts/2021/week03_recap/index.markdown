@@ -41,7 +41,7 @@ params:
 
 ## Weekly Trophies
 
-![Trophies](images/s21_w02_trophies.png)
+![Trophies](images/trophies.png)
 
 
 ## Matchups Recap
