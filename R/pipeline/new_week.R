@@ -12,33 +12,24 @@ options(dplyr.summarise.inform = FALSE)
 week <- 4
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "preWaivers"
+prefix <- "posWaivers"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
-# API ACCESS CHECK ####
+# FANTASY API ACCESS CHECK ####
 source("./R/import/checkFantasyAPI.R")
 if(!checkFantasyAPI(config$authToken, config$leagueId, week)) stop("Unable to access Fantasy API!")
 
-# TABELA DE PROJECAO ####
+# SCRAPPING YAHOOO ####
+source("./R/import/scrap_yahoo_fantasy_projection.R")
+yahooScrap <- scrapYahooProjection(week, config$yahooCookies)
 
 # SCRAPPING FFA SITES ####
 source("./R/import/ffa_player_projection.R")
 webScraps <- scrapPlayersPredictions(week, season)
 
-# checking
-webScraps %>% 
-  map_df(~select(.x, data_src, team, id), .id="pos") %>% 
-  count(data_src, pos) %>% 
-  pivot_wider(names_from = "pos",values_from="n")
-
-# # SCRAPPING NFL FANTASY ###
-source("./R/import/scrap_nfl_fantasy_projections.R")
-# nflScrap <- scrapNflFantasyProjection(config$authToken, config$leagueId, season, week)
-
-source("./R/import/scrap_yahoo_fantasy_projection.R")
-yahooScrap <- scrapYahooProjection(week, config$yahooCookies)
-
+# MIXING SCRAPS ###
+source("./R/import/scrap_nfl_fantasy_projections.R") # addScrapTable
 scraps <- webScraps %>% 
   addScrapTable(yahooScrap) 
 
@@ -71,7 +62,6 @@ my_player_ids <- player_ids %>%
   mutate(
     id = as.integer(id), 
     nfl_id = as.integer(nfl_id))
-
 
 # TEST BRANCH: TEAM ROSTERS ####
 team_allocation <- teams_rosters %>% 
@@ -121,13 +111,10 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 source("./R/simulation/players_projections.R")
 site_ptsproj <- calcPointsProjection(season, read_yaml("./config/score_settings.yml"))
 pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
-# pts_flcl <- projectFloorCeiling(proj_table, week, season)
 
 # adiciona os erros de projeções passadas
 ptsproj <- site_ptsproj %>% # projecao dos sites
   bind_rows(pts_errors) 
-  # %>% # erros das projecoes nas semanas passadas
-  # bind_rows(pts_flcl)       # floor e ceiling da projecao dos sites
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 
@@ -187,10 +174,6 @@ site_ptsproj %>%
   pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>% 
   inner_join(proj_table,.,by=c("id","pos")) %>% 
   write_csv(glue("./static/exports/2021/week{week}_full_ppr.csv"))
-
-if(file.exists(glue("./static/exports/2021/week{week}_rawdata.xlsx"))){
-  file.remove(glue("./static/exports/2021/week{week}_rawdata.xlsx"))
-}
 
 files <- map2( names(scraps), scraps,
                function(.pos, .data){
