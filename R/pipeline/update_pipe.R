@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 4
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "posTNF"
+prefix <- "preSNF"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -132,15 +132,7 @@ sim <- simulateGames(week, season, ptsproj, matchups_games, teams_rosters, playe
 saveRDS(sim, glue("./data/simulation_v{sim.version}_week{week}_{prefix}.rds"))
 
 ###### render reports
-# PROJECTION REPORT ####
-rmarkdown::render(
-  input = "./R/reports/ffa_players_projection.Rmd",
-  output_file = glue("../../{destPath}/ffa_players_projection_week{week}.html"),
-  output_format = "flex_dashboard",
-  params = list(week=week)
-)
-
-
+# Simulation Report
 rmarkdown::render(
   input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
   output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),
