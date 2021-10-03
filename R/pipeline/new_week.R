@@ -59,9 +59,12 @@ teams_rosters  <- ffa_extractTeamsFromMatchups(leagueMatchups)
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 my_player_ids <- player_ids %>%
+  # correct McPherson Kicker
+  mutate( nfl_id = if_else(id=="15368","2565953",nfl_id)) %>% 
   mutate(
     id = as.integer(id), 
     nfl_id = as.integer(nfl_id))
+
 
 # TEST BRANCH: TEAM ROSTERS ####
 team_allocation <- teams_rosters %>% 
@@ -92,7 +95,8 @@ players_projs <- proj_table %>%
   # adiciona a informacao do time "owner"
   left_join(team_allocation, by=c("nfl_id"="playerId")) %>% 
   # quem nao tem time vira "Free Agent"
-  mutate(fantasy.team=if_else(is.na(fantasy.team),"*FreeAgent", fantasy.team))
+  mutate(fantasy.team=if_else(is.na(fantasy.team),"*FreeAgent", fantasy.team)) %>% 
+  distinct()
 
 
 # salva estatisticas dos jogadores
