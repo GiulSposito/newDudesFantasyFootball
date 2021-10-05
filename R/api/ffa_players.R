@@ -40,7 +40,7 @@ ffa_players_stats <- function(.authToken, .leagueId, .season, .weeks){
     paste0("[",.,"]")
   
     
-  players <- ffa_api(
+  pstats <- ffa_api(
     .path = "v2/league/players",
     .query = list(
       "appKey"    = "internalemailuse",
@@ -49,6 +49,8 @@ ffa_players_stats <- function(.authToken, .leagueId, .season, .weeks){
       "count"     = 3000
     ),
     .auth=.authToken)
+  
+  return(pstats)
   
 }
 
@@ -119,6 +121,7 @@ ffa_extractPlayersStats <- function(playersStatsResp){
     unnest_wider(players) %>% 
     hoist(stats, seasonPts = c(1, 1, "pts")) %>% 
     hoist(stats, weekStats = c(1, 1)) %>% 
+    hoist(advanced, rankAgainstPosition = c("opponent","rankAgainstPosition")) %>% 
     mutate( weekPts = map(weekStats, function(wp){
       wp %>% 
         map(~ purrr::pluck(.x, "pts", .default = NA)) %>% 
@@ -133,7 +136,7 @@ ffa_extractPlayersStats <- function(playersStatsResp){
           weekSeasonPts = cumsum(weekSeasonPts)) %>% 
         select(week, weekPts, weekSeasonPts)
     })) %>% 
-    mutate(across(c(playerId, nflTeamId, byeWeek), as.integer)) %>% 
+    mutate(across(c(playerId, nflTeamId, byeWeek, rankAgainstPosition), as.integer)) %>% 
     return()
   
 }
