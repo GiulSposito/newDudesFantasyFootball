@@ -34,7 +34,7 @@ ffa_players_stats <- function(.authToken, .leagueId, .season, .weeks){
   
   # define estatísticas para retorno
   stats_str <- .weeks %>% 
-    map_chr(~glue('{"type":"stats","season":"<<.season>>","week":"<<.x>>"}', .open = "<<", .close = ">>")) %>% 
+    map_chr(~glue('{"type":"stats","season":"<<.season>>","week":"<<.x>>"},{"type":"rankAgainstPosition","season":"<<.season>>","week":"<<.x>>"}', .open = "<<", .close = ">>")) %>% 
     c(.,glue('{"type":"stats","season":"<<.season>>"}', .open = "<<", .close = ">>")) %>% 
     paste(collapse = ",") %>% 
     paste0("[",.,"]")
@@ -91,6 +91,24 @@ ffa_players_stats_adv <- function(.authToken, .leagueId, .season, .weeks, .stats
   
 }
 
+
+# return the league player with stats
+ffa_players_advanced <- function(.authToken, .leagueId, .season, .weeks, .playerId){
+  
+  player_adv <- ffa_api(
+    .path = "v2/player/advanced",
+    .query = list(
+      "appKey"    = "internalemailuse",
+      "leagueId"  = .leagueId,
+      "playerId"  = .playerId,
+      "week"      = .week,
+      "season"    = .season
+    ),
+    .auth=.authToken)
+  
+  return(player_adv)
+  
+}
 
 
 # convert uma resposta em um dataframe
