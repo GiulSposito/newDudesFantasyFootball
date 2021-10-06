@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 4
+week <- 5
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "final"
+prefix <- "posWaivers"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -42,11 +42,14 @@ teams_rosters  <- ffa_extractTeamsFromMatchups(leagueMatchups)
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 my_player_ids <- player_ids %>%
-  # correct McPherson Kicker
-  mutate( nfl_id = if_else(id=="15368","2565953",nfl_id)) %>% 
+  mutate( nfl_id = if_else(id=="15368","2565953",nfl_id)) %>% # correct McPherson Kicker
+  mutate( nfl_id = if_else(id=="14717","2563203",nfl_id)) %>% # correct Chase McLaughl Kicker
   mutate(
     id = as.integer(id), 
     nfl_id = as.integer(nfl_id))
+
+
+
 
 # TEST BRANCH: TEAM ROSTERS ####
 team_allocation <- teams_rosters %>% 
