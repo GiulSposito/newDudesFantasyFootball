@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 5
-  prefix: preWaivers
+  prefix: posWaivers
 ---
 
 
@@ -125,8 +125,8 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations Pre Sunday Games](/reports/2021/dudes_simulation_v5_week5_preSundayGames.html)
 - [Matchup Simulations Pos TNF](/reports/2021/dudes_simulation_v5_week5_posTNF.html)
 - [Matchup Simulations Pre TNF](/reports/2021/dudes_simulation_v5_week5_preTNF.html)
-- [Matchup Simulations Pos Waivers](/reports/2021/dudes_simulation_v5_week5_posWaivers.html)
 -->
+- [Matchup Simulations Pos Waivers](/reports/2021/dudes_simulation_v5_week5_posWaivers.html)
 - [Matchup Simulations Pre Waivers](/reports/2021/dudes_simulation_v5_week5_preWaivers.html)
 
 ## Data Base
