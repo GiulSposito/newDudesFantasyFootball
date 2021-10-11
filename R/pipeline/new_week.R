@@ -50,6 +50,12 @@ source("./R/api/ffa_players.R")
 players_stats <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week) %>% 
   ffa_extractPlayersStats()
 
+players_stats %>% 
+  mutate( week = week ) %>% 
+  select(week, playerId, position, rankAgainstPosition) %>% 
+  filter(complete.cases(.)) %>% 
+  saveRDS(glue("./data/rankAgainstPosition_week{week}.rds"))
+
 # MATCHUPS
 source("./R/api/ffa_league.R")
 leagueMatchups <- ffa_league_matchups(config$authToken, config$leagueId, week)
