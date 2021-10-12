@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 5
+week <- 6
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "preSundayGames"
+prefix <- "preWaivers"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -47,7 +47,7 @@ proj_table  <- calcPlayersProjections(scraps, read_yaml("./config/score_settings
 # PLAYERS AND MATCHUPS ####
 # PLAYERS
 source("./R/api/ffa_players.R")
-players_stats <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week) %>% 
+players_stats <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week) %>%  
   ffa_extractPlayersStats()
 
 players_stats %>% 

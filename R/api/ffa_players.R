@@ -34,7 +34,7 @@ ffa_players_stats <- function(.authToken, .leagueId, .season, .weeks){
   
   # define estatísticas para retorno
   stats_str <- .weeks %>% 
-    map_chr(~glue('{"type":"stats","season":"<<.season>>","week":"<<.x>>"},{"type":"rankAgainstPosition","season":"<<.season>>","week":"<<.x>>"}', .open = "<<", .close = ">>")) %>% 
+    map_chr(~glue('{"type":"stats","season":"<<.season>>","week":"<<.x>>"},{"type":"rankAgainstPosition","season":"<<.season>>","week":"<<.x>>"},{"type":"advanced","season":"<<.season>>","week":"<<.x>>"}', .open = "<<", .close = ">>")) %>% 
     c(.,glue('{"type":"stats","season":"<<.season>>"}', .open = "<<", .close = ">>")) %>% 
     paste(collapse = ",") %>% 
     paste0("[",.,"]")
