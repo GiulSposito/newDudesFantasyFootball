@@ -29,6 +29,7 @@ proj_table  <- calcPlayersProjections(scraps, read_yaml("./config/score_settings
 
 # PLAYERS AND MATCHUPS ####
 # PLAYERS
+# research : write(content(players_stats$response, as="text"), "./data/stats.json")
 source("./R/api/ffa_players.R")
 players_stats <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week) %>% 
   ffa_extractPlayersStats()

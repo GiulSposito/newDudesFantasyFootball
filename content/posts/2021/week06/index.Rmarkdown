@@ -140,4 +140,4 @@ _Last Update: `r lubridate::now()`_
 - [TE Raw Data](/exports/2021/week6_TE_rawdata.csv)
 - [K Raw Data](/exports/2021/week6_K_rawdata.csv)
 - [DEF Raw Data](/exports/2021/week6_DST_rawdata.csv)
- 
+- [FGW Index](/exports/2021/fgw.xlsx)

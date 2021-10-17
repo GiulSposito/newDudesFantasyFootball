@@ -34,7 +34,7 @@ ffa_players_stats <- function(.authToken, .leagueId, .season, .weeks){
   
   # define estatísticas para retorno
   stats_str <- .weeks %>% 
-    map_chr(~glue('{"type":"stats","season":"<<.season>>","week":"<<.x>>"},{"type":"rankAgainstPosition","season":"<<.season>>","week":"<<.x>>"},{"type":"advanced","season":"<<.season>>","week":"<<.x>>"}', .open = "<<", .close = ">>")) %>% 
+    map_chr(~glue('{"type":"stats","season":"<<.season>>","week":"<<.x>>"},{"type":"rankAgainstPosition","season":"<<.season>>","week":"<<.x>>"},{"type":"advanced","season":"<<.season>>","week":"<<.x>>"},{"type":"researchStats","season":"<<.season>>","week":"<<.x>>"}', .open = "<<", .close = ">>")) %>% 
     c(.,glue('{"type":"stats","season":"<<.season>>"}', .open = "<<", .close = ">>")) %>% 
     paste(collapse = ",") %>% 
     paste0("[",.,"]")
@@ -121,6 +121,13 @@ ffa_extractPlayersStats <- function(playersStatsResp){
     unnest_wider(players) %>% 
     hoist(stats, seasonPts = c(1, 1, "pts")) %>% 
     hoist(stats, weekStats = c(1, 1)) %>% 
+    hoist(researchStats, researchStatsWeek = c("week","2021")) %>% 
+    mutate(researchStatsWeek = map(researchStatsWeek, function(.l){
+      .l %>% 
+        map_df(~as_tibble(compact(.x)), .id="week") %>% 
+        mutate(across(everything(), as.numeric)) %>% 
+        mutate(week = as.integer(week))
+    })) %>% 
     hoist(advanced, rankAgainstPosition = c("opponent","rankAgainstPosition")) %>% 
     mutate( weekPts = map(weekStats, function(wp){
       wp %>% 
