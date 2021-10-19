@@ -47,13 +47,6 @@ fgw <- pscores %>%
   mutate( impact = fpow(scoreAvg + diffPoints)-.5,
           fgw    = impact*(percentStarted/100) )
 
-xlsx::write.xlsx(fgw, "./static/exports/2021/fgw.xlsx")
+xlsx::write.xlsx(fgw, "./static/exports/2021/fgw_week7.xlsx")
 
 
-%>% 
-  group_by(week, position) %>% 
-  slice_max(order_by = abs(fgw),n= 20) %>% 
-  ungroup() %>% 
-  filter(week==5) %>% 
-  arrange(position, desc(fgw)) %>% 
-  View()
