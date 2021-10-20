@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 7
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "preWaivers"
+prefix <- "posWaivers"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -79,7 +79,7 @@ team_allocation <- teams_rosters %>%
   select(teamId, fantasy.team, playerId)
 
 # tipos de status que zera a pontuacao
-injuryStatus <- c("Suspended","Injured Reserve","Not With Team")
+injuryStatus <- c("Suspended","Injured Reserve","Not With Team","Physically Unable to Perform")
 
 # pega as projecoes e cruza com player stats para ver status de injury
 players_projs <- proj_table %>% 

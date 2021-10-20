@@ -59,7 +59,7 @@ team_allocation <- teams_rosters %>%
   select(teamId, fantasy.team, playerId)
 
 # tipos de status que zera a pontuacao
-injuryStatus <- c("Suspended","Injured Reserve","Not With Team")
+injuryStatus <- c("Suspended","Injured Reserve","Not With Team","Physically Unable to Perform")
 
 # pega as projecoes e cruza com player stats para ver status de injury
 players_projs <- proj_table %>% 
