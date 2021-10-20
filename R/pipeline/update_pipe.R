@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 6
+week <- 7
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "final"
+prefix <- "posWaivers"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -146,17 +146,18 @@ rmarkdown::render(
 
 
 ## Extrai o ranking
-
-teams_rosters %>% 
-  select(teamId, name, imageUrl, week.stats, season.stats) %>% 
-  unnest(week.stats) %>% 
-  rename(week.pts = pts ) %>% 
-  unnest(season.stats) %>% 
-  mutate(
-    across(c(rank, divisionRank, wins, losses, ties, waiverPriority), as.integer),
-    across(c(pts, ptsAgainst), as.numeric)
-  ) %>% 
-  rename(season.pts=pts, season.ptsAgainst=ptsAgainst) %>% 
-  saveRDS(glue("./data/rank_week{week}.rds"))
+if (prefix=="final") {
+  teams_rosters %>% 
+    select(teamId, name, imageUrl, week.stats, season.stats) %>% 
+    unnest(week.stats) %>% 
+    rename(week.pts = pts ) %>% 
+    unnest(season.stats) %>% 
+    mutate(
+      across(c(rank, divisionRank, wins, losses, ties, waiverPriority), as.integer),
+      across(c(pts, ptsAgainst), as.numeric)
+    ) %>% 
+    rename(season.pts=pts, season.ptsAgainst=ptsAgainst) %>% 
+    saveRDS(glue("./data/rank_week{week}.rds"))
+}
 
 
