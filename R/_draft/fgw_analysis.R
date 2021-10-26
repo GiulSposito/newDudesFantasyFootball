@@ -47,6 +47,6 @@ fgw <- pscores %>%
   mutate( impact = fpow(scoreAvg + diffPoints)-.5,
           fgw    = impact*(percentStarted/100) )
 
-xlsx::write.xlsx(fgw, "./static/exports/2021/fgw_week7.xlsx")
+xlsx::write.xlsx(fgw, "./static/exports/2021/fgw_week8.xlsx")
 
 

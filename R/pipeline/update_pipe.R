@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 7
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "posSNF"
+prefix <- "final"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
@@ -137,13 +137,14 @@ saveRDS(sim, glue("./data/simulation_v{sim.version}_week{week}_{prefix}.rds"))
 
 ###### render reports
 # Simulation Report
-rmarkdown::render(
-  input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
-  output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),
-  output_format = "flex_dashboard",
-  params = list(week=week, prefix=prefix)
-)
-
+if (prefix!="final") {
+  rmarkdown::render(
+    input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
+    output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),
+    output_format = "flex_dashboard",
+    params = list(week=week, prefix=prefix)
+  )
+}
 
 ## Extrai o ranking
 if (prefix=="final") {
