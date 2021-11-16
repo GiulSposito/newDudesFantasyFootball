@@ -24,7 +24,7 @@ params:
   prefix: final
 ---
 
-**Matchup Winner Accuracy: 14%**
+**Matchup Winner Accuracy: 71%**
 
 <!--more-->
 
@@ -41,6 +41,7 @@ params:
 | 7    |       71%       |
 | 8    |       71%       |
 | 9    |       14%       |
+| 10   |       71%       |
 
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
