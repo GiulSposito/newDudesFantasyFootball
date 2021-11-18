@@ -1,7 +1,8 @@
 library(tidyverse)
 library(lubridate)
 library(glue)
-devtools::load_all("C:/Projects/ffanalytics") # library(ffanalytics)
+devtools::load_all("C:/Projects/ffanalytics") 
+# library(ffanalytics)
 library(flexdashboard)
 library(yaml)
 
@@ -12,7 +13,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 11
 season <- 2021
 config <- read_yaml("./config/config.yml")
-prefix <- "posWaivers"
+prefix <- "preTNF"
 destPath <- "static/reports/2021"
 sim.version <- 5
 
