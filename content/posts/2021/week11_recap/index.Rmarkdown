@@ -10,7 +10,6 @@ tags:
   - rank
   - recap
 dropCap: yes
-draft: yes
 displayInMenu: no
 displayInList: yes
 resources:
@@ -43,10 +42,6 @@ library(ggridges)
 config <- yaml.load_file("./config/config.yml")
 
 ```
-
-{{< tweet 1459007952690585602 >}}
-
-{{< tweet 1459006452589334529 >}}
 
 ```{r getRecap, results='hide'}
 source("./R/api/ffa_league.R")
