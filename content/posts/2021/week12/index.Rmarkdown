@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 12
-  prefix: interThanksGivingGames
+  prefix: posTNF
 ---
 
 
@@ -47,11 +47,11 @@ library(glue)
 .prefix <- params$prefix
 
 sim <- readRDS(glue("./data/simulation_v5_week{.week}_{.prefix}.rds"))
-
 # game summary in long form
 teams_sims <- bind_rows(
   select(sim$matchup_sim, teamId=awayTeam.teamId, winProb=awayTeam.winProb, winProb.org=awayTeam.winProb.org, pred.Pts=awayTeam.totalPts, sim.pts=awayTeam.simulation, sim.pts.org=awayTeam.simulation.org),
   select(sim$matchup_sim, teamId=homeTeam.teamId, winProb=homeTeam.winProb, winProb.org=homeTeam.winProb.org, pred.Pts=homeTeam.totalPts, sim.pts=awayTeam.simulation, sim.pts.org=homeTeam.simulation.org)
+
 ) %>% mutate(
   pred.Pts.org = map_dbl(sim.pts.org, median, na.rm=T)
 )
@@ -123,8 +123,9 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations Pre MNF](/reports/2021/dudes_simulation_v5_week12_preMNF.html)
 - [Matchup Simulations Pre SNF](/reports/2021/dudes_simulation_v5_week12_preSNF.html)
 - [Matchup Simulations Pre Sunday Games](/reports/2021/dudes_simulation_v5_week12_preSundayGames.html)
-- [Matchup Simulations Pos TNF](/reports/2021/dudes_simulation_v5_week12_posTNF.html)
 -->
+- [Matchup Simulations Pos TNF](/reports/2021/dudes_simulation_v5_week12_posTNF.html)
+- [Matchup Simulations Pre TNF](/reports/2021/dudes_simulation_v5_week12_preTNF.html)
 - [Matchup Simulations Inter Thanks Giving Games](/reports/2021/dudes_simulation_v5_week12_interThanksGivingGames.html)
 - [Matchup Simulations Pre Thanks Giving Games](/reports/2021/dudes_simulation_v5_week12_thanksGivingGames.html)
 - [Matchup Simulations Pos Waivers](/reports/2021/dudes_simulation_v5_week12_posWaivers.html)
