@@ -26,7 +26,7 @@ ffa_league_teams <- function(.authToken, .leagueId){
 
 
 # return the user id, leagues and teams of a 'authToken'
-ffa_league_matchups <- function(.authToken, .leagueId, .week){
+ffa_league_matchups <- function(.authToken, .leagueId, .week, .incRosters=T){
   
   players <- ffa_api(
     .path = "/v2/league/matchups",
@@ -34,12 +34,28 @@ ffa_league_matchups <- function(.authToken, .leagueId, .week){
       "appKey"    = "internalemailuse",
       "leagueId"  = .leagueId,
       "week"      =  .week,
-      "includeRosters" = 1,
+      "includeRosters" = ifelse(.incRosters,1,0),
       "forcePlayoffs" = 1
     ),
     .auth=.authToken)
   
 }
+
+# return the user id, leagues and teams of a 'authToken'
+# https://api.fantasy.nfl.com/v2/docs/service?serviceName=leagueSchedule
+ffa_league_schedule <- function(.leagueId, .authToken, .week){
+  
+  players <- ffa_api(
+    .path = "/v2/league/schedule",
+    .query = list(
+      "appKey"    = "internalemailuse",
+      "leagueId"  = .leagueId,
+      "week"      = .week
+    ),
+    .auth=.authToken)
+  
+}
+
 
 # return the user id, leagues and teams of a 'authToken'
 ffa_league_standings <- function(.authToken, .leagueId, .week){
