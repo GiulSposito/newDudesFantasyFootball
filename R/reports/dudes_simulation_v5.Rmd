@@ -285,7 +285,7 @@ rosters <- sim$teams %>%
 ## plot do grafico do roster
 plotRoster <- function(.teamId, .rosterData) {
   
-  .rosterData %>% 
+  plotData <- .rosterData %>% 
     filter(teamId==.teamId, 
            rosterSlot != "RES") %>% 
     mutate(
@@ -308,7 +308,9 @@ plotRoster <- function(.teamId, .rosterData) {
       )
     ) %>% 
     arrange(rosterSlot, position) %>% 
-    mutate(display.order=1:nrow(.)) %>% 
+    mutate(display.order=1:nrow(.))
+  
+  plotData %>% 
     ggplot(aes(x=reorder(playerLabel, -display.order), color=position)) +
     # original range from ffanalytics
     geom_pointrange(aes(y=estimate, ymin=conf.low, ymax=conf.high)) +
@@ -317,6 +319,7 @@ plotRoster <- function(.teamId, .rosterData) {
     geom_point(aes(y=points), size=2, color="black") +
     xlab("") +
     ylab("Fantasy Points") +
+    ylim(min(c(0,plotData$conf.low)),NA) +
     coord_flip() +
     theme_minimal() +
     theme(legend.position = "bottom")  
