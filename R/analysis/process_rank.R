@@ -6,10 +6,10 @@ library(glue)
 library(kableExtra)
 
 # parameter
-curr.week <- 14
+curr.week <- 12
 
 # game results
-matchups <- readRDS("./data/post_matchups_results.rds")
+# matchups <- readRDS("../oldDudesData/data/2019/post_matchups_results.rds")
 
 # para cada time do roster tira informacoes de ponto, se ganhou e qual o rank
 extractTeam <- . %>% 
@@ -134,6 +134,7 @@ finalrank <- wrank %>%
     .h2ht=h2h.table)
   ) %>% 
   unnest(data) %>% 
+  ungroup() %>% 
   arrange(week, desc(wins), desc(h2h.balance), desc(pts.pro), pts.ag) %>% 
   mutate( wrank = rep(1:10,curr.week) ) %>% 
   select(-op.id, -op.team, -op.out)
