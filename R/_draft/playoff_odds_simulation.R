@@ -51,48 +51,73 @@ h2hWinRanker <- function(subMatchs){
     return()
 }
 
+# funcao que rankquei um schedule
+calcRank <- function(games){
+  
+  # 1) make level 1
+  rankL1 <- h2hWinRanker(games)
+  
+  # 3) apply rank again for each rankgroup
+  rankL2 <- rankL1 %>% 
+    group_by(week, rank) %>% 
+    group_split() %>% 
+    map_df(function(.sm, .games){
+      srank <- .games %>%
+        filter(week <= .sm$week[1]) %>% 
+        filter( (aTeam == .sm$team[1] & hTeam == .sm$team[2])|
+                  (aTeam == .sm$team[2] & hTeam == .sm$team[1]) ) %>% 
+        h2hWinRanker() %>%
+        filter (week==max(week)) %>% 
+        select(team, rank, n) 
+      
+      .sm %>% 
+        left_join(srank, by=c("team")) %>% 
+        return()
+    }, .games = games)
+  
+  # 4) compute a rank for season points
+  rankL3 <- rankL2 %>% 
+    group_by(week) %>% 
+    mutate( rankPts = rank(seasonPts) ) %>% 
+    ungroup()
+  
+  # 5) compute a final ranking
+  rankFinal <- rankL3 %>%
+    replace_na(list(rank.y=0)) %>% 
+    mutate(rankScore = 10000*rank.x + 100*rank.y + 1*rankPts ) %>% 
+    group_by(week) %>% 
+    mutate(finalRank = rank(-rankScore)) %>% 
+    ungroup() %>% 
+    rename(rankL1=rank.x, nL1=n.x, rankL2=rank.y, nL2=n.y, rankL3=rankPts, rank=finalRank) %>% 
+    add_count(week,rank) %>% 
+    arrange(week, rank)  
+  
+  return(rankFinal)
+}
+
 # get one simulation case
-games <- simulations %>% 
+games <-  %>% 
   filter(simId==2) %>% 
   select(-simId)
 
-# 1) make level 1
-rankL1 <- h2hWinRanker(games)
+calcRank(filter(simulations, simId==5))
 
-# 3) apply rank again for each rankgroup
-rankL2 <- rankL1 %>% 
-  group_by(week, rank) %>% 
-  group_split() %>% 
-  map_df(function(.sm, .games){
-    srank <- .games %>%
-      filter(week <= .sm$week[1]) %>% 
-      filter( (aTeam == .sm$team[1] & hTeam == .sm$team[2])|
-                (aTeam == .sm$team[2] & hTeam == .sm$team[1]) ) %>% 
-      h2hWinRanker() %>%
-      filter (week==max(week)) %>% 
-      select(team, rank, n) 
-    
-    .sm %>% 
-      left_join(srank, by=c("team")) %>% 
-      return()
-  }, .games = games)
+filter(simulations, simId==5, aTeam!="A")
 
-# 4) compute a rank for season points
-rankL3 <- rankL2 %>% 
-  group_by(week) %>% 
-  mutate( rankPts = rank(seasonPts) ) %>% 
-  ungroup()
+BCDA
+CDBA
 
-# 5) compute a final ranking
-rankFinal <- rankL3 %>%
-  replace_na(list(rank.y=0)) %>% 
-  mutate(rankScore = 10000*rank.x + 100*rank.y + 1*rankPts ) %>% 
-  group_by(week) %>% 
-  mutate(finalRank = rank(-rankScore)) %>% 
-  ungroup() %>% 
-  rename(rankL1=rank.x, nL1=n.x, rankL2=rank.y, nL2=n.y, rankL3=rankPts, rank=finalRank) %>% 
-  add_count(week,rank) %>% 
-  arrange(week, rank)
+C 1-1 330
+D 1-1 364
+B 1-1 360
+
+DBCA
+
+B x C
+C x D
+D x B 
+
+
   
 rankFinal %>% 
   select(-win, -loss, -pts)
