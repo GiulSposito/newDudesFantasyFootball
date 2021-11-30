@@ -109,7 +109,7 @@ calcRank <- function(games){
 # calcRank(games)
 # games
 
-nsim <- nrow(simulations)
+nsim <- max(simulations$simId)
 
 simulations %>% 
   filter(simId<=nsim) %>% 
