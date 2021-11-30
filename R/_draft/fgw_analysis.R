@@ -21,7 +21,7 @@ pscores <- ppoints %>%
   mutate( diffPoints = weekPts - weekPosAvgPoints)
 
 
-sims <- fs::dir_ls("../DudesFantasyFootball/data/2020") %>%
+sims <- fs::dir_ls("./data/2020") %>%
   .[str_detect(.,"final")] %>% 
   map(readRDS)
 
@@ -34,10 +34,16 @@ team_points <- sims %>%
   })
 
 scoreAvg <- team_points$pts %>% mean()
+team_points$pts %>% mean()
+team_points$pts %>% sd()
 scoreAvg <- 112.95
+
+qqnorm(team_points$pts)
 
 fpow <- team_points$pts %>% 
   ecdf()
+
+fpow %>% summary()
 
 fpow(112.95)
 
@@ -47,6 +53,6 @@ fgw <- pscores %>%
   mutate( impact = fpow(scoreAvg + diffPoints)-.5,
           fgw    = impact*(percentStarted/100) )
 
-xlsx::write.xlsx(fgw, "./static/exports/2021/fgw_week8.xlsx")
+xlsx::write.xlsx(fgw, "./static/exports/2021/fgw_week13.xlsx")
 
 
