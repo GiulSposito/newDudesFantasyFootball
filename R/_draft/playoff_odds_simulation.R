@@ -9,23 +9,39 @@ matchups <- tribble(
   2, "B", "D",
   3, "A", "D",
   3, "B", "C",
-)
-# run a score sumulation over the schedule
-simulations <- rep(list(matchups),1000) %>% # 100 is # of simulations
-  map_df(function(.mt){
-    n <- dim(.mt)[1]
-    .mt %>% 
-      mutate(
-        # score simulation
-        aScore = rnorm(n, mean = 113.4947, sd = 22.22987), # values from season 2020
-        hScore = rnorm(n, mean = 113.4947, sd = 22.22987), # values from season 2020
-        aWin   = aScore > hScore, # who win?
-        hWin   = !aWin            # who win?
-      ) %>% 
-      return()
-  }, .id="simId") %>% # simulation id
-  mutate( simId = as.integer(simId) )
+) %>% 
+  mutate(
+    aWin = NA
+  )
 
+
+# run a score sumulation over the schedule
+simulateGames <- function(.mats, .numSim=100){
+
+  rep(list(.mats),.numSim) %>% # 100 is # of simulations
+    map_df(function(.mtall){
+      
+      .mtFinished  <- filter(.mtall, !is.na(aWin))
+      .mtScheduled <- filter(.mtall, is.na(aWin))
+      
+      n <- dim(.mtScheduled)[1]
+      .mtScheduled %>% 
+        mutate(
+          # score simulation
+          aScore = rnorm(n, mean = 113.4947, sd = 22.22987), # values from season 2020
+          hScore = rnorm(n, mean = 113.4947, sd = 22.22987), # values from season 2020
+          aWin   = aScore > hScore, # who win?
+          hWin   = !aWin            # who win?
+        ) %>% 
+        bind_rows(.mtFinished) %>% 
+        return()
+      
+    }, .id="simId") %>% # simulation id
+    mutate( simId = as.integer(simId) ) %>% 
+    return()
+}
+
+simulations <- simulateGames(matchups, 100)
 
 # get a schedule and rank teams by victory
 h2hWinRanker <- function(subMatchs){
