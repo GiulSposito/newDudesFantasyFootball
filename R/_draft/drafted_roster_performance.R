@@ -3,13 +3,13 @@ library(glue)
 library(ggimage)
 
 
-draft_rosters <- readRDS("../DudesFantasyFootball/data/2020/drafted_teams_rosters.rds")# readRDS("./data/drafted_teams_rosters.rds")
+draft_rosters <- readRDS("./data/2020/drafted_teams_rosters.rds")# readRDS("./data/drafted_teams_rosters.rds")
 
 # readRDS("./data/draft_picks.rds")
 
 histRosters <- 1:16 %>% 
   map_df(function(.week){
-    sim <- readRDS(glue("../DudesFantasyFootball/data/2020/simulation_v5_week{.week}_final.rds"))
+    sim <- readRDS(glue("./data/2020/simulation_v5_week{.week}_final.rds"))
     bind_rows(
       select(sim$matchup_sim, week, team.id=awayTeam.teamId, points=awayTeam.totalPts),
       select(sim$matchup_sim, week, team.id=homeTeam.teamId, points=homeTeam.totalPts)
@@ -25,7 +25,7 @@ histRosters <- histRosters %>%
   ungroup() %>% 
   arrange(team.id, week)
 
-sim <- readRDS(glue("../DudesFantasyFootball/data/2020/simulation_v5_week16_final.rds"))
+sim <- readRDS(glue("./data/2020/simulation_v5_week16_final.rds"))
 
 histPoints <- sim$players_stats %>% 
   select(playerId, weekPts) %>% 
@@ -92,7 +92,7 @@ draftedRosters %>%
   mutate(acc.weekPts = cumsum(weekPts) ) %>% 
   ungroup() %>% 
   mutate( acc.week.pct = acc.weekPts/acc.points ) %>%
-  arrange(team.id, week) %>% View()
+  arrange(team.id, week) %>% 
   ggplot(aes(x=week, y=acc.week.pct, fill=drafted)) +
   # geom_area() +
   geom_bar(position="stack", stat="identity", width=1) +
@@ -100,7 +100,7 @@ draftedRosters %>%
   facet_wrap(team.name ~ ., ncol = 2 ) +
   theme_minimal()
 
-sim <- readRDS(glue("../DudesFantasyFootball/data/2020/simulation_v5_week1_final.rds"))
+sim <- readRDS(glue("./data/2020/simulation_v5_week1_final.rds"))
   
   
 draftedRosters %>% 
