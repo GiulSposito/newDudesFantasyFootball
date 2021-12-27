@@ -27,7 +27,7 @@ schedule <- matchups_resp %>%
   select(-aWinOut, -hWinOut)
 
 # game results (points)
-game_results <- 1:12 %>% 
+game_results <- 1:14 %>% 
   map(~glue("./data/simulation_v5_week{.x}_final.rds")) %>% 
   map(readRDS) %>% 
   map(pluck, "matchup_sim") %>% 

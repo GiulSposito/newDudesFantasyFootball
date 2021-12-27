@@ -35,10 +35,10 @@ simulateGames <- function(.mats, .numSim=100){
         return()
       
     }, .id="simId") %>% # simulation id
+
     mutate( simId = as.integer(simId) ) %>% 
     return()
 }
-
 # convert schedule format to team match formats
 scheduleToTeamMatchs <- function(.schedule){
   bind_rows(
@@ -91,8 +91,8 @@ teamMatchs <- simulations %>%
   select(-simId) %>% 
   scheduleToTeamMatchs()
 
-# teamMatchs <- matchups %>% 
-#   scheduleToTeamMatchs()
+teamMatchs <- matchups %>%
+  scheduleToTeamMatchs()
 
 # initial global rank
 rank <- teamMatchs %>% 
@@ -111,14 +111,13 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
     group_by(week, rankPos) %>% 
     nest() %>% 
     mutate( tieRank = map(data, function(.tied, .allTM){
-      print("--tied--")
       print(.tied)
-      
       if(nrow(.tied)<2){
         .tied %>% 
           mutate(tieRankPos=1,
                  tieRankCount=1) %>% 
-          select(team, tieRankPos, tieRankCount) %>% 
+          select(team, tieRankPos, tieRankCount) %T>%
+          print() %>% 
           return()
       }
       
@@ -138,6 +137,7 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
           add_count(tieRankPos, name="tieRankCount") %>% 
           select(team, tieRankPos, tieRankCount)
         
+        print(resp)
         return(resp)
       }
       
@@ -159,9 +159,9 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
           add_count(rankPos, name="rankCount")
       }
       
-      print(resp) 
       resp %>% 
-        select(team, tieRankPos=rankPos, tieRankCount=rankCount) %>% 
+        select(team, tieRankPos=rankPos, tieRankCount=rankCount) %T>%
+        print() %>% 
         return()
     }, .allTM = teamMatchs)) %>% 
     unnest(tieRank, keep_empty = T) %>% 
@@ -171,30 +171,30 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
     select(week, team, rankPos=detiedRank) %>% 
     add_count(week, rankPos, name="rankCount") %>% 
     arrange(week, team)
+  
+   
 }
+
+teams <- readRDS("./data/simulation_v5_week14_final.rds")$teams 
 
 teamMatchs %>% 
   mutate(win=as.integer(win)) %>% 
-  pivot_wider(id_cols = team, names_from = opTeam, values_from = win, values_fn = sum)
+  inner_join(select(teams, team=teamId, name)) %>% 
+  pivot_wider(id_cols = c(team, name), names_from = opTeam, values_from = win, values_fn = sum) %>% 
+  View()
 
-# teams <- readRDS("./data/simulation_v5_week14_final.rds")$teams 
 
 teamMatchs %>% 
   calcRankParameters() %>% 
-  select(week, team, pctWin, proScore) %>% 
+  select(week, team, pctWin, acProScore) %>% 
   inner_join(rank, by=c("week","team")) %>% 
-  # inner_join(select(teams, team=teamId, name)) %>% 
+  inner_join(select(teams, team=teamId, name)) %>% 
   arrange(week, rankPos) %>% 
   filter(week==max(week)) %>% 
   View()
   
-A 1-2
-B 1-2
-D 1-2
 
-  c(1,2,3) %T>% 
-    print() %>% 
-    sum()
+
 # x
 # .tied <- x[1,]$data[[1]]
 # .allTM <- teamMatchs 
