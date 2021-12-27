@@ -11,6 +11,7 @@ pts %>%
       T ~ "Edmonds_Tannehill"
     )
   ) %>% 
+  mutate( weekPts = if_else(is.na(weekPts), 0, weekPts) ) %>% 
   pivot_wider(id_cols=week, names_from="trade", values_from=weekPts, values_fn=sum) %>% 
   filter(week >= 2, complete.cases(.)) %>% 
   pivot_longer(cols = -week, names_to="Trade", values_to="Points") %>% 
