@@ -3,11 +3,11 @@ library(glue)
 library(ggimage)
 
 
-draft_rosters <- readRDS("./data/drafted_teams_rosters.rds")
+draft_rosters <- readRDS("./data/2020/drafted_teams_rosters.rds")
 
 histRosters <- 1:16 %>% 
   map_df(function(.week){
-    sim <- readRDS(glue("./data/simulation_v5_week{.week}_final.rds"))
+    sim <- readRDS(glue("./data/2020/simulation_v5_week{.week}_final.rds"))
     bind_rows(
       select(sim$matchup_sim, week, team.id=awayTeam.teamId, points=awayTeam.totalPts),
       select(sim$matchup_sim, week, team.id=homeTeam.teamId, points=homeTeam.totalPts)
@@ -23,7 +23,7 @@ histRosters <- histRosters %>%
   ungroup() %>% 
   arrange(team.id, week)
 
-sim <- readRDS(glue("./data/simulation_v5_week16_final.rds"))
+sim <- readRDS(glue("./data/2020/simulation_v5_week16_final.rds"))
 
 histPoints <- sim$players_stats %>% 
   select(playerId, position, weekPts) %>% 
@@ -35,7 +35,7 @@ rosterPerf <- histRosters %>%
   select(week, team.id, team.name, points, acc.points, playerId) %>% 
   inner_join(histPoints, by=c("playerId","week"))
 
-sim <- readRDS(glue("./data/simulation_v5_week1_final.rds"))
+sim <- readRDS(glue("./data/2020/simulation_v5_week1_final.rds"))
   
 rosterPerf %>% 
   filter(week <=13 ) %>% 
