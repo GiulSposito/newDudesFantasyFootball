@@ -95,29 +95,42 @@ teamMatchs <- matchups %>%
   scheduleToTeamMatchs()
 
 # initial global rank
-rank <- teamMatchs %>% 
-  calcRankParameters()  %>% 
+teamRankPar <- teamMatchs %>% 
+  calcRankParameters()  
+
+rank <- teamRankPar %>% 
   rankByWinPct() %>% 
   arrange(week, team)
+
+printRank <- function(.tm, .rk){
+  .tm %>% 
+    inner_join(.rk, by=c("week", "team")) %>% 
+    arrange(week, rankPos) %>% 
+    select(week, team, acProScore, wins, losses, pctWin, rankPos, rankCount) %>% 
+    print()
+}
 
 # h2h detieing
 
 oldRankFingerPrint <- vector("numeric", nrow(rank))
 
 while(any(rank$rankPos!=oldRankFingerPrint)){
+  
+  # printRank(teamRankPar, rank) %>% 
+  #   filter(week==14)
+  
   oldRankFingerPrint <- rank$rankPos
   rank <- rank %>% 
     mutate(tweek=week) %>% 
     group_by(week, rankPos) %>% 
     nest() %>% 
     mutate( tieRank = map(data, function(.tied, .allTM){
-      print(.tied)
+
       if(nrow(.tied)<2){
         .tied %>% 
           mutate(tieRankPos=1,
                  tieRankCount=1) %>% 
-          select(team, tieRankPos, tieRankCount) %T>%
-          print() %>% 
+          select(team, tieRankPos, tieRankCount) %>%
           return()
       }
       
@@ -130,14 +143,13 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
       # we must consider proPoints
       if(nrow(tiedTeamMatchs)==0) {
         resp <- .allTM %>% 
-          filter(week<=.tied$tweek[1], team %in% .tied$team ) %>% 
+          filter(week<=.tied$tweek[1]) %>% 
           calcRankParameters() %>% 
-          filter(week==.tied$tweek[1]) %>% 
+          filter(week==.tied$tweek[1], team %in% .tied$team ) %>% 
           mutate(tieRankPos=rank(-acProScore)) %>% 
           add_count(tieRankPos, name="tieRankCount") %>% 
           select(team, tieRankPos, tieRankCount)
         
-        print(resp)
         return(resp)
       }
       
@@ -154,14 +166,16 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
         
       if (all(nrow(resp)==resp$rankCount)) {
         # tied cannot be splited 
-        resp <- deTiedMatchs %>% 
+        resp <- .allTM %>% 
+          filter(week<=.tied$tweek[1]) %>% 
+          calcRankParameters() %>% 
+          filter(week==.tied$tweek[1], team %in% .tied$team ) %>% 
           mutate(rankPos=rank(-acProScore)) %>% 
           add_count(rankPos, name="rankCount")
       }
       
       resp %>% 
-        select(team, tieRankPos=rankPos, tieRankCount=rankCount) %T>%
-        print() %>% 
+        select(team, tieRankPos=rankPos, tieRankCount=rankCount) %>%
         return()
     }, .allTM = teamMatchs)) %>% 
     unnest(tieRank, keep_empty = T) %>% 
@@ -176,12 +190,17 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
 }
 
 teams <- readRDS("./data/simulation_v5_week14_final.rds")$teams 
+teams %>% 
+  select(teamId, name)
+
 
 teamMatchs %>% 
+  filter(week <= 14) %>% 
   mutate(win=as.integer(win)) %>% 
-  inner_join(select(teams, team=teamId, name)) %>% 
-  pivot_wider(id_cols = c(team, name), names_from = opTeam, values_from = win, values_fn = sum) %>% 
-  View()
+  #inner_join(select(teams, team=teamId, name)) %>% 
+  pivot_wider(id_cols = c(team), names_from = opTeam, values_from = win, values_fn = sum) %>% 
+  filter(team %in% c(1,4,6)) %>% 
+  select(team, `1`,`4`,`6`)
 
 
 teamMatchs %>% 
