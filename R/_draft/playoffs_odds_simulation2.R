@@ -105,7 +105,8 @@ teamRankPar <- teamMatchs %>%
 
 rank <- teamRankPar %>% 
   rankByWinPct() %>% 
-  arrange(week, team) 
+  arrange(week, team) %>% 
+  arrange(rankPos)
 
 # h2h detieing
 
@@ -119,10 +120,9 @@ while(all(oldRankFingerPrint!=rank$rankPos)){
     group_by(week, rankPos) %>% 
     group_split() %>% 
     map_df(function(.tied, .tm){
-      
+
       # new baseline for rank
       tied <- mutate(.tied,tieRankPos=0)
-      
       
       # one row = there is no tied
       # week 1 there no way to detied by wins
@@ -142,45 +142,60 @@ while(all(oldRankFingerPrint!=rank$rankPos)){
       inTiedRank <- tiedMatchs %>% 
         calcRankParameters() %>% 
         rankByWinPct() %>% 
+        group_by(team) %>% 
         filter(week==max(week)) %>% 
+        ungroup() %>% 
         select(team, tieRankPos=rankPos)
       
       # recalc group rank
       tied %>%
         select(-tieRankPos) %>% 
-        inner_join(inTiedRank, by = "team") %>% 
+        left_join(inTiedRank, by = "team") %>% 
+        mutate(tieRankPos = if_else(is.na(tieRankPos),0,tieRankPos)) %>% 
         return()
     }, .tm=teamMatchs)
   
   # compound the rank (external with in between)
   rank <- rank %>% 
     group_by(week) %>% 
-    mutate(rankPos = rank(100*rankPos+tieRankPos)) %>% 
+    mutate(rankPos = rank(1000*rankPos+tieRankPos)) %>% 
     select(-tieRankPos) %>% 
     add_count( rankPos, name="rankCount") %>% 
     ungroup()
 }
 
-# rank resolved by winPct detieing
-detied <- filter(rank, rankCount==1)
-tied   <- filter(rank, rankCount>1)
+# .tied <- tms[[4]]
 
-untied <- tied %>% 
+# rank resolved by winPct detieing
+detied <- rank %>% 
+  filter(rankCount==1) %>% 
+  mutate(tieRankPos=0)
+
+untied <- rank %>%
+  filter(rankCount>1) %>% 
   group_by(week,rankPos) %>% 
   mutate(tieRankPos = rank(-acProScore)) %>% 
+  ungroup()
+  
+bind_rows(detied, untied) %>%   
   group_by(week) %>% 
-  mutate(rankPos = rank(100*rankPos+tieRankPos)) %>% 
+  mutate(rankPos = rank(1000*rankPos+tieRankPos)) %>% 
   select(-tieRankPos) %>% 
   add_count( rankPos, name="rankCount") %>% 
-  ungroup()
+  ungroup() %>% 
+  filter(week==2) %>% 
+  arrange(week, rankPos) %>% 
+  inner_join(select(teams, team=teamId, name)) %>% 
+  View()
 
-bind_rows(detied, untied) %>% 
-  arrange(week, rankPos)
+teams <- readRDS("./data/simulation_v5_week14_final.rds")$teams
+teams %>%
+  select(teamId, name) 
 
 teamMatchs %>% 
   filter(week <= 2) %>% 
   mutate(win=as.integer(win)) %>% 
-  #inner_join(select(teams, team=teamId, name)) %>% 
+  inner_join(select(teams, team=teamId, name)) %>% 
   pivot_wider(id_cols = c(team), names_from = opTeam, values_from = win, values_fn = sum) 
   
 # .tied <- tms[[4]]

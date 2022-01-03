@@ -19,8 +19,8 @@ simulateGames <- function(.mats, .numSim=100){
   rep(list(.mats),.numSim) %>% # 100 is # of simulations
     map_df(function(.mtall){
       
-      .mtFinished  <- filter(.mtall, !is.na(aWin))
-      .mtScheduled <- filter(.mtall, is.na(aWin))
+      .mtFinished  <- filter(.mtall, !is.na(aScore))
+      .mtScheduled <- filter(.mtall, is.na(aScore))
       
       n <- dim(.mtScheduled)[1]
       .mtScheduled %>% 
@@ -39,6 +39,7 @@ simulateGames <- function(.mats, .numSim=100){
     mutate( simId = as.integer(simId) ) %>% 
     return()
 }
+
 # convert schedule format to team match formats
 scheduleToTeamMatchs <- function(.schedule){
   bind_rows(
@@ -83,10 +84,10 @@ rankByWinPct <- function(.rankPar){
 } 
 
 # simulate games
-simulations <- simulateGames(matchups, 1)
+simGames <- simulateGames(matchups, 1)
 
 # change schedule format
-teamMatchs <- simulations %>% 
+teamMatchs <- simGames %>% 
   filter(simId==1) %>% 
   select(-simId) %>% 
   scheduleToTeamMatchs()
@@ -100,7 +101,7 @@ teamRankPar <- teamMatchs %>%
 
 rank <- teamRankPar %>% 
   rankByWinPct() %>% 
-  arrange(week, team)
+  arrange(week, team) 
 
 printRank <- function(.tm, .rk){
   .tm %>% 
@@ -125,6 +126,7 @@ while(any(rank$rankPos!=oldRankFingerPrint)){
     group_by(week, rankPos) %>% 
     nest() %>% 
     mutate( tieRank = map(data, function(.tied, .allTM){
+      print(.tied)
 
       if(nrow(.tied)<2){
         .tied %>% 

@@ -38,7 +38,7 @@ matchups <- schedule %>%
   left_join(game_results, by = c("week", "aTeam", "hTeam")) %>% 
   arrange(desc(week), aTeam, hTeam)
 
-simGames <- simulateGames(matchups,10) %>% 
+simGames <- simulateGames(matchups,1) %>% 
   arrange(simId, desc(week), aTeam, hTeam)
 
 simulations <- simGames %>% 
