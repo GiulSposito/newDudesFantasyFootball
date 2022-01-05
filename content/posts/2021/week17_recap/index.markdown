@@ -28,10 +28,13 @@ params:
 
 
 
+
 ## Teams Performances
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/teamPerf-1.png" width="672" />
 
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">NICK CHUBB BURIED HIM <br> <a href="https://t.co/mxZDAbFlcf">pic.twitter.com/mxZDAbFlcf</a></p>&mdash; PFF (@PFF) <a href="https://twitter.com/PFF/status/1478206412194996228?ref_src=twsrc%5Etfw">January 4, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ## League Highlights
 
