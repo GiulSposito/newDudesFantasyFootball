@@ -18,58 +18,74 @@ resources:
     description: Its football, dudes! Trophy Room
 ---
 
-Remembering our champions...
-
 <!--more-->
-
-## Champions
 
 ![](images/trophies.jpg)
 
 ### Season 2021
-<span class="emoji">🏆</span> 1st Place: **Barão Butchers** (Kadu)<br/>
-<span class="emoji">🥈</span> 2nd Place: **Paulínia Robots** (Leonel)<br/>
-<span class="emoji">🥉</span> 3rd Place: **Limeira Dead Rabbits** (Danilo)<br/>
+🏆 1st Place: **Barão Butchers** (Kadu)<br/>
+🥈 2nd Place: **Paulínia Robots** (Leonel)<br/>
+🥉 3rd Place: **Limeira Dead Rabbits** (Danilo)<br/>
 <br/>
-<span class="emoji">🥇️</span> Reg Season 1st Place: **Indaiatuba Riders** (Langas)<br/>
-<span class="emoji">🎖</span> Highest Scoring: **Paulínia Robots** (Leonel)<br/>
-<span class="emoji">🏅</span> Survival Champion: **Paulínia Robots** (Leonel)<br/>
+🥇️ Reg Season 1st Place: **Indaiatuba Riders** (Langas)<br/>
+🎖 Highest Scoring: **Paulínia Robots** (Leonel)<br/>
+🏅 Survival Champion: **Paulínia Robots** (Leonel)<br/>
 
 ### Season 2020
-<span class="emoji">🏆</span> 1st Place: **Campinas Giants** (Teixeira)<br/>
-<span class="emoji">🥈</span> 2nd Place: **Rio Claro Farmers** (Vini)<br/>
-<span class="emoji">🥉</span> 3rd Place: **Sorocaba Wild Mules** (Hilton)<br/>
+🏆 1st Place: **Campinas Giants** (Teixeira)<br/>
+🥈 2nd Place: **Rio Claro Farmers** (Vini)<br/>
+🥉 3rd Place: **Sorocaba Wild Mules** (Hilton)<br/>
 <br/>
-<span class="emoji">🥇️</span> Reg Season 1st Place: **Sorocaba Wild Mules** (Hilton)<br/>
-<span class="emoji">🎖</span> Highest Scoring: **Gonçalvez Miners** (Fávero)<br/>
-<span class="emoji">🏅</span> Survival Champion: **Gonçalvez Miners** (Fávero)<br/>
-
+🥇️ Reg Season 1st Place: **Sorocaba Wild Mules** (Hilton)<br/>
+🎖 Highest Scoring: **Gonçalvez Miners** (Fávero)<br/>
+🏅 Survival Champion: **Gonçalvez Miners** (Fávero)<br/>
 
 ### Season 2019
-1. Indaiatuba Riders - Owner: Langas
-1. Sorocaba Steelers - Onwer: Marcão
-1. Campinas Giants - Owner: Teixeira
-
+🏆 1st Place: **Indaiatuba Riders** (Langas)<br/>
+🥈 2nd Place: **Sorocaba Steelers** (Marcão)<br/>
+🥉 3rd Place: **Campinas Giantss** (Teixeira)<br/>
+<br/>
+🥇️ Reg Season 1st Place: **Campinas Giants** (Teixeira)<br/>
+🎖 Highest Scoring: **Campinas Giants** (Teixeira)<br/>
 
 ### Season 2018
-1. Rio Claro Pfeiferians - Owner: Vini
-1. Paulínia Robots - Onwer: Leonel
-1. Sorocaba Wild Mules - Owner: Hilton
-
+🏆 1st Place: **Rio Claro Pfeiferians** (Vini)<br/>
+🥈 2nd Place: **Paulínia Robots** (Leonel)<br/>
+🥉 3rd Place: **Sorocaba Wild Mules** (Hilton)<br/>
+<br/>
+🥇 Reg Season 1st Place: **Sorocaba Wild Mules** (Hilton)<br/>
+🎖 Highest Scoring: **Sorocaba Steelers** (Marcão)<br/>
 
 ### Season 2017
-1. Sorocaba Steelers - Onwer: Marcão
-1. Paulínia Robots - Onwer: Leonel
-1. Amparo Bikers - Owner: Giul
-
+🏆 1st Place: **Sorocaba Steelers** (Marcão)<br/>
+🥈 2nd Place: **Paulínia Robots** (Leonel)<br/>
+🥉 3rd Place: **Amparo Bikers** (Giul)<br/>
+<br/>
+🥇 Reg Season 1st Place: **Sorocaba Steelers** (Marcão)<br/>
+🎖 Highest Scoring: **Paulínia Robots** (Leonel)<br/>
 
 ### Season 2016
-1. Campinas Giants - Onwer: Teixeira
-1. Brotas Alligators - Onwer: Gilson
-1. Rio Claro Pfeiferians - Owner: Vini
-
+🏆 1st Place: **Campinas Giants** (Teixeira)<br/>
+🥈 2nd Place: **Brotas Alligators** (Gilson)<br/>
+🥉 3rd Place: **Rio Claro Pfeiferians** (Vini)<br/>
+<br/>
+🥇 Reg Season 1st Place: **Campinas Giants** (Teixeira)<br/>
+🎖 Highest Scoring: **Campinas Giants** (Teixeira)<br/>
 
 ### Season 2015
-1. Amparo Bikers - Onwer: Giul
-1. Brotas Alligators - Onwer: Gilson
-1. Paulínia Robots - Owner: Leonel
+🏆 1st Place: **Amparo Bikers** (Giul)<br/>
+🥈 2nd Place: **Brotas Alligators** (Gilson)<br/>
+🥉 3rd Place: **Paulínia Robots** (Leonel)<br/>
+<br/>
+🥇 Reg Season 1st Place: **Amparo Bikers** (Giul)<br/>
+🎖 Highest Scoring: **Brotas Alligators** (Gilson)<br/>
+
+<!--
+Standing Template
+🏆 1st Place: **** ()<br/>
+🥈 2nd Place: **** ()<br/>
+🥉 3rd Place: **** ()<br/>
+<br/>
+🥇 Reg Season 1st Place: **** ()<br/>
+🎖 Highest Scoring: **** ()<br/>
+--> 
