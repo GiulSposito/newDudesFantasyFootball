@@ -11,7 +11,7 @@ toc: no
 dropCap: no
 displayInMenu: no
 displayInList: yes
-draft: yes
+draft: no
 resources:
 - name: featuredImage
   src: "butchers_championship.png"
