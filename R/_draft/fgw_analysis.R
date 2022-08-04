@@ -1,6 +1,6 @@
 library(tidyverse)
 
-pstats <- readRDS("./data/players_points.rds")
+pstats <- readRDS("./data/2021/players_points.rds")
 
 rstats <- pstats %>% 
   select(playerId, researchStatsWeek) %>%
@@ -21,7 +21,7 @@ pscores <- ppoints %>%
   mutate( diffPoints = weekPts - weekPosAvgPoints)
 
 
-sims <- fs::dir_ls("./data/2020") %>%
+sims <- fs::dir_ls("./data/2021") %>%
   .[str_detect(.,"final")] %>% 
   map(readRDS)
 
