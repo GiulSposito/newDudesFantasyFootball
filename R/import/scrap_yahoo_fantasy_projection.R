@@ -5,7 +5,9 @@ library(rvest)
 library(janitor)
 library(ffanalytics)
 
-scrapYahooPosition <- function(.pos, .size, .week, .cookies){
+.YAHOO_PLAYERS_URL <- "https://football.fantasysports.yahoo.com/f1/929480/players"
+
+scrapYahooPosition <- function(.pos, .size, .week, .season, .cookies){
 
   scrp_data <- seq(0,.size,25) %>%
     map_df(function(.i, .pos, .week, .cookies){
@@ -13,14 +15,13 @@ scrapYahooPosition <- function(.pos, .size, .week, .cookies){
       # weekly
       if (.week!=0) {
         # weekly projection
-        yahooUrl <- glue("https://football.fantasysports.yahoo.com/f1/992851/players?status=ALL&pos={.pos}&cut_type=9&stat1=S_PW_{.week}&myteam=0&sort=AR&sdir=1&count={.i}")
-        #yahooUrl <- glue("https://football.fantasysports.yahoo.com/f1/992851/players?status=ALL&pos={.pos}&cut_type=9&stat1=S_PW_{.week}&myteam=0&sort=AR&sdir=1&count={.i}")
+        yahooUrl <- glue("{.YAHOO_PLAYERS_URL}?status=ALL&pos={.pos}&cut_type=9&stat1=S_PW_{.week}&myteam=0&sort=AR&sdir=1&count={.i}")
       } else {
         # season projection
-        yahooUrl <- glue("https://football.fantasysports.yahoo.com/f1/992851/players?status=A&pos={.pos}&cut_type=9&stat1=S_PS_2021&myteam=0&sort=AR&sdir=1&count={.i}")
+        yahooUrl <- glue("{.YAHOO_PLAYERS_URL}?status=A&pos={.pos}&cut_type=9&stat1=S_PS_{.season}&myteam=0&sort=AR&sdir=1&count={.i}")
       }
       
-      print(paste0(yahooUrl,"\n"))
+      print(yahooUrl)
       
       resp <- GET(
         url = yahooUrl,
@@ -61,8 +62,6 @@ scrapYahooPosition <- function(.pos, .size, .week, .cookies){
         as_tibble() %>%
         mutate(src_id=ids) %>% 
         return()
-
-
     }, .pos=.pos, .week=.week, .cookies=.cookies) %>%
     distinct()
 
@@ -92,7 +91,7 @@ scrapYahooPosition <- function(.pos, .size, .week, .cookies){
     return()
 }
 
-scrapYahooProjection <- function(.week, .yahooCookies){
+scrapYahooProjection <- function(.week, .season=2022, .yahooCookies){
 
   scrp_df <- tibble(
       pos = c("O","K","DEF"),
@@ -100,7 +99,7 @@ scrapYahooProjection <- function(.week, .yahooCookies){
     ) %>%
     split(1:nrow(.)) %>%
     map_df(function(.position, .week, .cookies){
-      scrapYahooPosition(.position$pos, .position$size, .week=.week, .cookies = .cookies)
+      scrapYahooPosition(.position$pos, .position$size, .week=.week, .season=.season, .cookies = .cookies)
     }, .week=.week, .cookies=.yahooCookies) %>%
     select(-na, -injuryStatus) %>% 
     select(-one_of("forecast"))
