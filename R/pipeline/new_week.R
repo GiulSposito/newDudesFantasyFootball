@@ -1,8 +1,7 @@
 library(tidyverse)
 library(lubridate)
 library(glue)
-devtools::load_all("../ffanalytics") 
-# library(ffanalytics)
+library(ffanalytics)
 library(flexdashboard)
 library(yaml)
 
@@ -10,11 +9,11 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 17
-season <- 2021
+week <- 1
+season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "preSundayGames"
-destPath <- "static/reports/2021"
+prefix <- "preTNF"
+destPath <- "static/reports/2022"
 sim.version <- 5
 
 # FANTASY API ACCESS CHECK ####
