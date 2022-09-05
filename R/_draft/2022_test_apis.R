@@ -1,7 +1,8 @@
 # global parameters
 options(dplyr.summarise.inform = FALSE) # Suppress summarise info
 
-devtools::install_github("FantasyFootballAnalytics/ffanalytics")
+# devtools::install_github("FantasyFootballAnalytics/ffanalytics")
+remotes::install_github("FantasyFootballAnalytics/ffanalytics")
 
 ### testing yahoo scrapping
 # 1. log on http://football.fantasysports.yahoo.com
@@ -36,3 +37,7 @@ proj_info <- proj_stats %>%
   add_player_info()
 
 proj_info %>% View()
+
+saveRDS(my_scrape, "./data/season_scrap.rds")
+saveRDS(my_projections, "./data/season_projection.rds")
+saveRDS(proj_info, "./data/season_proj_stats.rds")
