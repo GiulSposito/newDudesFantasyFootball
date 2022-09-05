@@ -24,7 +24,7 @@ team_ids <- teams$teamId
 recap_list <- team_ids %>% 
   map(function(x){
     # URL do json do draft recap eh fixa muda so o ano.
-    GET(glue("https://nfl-fantasy.automatedinsights.com/content-prod/2021/draftrecap/eb70/3940933/{x}.json.gzip")) %>% 
+    GET(glue("https://nfl-fantasy.automatedinsights.com/content-prod/2022/draftrecap/eb70/3940933/{x}.json.gzip")) %>% 
       content(as="text") %>% 
       # na verdade é uma chamada js passando o conteúdo json, removo o entorno da chamaa
       str_remove("YUI.Env.onDraftRecapLoaded\\(  ") %>% 
