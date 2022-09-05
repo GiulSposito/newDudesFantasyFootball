@@ -45,6 +45,7 @@ proj <- readRDS("./data/season_projtable.rds") %>%
 drafted_season_proj <- teams_rosters %>% 
   select(teamId, name, rosters) %>% 
   unnest(rosters) %>% 
+  filter(complete.cases(.)) %>% 
   inner_join(select(my_player_ids, id, nfl_id), by=c("playerId"="nfl_id")) %>% 
   inner_join(proj, by = "id") %>% 
   filter(avg_type=="average") %>% 
