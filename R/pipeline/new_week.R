@@ -12,39 +12,40 @@ options(dplyr.summarise.inform = FALSE)
 week <- 1
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "preTNF"
+prefix <- "posDraft"
 destPath <- "static/reports/2022"
 sim.version <- 5
-
-# FANTASY API ACCESS CHECK ####
-source("./R/import/checkFantasyAPI.R")
-if(!checkFantasyAPI(config$authToken, config$leagueId, week)) stop("Unable to access Fantasy API!")
-
-# SCRAPPING YAHOOO ####
-source("./R/import/scrap_yahoo_fantasy_projection.R")
-yahooScrap <- scrapYahooProjection(week, config$yahooCookies)
 
 # SCRAPPING FFA SITES ####
 source("./R/import/ffa_player_projection.R")
 webScraps <- scrapPlayersPredictions(week, season)
 
-# MIXING SCRAPS ###
-source("./R/import/scrap_nfl_fantasy_projections.R") # addScrapTable
-scraps <- webScraps %>% 
-  addScrapTable(yahooScrap) 
-
 # checking
-scraps %>% 
+webScraps %>% 
   map_df(~select(.x, data_src, team, id), .id="pos") %>% 
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
 
-saveScraps(week, scraps)
+saveScraps(week, webScraps)
+
+#save state
+saveRDS(webScraps, glue("./data/weekly_webscraps_{week}.rds"))
+webScraps <- readRDS(glue("./data/weekly_webscraps_{week}.rds"))
 
 # PROJECT FANTASY POINTS
-proj_table  <- calcPlayersProjections(scraps, read_yaml("./config/score_settings.yml"))
+source("./R/import/ffa_player_projection.R")
+proj_table  <- calcPlayersProjections(webScraps, read_yaml("./config/score_settings.yml"))
+
+#save state
+saveRDS(proj_table, glue("./data/weekly_proj_table_{week}.rds"))
+proj_table <- readRDS(glue("./data/weekly_proj_table_{week}.rds"))
 
 # PLAYERS AND MATCHUPS ####
+
+# FANTASY API ACCESS CHECK ####
+source("./R/import/checkFantasyAPI.R")
+if(!checkFantasyAPI(config$authToken, config$leagueId, week)) stop("Unable to access Fantasy API!")
+
 # PLAYERS
 source("./R/api/ffa_players.R")
 players_stats <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week) %>%  
@@ -65,12 +66,7 @@ teams_rosters  <- ffa_extractTeamsFromMatchups(leagueMatchups)
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 my_player_ids <- player_ids %>%
-  mutate( nfl_id = if_else(id=="15368","2565953",nfl_id)) %>% # correct McPherson Kicker
-  mutate( nfl_id = if_else(id=="14717","2563203",nfl_id)) %>% # correct Chase McLaughl Kicker
-  mutate(
-    id = as.integer(id), 
-    nfl_id = as.integer(nfl_id))
-
+  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id))
 
 # TEST BRANCH: TEAM ROSTERS ####
 team_allocation <- teams_rosters %>% 
@@ -117,14 +113,27 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 
 # SIMULACAO ####
 
+# fantasy points por site
+source("../ffanalytics/R/calc_projections.R")
+source("../ffanalytics/R/custom_scoring.R")
+site_pp <-source_points(webScraps, read_yaml("./config/score_settings.yml")) %>% 
+  rename( pts.proj=raw_points )  %>% 
+  mutate( id = as.integer(id) )
+
+#save state
+saveRDS(site_pp, glue("./data/weekly_proj_player_site_{week}.rds"))
+site_pp <- readRDS(glue("./data/weekly_proj_player_site_{week}.rds"))
+
 # calcula tabela de pontuacao para todos os jogadores usa na simulacao
-source("./R/simulation/players_projections.R")
-site_ptsproj <- calcPointsProjection(season, read_yaml("./config/score_settings.yml"))
-pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
+# source("./R/simulation/players_projections.R")
+# site_ptsproj <- calcPointsProjection(season, read_yaml("./config/score_settings.yml"))
+# pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
 # adiciona os erros de projeções passadas
-ptsproj <- site_ptsproj %>% # projecao dos sites
-  bind_rows(pts_errors) 
+# ptsproj <- site_ptsproj %>% # projecao dos sites
+#   bind_rows(pts_errors) 
+
+ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 
@@ -135,6 +144,7 @@ sttest <- safely(tidy.ttest)
 
 # pega os pontos projetados (com erros) da semana em questão
 .week<-week
+
 ptsproj %>% 
   filter(week==.week) %>% 
   select(id, data_src, pts.proj) %>%
