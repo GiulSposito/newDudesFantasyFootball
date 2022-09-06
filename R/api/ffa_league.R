@@ -151,22 +151,22 @@ ffa_extractTeamsFromMatchups <- function(leagueMatchupsResp){
         as_tibble() %>% 
         mutate(across(rosterSlotId:playerId,as.integer)) %>% 
         return()
-    })) %>% 
+    })) %>%
     # transform as estatisticas semanais em tibble
     mutate( week.stats = map(stats, function(.stat){
-      .stat$week$`2021` %>%
+      .stat$week[[1]] %>%
         tibble(week=names(.), week.stats=.) %>%
-        unnest_wider(week.stats) %>% 
-        mutate( week = as.integer(week) ) %>% 
-        mutate( pts  = ifelse("pts" %in% names(.), as.numeric(pts), as.numeric(0)) ) %>% 
+        unnest_wider(week.stats) %>%
+        mutate( week = as.integer(week) ) %>%
+        mutate( pts  = ifelse("pts" %in% names(.), as.numeric(pts), as.numeric(0)) ) %>%
         return()
-    })) %>% 
+    })) %>%
     # transforma as estatisticas da temporada em tibble
     mutate( season.stats = map(stats, function(.stat){
-      .stat$season %>% tibble(season.stats=.) %>% 
-        unnest_wider(season.stats)    
-    }))
-
+      .stat$season %>% tibble(season.stats=.) %>%
+        unnest_wider(season.stats)
+    })) %>% 
+    return()
 }
 
 # extrai os jogos
