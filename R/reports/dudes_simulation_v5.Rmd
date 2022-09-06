@@ -242,15 +242,10 @@ games_summary %>%
 
 ## preparacao dos dados dos rosters
 
-# seleciona algumas colunas ta tabela de projecao
-# projections <- sim$proj_table %>% 
-#   filter(position==pos) %>% 
-#   select(id, projPts = points, pos_rank, drop_off, sd_pts, floor, ceiling, tier)
-
 projections <- sim$proj_table %>% 
   filter(position==pos) %>% 
   inner_join(readRDS(glue("./data/dudesffa_projpoints_week{.week}.rds")), by="id") %>% 
-  select(id, projPts = estimate, pos_rank, drop_off, sd_pts, floor=conf.low, ceiling=conf.high, tier) 
+  select(id, projPts = estimate, pos_rank,  sd_pts, floor=conf.low, ceiling=conf.high, tier) 
 
 # junta os rosters dos times, estatíticas dos jogadores, a tabela de projecao e
 # uma de-para de apreviacao do Injury Status
