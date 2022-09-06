@@ -122,11 +122,11 @@ _Last Update: `r lubridate::now()`_
 
 ## Data Base
 
-- [Full PPR Projection Table](/exports/2021/week1_full_ppr.csv)
-- [QB Raw Data](/exports/2021/week1_QB_rawdata.csv)
-- [WR Raw Data](/exports/2021/week1_WR_rawdata.csv)
-- [RB Raw Data](/exports/2021/week1_RB_rawdata.csv)
-- [TE Raw Data](/exports/2021/week1_TE_rawdata.csv)
-- [K Raw Data](/exports/2021/week1_K_rawdata.csv)
-- [DEF Raw Data](/exports/2021/week1_DST_rawdata.csv)
-- [FGW Index](/exports/2021/fgw_week1.xlsx)
+- [Full PPR Projection Table](/exports/2022/week1_full_ppr.csv)
+- [QB Raw Data](/exports/2022/week1_QB_rawdata.csv)
+- [WR Raw Data](/exports/2022/week1_WR_rawdata.csv)
+- [RB Raw Data](/exports/2022/week1_RB_rawdata.csv)
+- [TE Raw Data](/exports/2022/week1_TE_rawdata.csv)
+- [K Raw Data](/exports/2022/week1_K_rawdata.csv)
+- [DEF Raw Data](/exports/2022/week1_DST_rawdata.csv)
+- [FGW Index](/exports/2022/fgw_week1.xlsx)
