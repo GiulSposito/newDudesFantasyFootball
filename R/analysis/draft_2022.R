@@ -489,6 +489,75 @@ QB
 FLEX
 
 
+genDraftPicks <- function(.dataset, .pos, .num){
+  .dataset %>% 
+    filter( avg_type=="average" ) %>% 
+    select(id, pos, first_name, last_name, team, everything()) %>% 
+    select(1:5, adp, pos_ecr, points_vor, floor, points, ceiling) %>% 
+    filter( pos %in% .pos) %>% 
+    slice_max(points, n=.num) %>% 
+    mutate(name = glue::glue("{first_name} {last_name} {pos} ({team})")) %>% 
+    mutate(name = fct_reorder(name, points)) %>% 
+    arrange(desc(points)) %>%  
+    return()
+}
+
+RB1 <- genDraftPicks(proj_info, "RB", 14)
+
+TEWR1 <- proj_info %>% 
+  anti_join(select(RB1, id, pos), by = c("id", "pos")) %>% 
+  genDraftPicks(c("WR", "TE"), 28)
+
+TERB2WR2 <- proj_info %>% 
+  anti_join(select(RB1, id, pos), by = c("id", "pos")) %>% 
+  anti_join(select(TEWR1, id, pos), by = c("id", "pos")) %>% 
+  genDraftPicks(c("WR", "RB", "TE"), 2*14)
+
+QB <- proj_info %>% 
+  genDraftPicks(c("QB"), 14)
+
+FLEX <- proj_info %>% 
+  anti_join(select(RB1, id, pos), by = c("id", "pos")) %>% 
+  anti_join(select(TEWR1, id, pos), by = c("id", "pos")) %>% 
+  anti_join(select(TERB2WR2, id, pos), by = c("id", "pos")) %>% 
+  genDraftPicks(c("WR", "RB"), 14)
+
+K <- genDraftPicks(proj_info, "K", 14)
+DST <- genDraftPicks(proj_info, "DST", 14)
+
+bind_rows(RB1, TEWR1, TERB2WR2, QB, FLEX, K, DST) %>% 
+  mutate( rank=1:nrow(.) ) %>% 
+  mutate( name = glue::glue("{first_name} {last_name} {pos} ({team})") ) %>% 
+  mutate( name = fct_reorder(name, -rank)) %>% 
+  mutate( round = rep(1:nrow(.),each=14)[1:nrow(.)] ) %>% 
+  ggplot(aes(x=points, y=name, color=pos)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin=floor, xmax=ceiling), size=.2) +
+  facet_grid(vars(round), scales = "free_y") +
+  theme_light() +
+  theme(axis.text.y = element_text(size=5)) +
+  labs(facet="round")
+
+proj_info %>% 
+  filter( avg_type=="average" ) %>% 
+  select(id, pos, first_name, last_name, team, everything()) %>% 
+  select(1:5, adp, pos_ecr, points_vor, floor, points, ceiling) %>% 
+  filter( pos %in% c("RB", "WR", "TE")) %>% 
+  slice_min(adp, n=14*3) %>% 
+  mutate(name = glue::glue("{first_name} {last_name} {pos} ({team})")) %>% 
+  mutate(name = fct_reorder(name, points)) %>% 
+  arrange(desc(points)) %>% 
+  mutate( round = rep(1:nrow(.),each=14)[1:nrow(.)] ) %>% 
+  ggplot(aes(x=points, y=name, color=pos)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin=floor, xmax=ceiling), size=.2) +
+  facet_grid(vars(round), scales = "free_y") +
+  theme_light() +
+  theme(axis.text.y = element_text(size=6)) +
+  labs(facet="round")
+
+
+
 proj_info %>% 
   filter( avg_type=="average" ) %>% 
   select(id, pos, first_name, last_name, team, everything()) %>% 
