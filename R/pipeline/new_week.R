@@ -116,9 +116,12 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 # fantasy points por site
 source("../ffanalytics/R/calc_projections.R")
 source("../ffanalytics/R/custom_scoring.R")
-site_pp <-source_points(webScraps, read_yaml("./config/score_settings.yml")) %>% 
-  rename( pts.proj=raw_points )  %>% 
-  mutate( id = as.integer(id) )
+site_pp <- source_points(webScraps, read_yaml("./config/score_settings.yml")) %>% 
+  mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
+  rename( pts.proj=raw_points ) %>% 
+  mutate( id = as.integer(id) ) %>%
+  filter(complete.cases(.)) %>% 
+  distinct()
 
 #save state
 saveRDS(site_pp, glue("./data/weekly_proj_player_site_{week}.rds"))
@@ -186,20 +189,28 @@ rmarkdown::render(
 
 ### Raw Export
 
-if(file.exists(glue("./static/exports/2021/week{week}_full_ppr.csv"))){
-  file.remove(glue("./static/exports/2021/week{week}_full_ppr.csv"))
+if(file.exists(glue("./static/exports/{season}/week{week}_full_ppr.csv"))){
+  file.remove(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 }
 
-site_ptsproj %>% 
-  pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>% 
-  inner_join(proj_table,.,by=c("id","pos")) %>% 
-  write_csv(glue("./static/exports/2021/week{week}_full_ppr.csv"))
+# ptsproj %>% 
+#   pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>% 
+#   inner_join(proj_table,by=c("id","pos")) %>% 
+#   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 
-files <- map2( names(scraps), scraps,
+ptsproj %>%
+  mutate( data_src = str_c(data_src, "pts", sep="_") ) %>% 
+  pivot_wider(id_cols=c(id, pos), names_from=data_src, values_from=pts.proj) %>% 
+  janitor::clean_names() %>% 
+  inner_join(proj_table,by=c("id","pos")) %>% 
+  mutate( season = season, week = week ) %>% 
+  write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
+
+files <- map2( names(webScraps), webScraps,
                function(.pos, .data){
                  print(.pos)
-                 write_csv(.data, file = glue("./static/exports/2021/week{week}_{.pos}_rawdata.csv"))
-                 return(glue("./static/exports/2021/week{week}_{.pos}_rawdata.csv"))
+                 write_csv(.data, file = glue("./static/exports/{season}/week{week}_{.pos}_rawdata.csv"))
+                 return(glue("./static/exports/{season}/week{week}_{.pos}_rawdata.csv"))
                })
 
 
