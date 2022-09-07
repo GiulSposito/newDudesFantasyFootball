@@ -5,7 +5,7 @@ library(tidyverse)
 # chamada dentro da página de draft recap all rounds
 # https://fantasy.nfl.com/league/3940933/draftresults?draftResultsDetail=0&draftResultsTab=round&draftResultsType=results
 
-draft_file <- "./import/draftresults.html"
+draft_file <- "./data/draft_picks.html"
 
 read_html(draft_file) %>% 
   html_nodes("a.playerName") %>% 
@@ -37,4 +37,4 @@ draft <- tibble(
   team.name   = teamNames
 )
 
-saveRDS(draft, "./export/draft_2021.rds")
+saveRDS(draft, "./data/draft_2022_picks.rds")
