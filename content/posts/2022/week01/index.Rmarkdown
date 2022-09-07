@@ -21,7 +21,7 @@ resources:
   src: kickoff.jpg
 params:
   week: 1
-  prefix: posDraft
+  prefix: posWaivers
 ---
 
 _Last Update: `r lubridate::now()`_
