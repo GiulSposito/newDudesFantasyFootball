@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 1
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "posDraft"
+prefix <- "posWaivers"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -119,7 +119,8 @@ source("../ffanalytics/R/custom_scoring.R")
 site_pp <- source_points(webScraps, read_yaml("./config/score_settings.yml")) %>% 
   mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
   rename( pts.proj=raw_points ) %>% 
-  mutate( id = as.integer(id) ) %>%
+  mutate( id = as.integer(id),
+          pts.proj=round(pts.proj,2)) %>%
   filter(complete.cases(.)) %>% 
   distinct()
 
