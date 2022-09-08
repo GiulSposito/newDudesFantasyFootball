@@ -21,7 +21,7 @@ resources:
   src: kickoff.jpg
 params:
   week: 1
-  prefix: posWaivers
+  prefix: preTNF
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -120,6 +120,7 @@ _Last Update: `r lubridate::now()`_
 
 - [Matchup Simulations Pos Draft](/reports/2022/dudes_simulation_v5_week1_posDraft.html)
 - [Matchup Simulations posWaivers](/reports/2022/dudes_simulation_v5_week1_posWaivers.html)
+- [Matchup Simulations preTNF](/reports/2022/dudes_simulation_v5_week1_preTNF.html)
 
 ## Data Base
 
