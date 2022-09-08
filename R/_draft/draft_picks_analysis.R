@@ -142,7 +142,7 @@ draft_data %>%
 draft_data %>% 
   ggplot(aes(pick, adp, color=pos)) +
   geom_point() +
-  facet_wrap(~team.name) +
+  #facet_wrap(~team.name) +
   theme_light()
 
 draft_data %>% 
@@ -184,10 +184,73 @@ draft_data %>%
   theme_minimal()
 
 
-lm(pick~adp, data=draft_data) %>% 
-  summary()
+draft_data %>% 
+  group_by(team.id, team.name) %>% 
+  summarise(
+    floor = sum(floor), 
+    points = sum(points),
+    ceiling = sum(ceiling),
+    .groups = "drop"
+  ) %>% 
+  arrange(team.id) %>% 
+  mutate( autopick = c(F,T,T,F,F,F,T,T,F,T,F,T,F,T)) %>% 
+  mutate( team.name = fct_reorder(team.name, points)) %>% 
+  ggplot(aes(y=team.name, x=points, color=autopick)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin=floor, xmax=ceiling), size=.5) +
+  theme_light()
+
+pick_order <- draft_data %>% 
+  filter(round==1) %>% 
+  select(team.id, draft.position=pick)
+
+
+draft_data %>% 
+  group_by(team.id, team.name) %>% 
+  summarise(
+    floor = sum(floor), 
+    points = sum(points),
+    ceiling = sum(ceiling),
+    .groups = "drop"
+  ) %>% 
+  arrange(team.id) %>% 
+  mutate( autopick = c(F,T,T,F,F,F,T,T,F,T,F,T,F,T)) %>% 
+  inner_join(pick_order, by="team.id") %>% 
+  mutate( draft.order = glue("{team.name} #{draft.position}")) %>% 
+  mutate( draft.order = fct_reorder(draft.order, draft.position)) %>% 
+  ggplot(aes(y=draft.order, x=points, color=autopick)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin=floor, xmax=ceiling), size=.5) +
+  theme_light() +
+  theme( axis.text.x = element_text(angle=45, hjust = 1)) + 
+  coord_flip()
 
 
 
+pos_points <- draft_data %>% 
+  group_by(round, pos) %>% 
+  summarise(
+    avg_floor = mean(floor), 
+    avg_points = mean(points),
+    avg_ceiling = mean(ceiling),
+    .groups="drop"
+  )
 
+pos_points %>% 
+  ggplot(aes(x=round, y=avg_points, color=pos)) +
+  geom_point() +
+  theme_light()
+
+draft_data %>% 
+  select(round, team.id, team.name, pos, player.name, floor, points, ceiling) %>% 
+  inner_join(pos_points, by = c("round", "pos")) %>% 
+  mutate( pick_strengh = points - avg_points  ) %>% 
+  inner_join(pick_order, by = "team.id") %>% 
+  mutate(team.name = fct_reorder(team.name, draft.position)) %>% 
+  ggplot(aes(x=round, y=pick_strengh, fill=pos)) +
+  geom_bar(stat="identity") +
+  geom_hline(yintercept = 0 ) +
+  geom_vline(xintercept = 9.5, linetype="dashed", color="grey") + 
+  facet_wrap(~team.name) +
+  theme_light()
 
