@@ -3,11 +3,16 @@ library(tidyverse)
 season <- readRDS("./data/season_proj_stats.rds")
 week <- readRDS("./data/week1_players_projections.rds")
 
+ids <- season %>% 
+  filter(avg_type=="average", last_name %in% c("Claypool", "Green")) %>% 
+  select(id, pos, first_name, last_name, team) %>% 
+  pull(id)
+
 season %>% 
   filter( avg_type=="average") %>% 
   select( id, pos, first_name, last_name, team, everything()) %>% 
-  filter( id %in% c(12650,12652)) %>% 
-  mutate( name = glue::glue("{first_name} {last_name} {team} ({pos})") ) %>% 
+  filter( id %in% ids) %>% 
+  mutate( name = glue::glue("{first_name} {last_name} ({pos}) {team}") ) %>% 
   mutate( name = fct_reorder(name, points)) %>% 
   ggplot(aes(y=points, x=name)) +
   geom_pointrange(aes(ymin=floor, ymax=ceiling)) +

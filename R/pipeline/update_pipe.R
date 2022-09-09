@@ -9,11 +9,11 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 17
-season <- 2021
+week <- 1
+season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "final"
-destPath <- "static/reports/2021"
+prefix <- "posTNF"
+destPath <- "static/reports/2022"
 sim.version <- 5
 
 # API ACCESS CHECK ####
@@ -41,16 +41,10 @@ matchups_games <- ffa_extractMatchups(leagueMatchups)
 teams_rosters  <- ffa_extractTeamsFromMatchups(leagueMatchups)   
 
 # carregando tabelas de "de para" de IDs de Jogadores
+# carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 my_player_ids <- player_ids %>%
-  mutate( nfl_id = if_else(id=="15368","2565953",nfl_id)) %>% # correct McPherson Kicker
-  mutate( nfl_id = if_else(id=="14717","2563203",nfl_id)) %>% # correct Chase McLaughl Kicker
-  mutate(
-    id = as.integer(id), 
-    nfl_id = as.integer(nfl_id))
-
-
-
+  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id))
 
 # TEST BRANCH: TEAM ROSTERS ####
 team_allocation <- teams_rosters %>% 
@@ -83,7 +77,6 @@ players_projs <- proj_table %>%
   # quem nao tem time vira "Free Agent"
   mutate(fantasy.team=if_else(is.na(fantasy.team),"*FreeAgent", fantasy.team))
 
-
 # salva estatisticas dos jogadores
 players_stats %>% 
   unnest(weekPts) %>% 
@@ -97,13 +90,24 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 # SIMULACAO ####
 
 # calcula tabela de pontuacao para todos os jogadores usa na simulacao
-source("./R/simulation/players_projections.R")
-site_ptsproj <- calcPointsProjection(season, read_yaml("./config/score_settings.yml"))
-pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
+# fantasy points por site
+source("../ffanalytics/R/calc_projections.R")
+source("../ffanalytics/R/custom_scoring.R")
+site_pp <- source_points(webScraps, read_yaml("./config/score_settings.yml")) %>% 
+  mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
+  rename( pts.proj=raw_points ) %>% 
+  mutate( id = as.integer(id),
+          pts.proj=round(pts.proj,2)) %>%
+  filter(complete.cases(.)) %>% 
+  distinct()
+
+# pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
 # adiciona os erros de projeções passadas
-ptsproj <- site_ptsproj %>% # projecao dos sites
-  bind_rows(pts_errors) 
+# ptsproj <- site_ptsproj %>% # projecao dos sites
+#   bind_rows(pts_errors) 
+
+ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 
