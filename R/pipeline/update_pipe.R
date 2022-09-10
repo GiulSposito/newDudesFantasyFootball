@@ -93,7 +93,7 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 # fantasy points por site
 source("../ffanalytics/R/calc_projections.R")
 source("../ffanalytics/R/custom_scoring.R")
-site_pp <- source_points(webScraps, read_yaml("./config/score_settings.yml")) %>% 
+site_pp <- source_points(scraps, read_yaml("./config/score_settings.yml")) %>% 
   mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
   rename( pts.proj=raw_points ) %>% 
   mutate( id = as.integer(id),
