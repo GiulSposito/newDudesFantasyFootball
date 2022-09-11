@@ -1,63 +1,49 @@
 library(tidyverse)
 library(ffanalytics)
+library(progressr)
+library(furrr)
 
+# recupera scraps (uma lista de semana, posicao, fonte)
 scrapes <- readRDS("./data/season_simulation_weekly_scrape.rds")
 
-scrapes[1:100] %>% 
+# pega so o retorno e limpa requisicoes com erro
+wscrap <- scrapes %>% 
   map(pluck, "result") %>% 
-  compact() %>% 
-  map(function(.x){
-    print(class(.x[[1]]))
-    if(nrow(.x[[1]])==0) return(NULL)
-    print(.x[[1]])
-    projections_table(.x, scoring_rules=yaml::read_yaml("./config/score_settings.yml"), avg_type="average")
-  })
+  compact()
 
-
+# recuperador da semana (atributo da lista do scrape) e projecao resistente a falha de info
 which_week <- attr_getter("week")
+safety_proj_table <- possibly(projections_table, otherwise = NULL)
 
-week <- scrapes %>% 
-  map(pluck, "result") %>% 
-  compact() %>% 
-  map(function(.x){
-    which_week(.x)
-  }) %>% 
-  unlist()
+# prepara chamada em paralelo
+with_progress({
+  pbar <- progressor(steps = length(wscrap))
+  plan(multisession, workers=5)
+  # gera um df com as projecoes calculadas
+  season_raw_wproj <- tibble(
+      week     = map_int(wscrap, which_week),
+      pos      = map_chr(wscrap, names),
+      raw_data = map(wscrap, pluck, 1),
+      prj_data = future_map(wscrap, function(.x,sc,avgt){
+        pbar()
+        safety_proj_table(.x, scoring_rules=sc, avg_type=avgt)      
+      }, sc=yaml::read_yaml("./config/score_settings.yml"), avgt="average")
+    )
+  plan(sequential)
+})
 
-pos <- scrapes %>% 
-  map(pluck, "result") %>% 
-  compact() %>% 
-  map(function(.x){
-    names(.x)
-  }) %>% 
-  unlist()
+# trata as projecoes que foram calculadas
+season_wproj <- season_raw_wproj %>% 
+  mutate(has_data = !map_lgl(prj_data, is.null)) %>% 
+  filter(has_data) %>% 
+  select(week, prj_data) %>% 
+  unnest(prj_data) %>% 
+  arrange(week, id)
 
-raw_data <- scrapes %>% 
-  map(pluck, "result") %>% 
-  compact() %>% 
-  map(function(.x){
-    .x[[1]]
-  })
+# checa completude
+season_wproj %>% 
+  count(week, pos, sort=T) %>% 
+  pivot_wider(id_cols=c(pos), names_from="week", values_from = "n")
 
-x <- tibble(
-  week = week,
-  pos = pos, 
-  raw_data = raw_data) %>% 
-  mutate( rd_len = map_int(raw_data, nrow)) %>% 
-  filter(rd_len>0) %>% 
-  select(-rd_len) %>% 
-  group_by(week,pos) %>% 
-  nest(dtsets = c(raw_data)) %>% 
-  transmute( allset = map(dtsets, function(.x){
-    bind_rows(.x$raw_data) 
-  }))
-
-x[1,]$allset
-
-x %>% 
-  mutate( wproj = map_int(allset, nrow ) )
-
-x[1,] %>% 
-  # filter(week==1, pos=="DST") %>% 
-  pull(allset) %>% View(.[[1]])
-  projections_table(scoring_rules=yaml::read_yaml("./config/score_settings.yml"))
+# salva
+saveRDS(season_wproj, "./data/season_weekly_proj.rds")
