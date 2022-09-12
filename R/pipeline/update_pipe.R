@@ -3,7 +3,6 @@ library(lubridate)
 library(glue)
 library(ffanalytics)
 library(flexdashboard)
-library(yaml)
 
 # Suppress summarise info
 options(dplyr.summarise.inform = FALSE)
@@ -11,8 +10,8 @@ options(dplyr.summarise.inform = FALSE)
 # EXECUTION PARAMETERS ####
 week <- 1
 season <- 2022
-config <- read_yaml("./config/config.yml")
-prefix <- "posTNF"
+config <- yaml::read_yaml("./config/config.yml")
+prefix <- "preMNF"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -25,7 +24,7 @@ scraps <- readRDS(glue("./data/week{week}_scrap.rds"))
 
 # PROJECT FANTASY POINTS
 source("./R/import/ffa_player_projection.R")
-proj_table  <- calcPlayersProjections(scraps, read_yaml("./config/score_settings.yml"))
+proj_table  <- calcPlayersProjections(scraps, yaml::read_yaml("./config/score_settings.yml"))
 
 # PLAYERS AND MATCHUPS ####
 # PLAYERS
@@ -93,7 +92,7 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 # fantasy points por site
 source("../ffanalytics/R/calc_projections.R")
 source("../ffanalytics/R/custom_scoring.R")
-site_pp <- source_points(scraps, read_yaml("./config/score_settings.yml")) %>% 
+site_pp <- source_points(scraps, yaml::read_yaml("./config/score_settings.yml")) %>% 
   mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
   rename( pts.proj=raw_points ) %>% 
   mutate( id = as.integer(id),
