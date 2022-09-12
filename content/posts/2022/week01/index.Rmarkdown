@@ -21,7 +21,7 @@ resources:
   src: kickoff.jpg
 params:
   week: 1
-  prefix: preSundayGames
+  prefix: preMNF
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -123,6 +123,7 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations preTNF](/reports/2022/dudes_simulation_v5_week1_preTNF.html)
 - [Matchup Simulations posTNF](/reports/2022/dudes_simulation_v5_week1_posTNF.html)
 - [Matchup Simulations preSundayGames](/reports/2022/dudes_simulation_v5_week1_preSundayGames.html)
+- [Matchup Simulations preMNF](/reports/2022/dudes_simulation_v5_week1_preMNF.html)
 
 
 {{< tweet 1568067320974655488 >}}
