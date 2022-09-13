@@ -2,13 +2,7 @@
 playerPointsProjections <- function(.scrap, .score.settings){
   
   source("../ffanalytics/R/calc_projections.R")
-  source("../ffanalytics/R/stats_aggregation.R")
-  source("../ffanalytics/R/source_classes.R")
   source("../ffanalytics/R/custom_scoring.R")
-  source("../ffanalytics/R/scoring_rules.R")
-  source("../ffanalytics/R/make_scoring.R")
-  source("../ffanalytics/R/recode_vars.R")
-  source("../ffanalytics/R/impute_funcs.R")
   
   # calcula 
   players.projection  <- source_points(.scrap, .score.settings)
@@ -22,10 +16,13 @@ calcPointsProjection <- function(.season, .score.settings, saveToFile=T){
     map(playerPointsProjections,
         .score.settings = .score.settings) %>% 
     bind_rows(.id="week") %>% 
+    mutate(pos = if_else(pos=="D", "DST", pos)) %>% 
     mutate( season=.season,
             week = as.integer(week),
             id = as.integer(id) ) %>% 
-    rename(pts.proj = points) %T>% 
+    rename(pts.proj = raw_points)  %>%
+    filter(complete.cases(.)) %>% 
+    distinct() %T>% 
     # salva pontuacao projetada
     saveRDS("./data/points_projection.rds") %>% 
     return()
