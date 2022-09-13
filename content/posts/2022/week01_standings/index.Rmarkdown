@@ -63,8 +63,9 @@ League Leaders: `r leaders`.
 
 <!--more-->
 
-## League Ranking
+{{< tweet 1569073387544215554 >}}
 
+## League Ranking
 
 ```{r ranking}
 ranking %>% 

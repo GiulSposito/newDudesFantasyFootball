@@ -31,8 +31,9 @@ League Leaders: Robots, Jetsons, Steelers, Pats, Farmers, Butchers.
 
 <!--more-->
 
-## League Ranking
+{{< tweet 1569073387544215554 >}}
 
+## League Ranking
 
 
 | rank|img                                                                                                                                                                       |name                 |record |    pts| agains|
