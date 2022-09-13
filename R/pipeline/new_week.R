@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 1
+week <- 2
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "preSundayGames"
+prefix <- "preWaivers"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -100,7 +100,6 @@ players_projs <- proj_table %>%
   mutate(fantasy.team=if_else(is.na(fantasy.team),"*FreeAgent", fantasy.team)) %>% 
   distinct()
 
-
 # salva estatisticas dos jogadores
 players_stats %>% 
   unnest(weekPts) %>% 
@@ -129,15 +128,15 @@ saveRDS(site_pp, glue("./data/weekly_proj_player_site_{week}.rds"))
 site_pp <- readRDS(glue("./data/weekly_proj_player_site_{week}.rds"))
 
 # calcula tabela de pontuacao para todos os jogadores usa na simulacao
-# source("./R/simulation/players_projections.R")
-# site_ptsproj <- calcPointsProjection(season, read_yaml("./config/score_settings.yml"))
-# pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
+source("./R/simulation/players_projections.R")
+site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml"))
+pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
 # adiciona os erros de projeções passadas
-# ptsproj <- site_ptsproj %>% # projecao dos sites
-#   bind_rows(pts_errors) 
+ptsproj <- site_ptsproj %>% # projecao dos sites
+  bind_rows(pts_errors)
 
-ptsproj <- site_pp
+# ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 
@@ -194,18 +193,20 @@ if(file.exists(glue("./static/exports/{season}/week{week}_full_ppr.csv"))){
   file.remove(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 }
 
-# ptsproj %>% 
-#   pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>% 
-#   inner_join(proj_table,by=c("id","pos")) %>% 
-#   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
-
 ptsproj %>%
-  mutate( data_src = str_c(data_src, "pts", sep="_") ) %>% 
-  pivot_wider(id_cols=c(id, pos), names_from=data_src, values_from=pts.proj) %>% 
-  janitor::clean_names() %>% 
-  inner_join(proj_table,by=c("id","pos")) %>% 
-  mutate( season = season, week = week ) %>% 
+  pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>%
+  inner_join(proj_table,by=c("id","pos")) %>%
   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
+
+# ptsproj %>%
+#   mutate( data_src = str_c(data_src, "pts", sep="_") ) %>% 
+#   distinct() %>% 
+#   count(week, pos, id, data_src, sort = T) %>% 
+#   pivot_wider(id_cols=c(id, pos), names_from=data_src, values_from=pts.proj) %>% 
+#   janitor::clean_names() %>% 
+#   inner_join(proj_table,by=c("id","pos")) %>% 
+#   mutate( season = season, week = week ) %>% 
+#   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 
 files <- map2( names(webScraps), webScraps,
                function(.pos, .data){
