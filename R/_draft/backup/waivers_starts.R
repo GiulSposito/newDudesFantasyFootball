@@ -1,20 +1,15 @@
 library(tidyverse)
 library(glue)
 
-#.team <- "Limeira Dead Rabbits"
 .team <- "Amparo Bikers"
-#.team <- "Indaiatuba Riders"
 .week <- 2
+.prefix <- "posWaivers"
 
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
     fantasy.team %in% c(.team,"*FreeAgent"),
     week==.week
   )
-  
-# 9:12 %>% 
-#   paste0("./data/week",.,"_players_projections.rds") %>% 
-#   map_df(readRDS)
 
 # starts
 starters <- tibble(
@@ -63,3 +58,9 @@ releases %>% select(id, first_name, last_name, position, team, fantasy.team)
 players %>% 
   filter(id %in% c(14840,14127)) %>% 
   select(id, first_name, last_name, position, team, fantasy.team, floor, points, ceiling)
+
+
+# 
+# sim <- readRDS(glue("./data/simulation_v5_week{.week}_{.prefix}.rds"))
+
+

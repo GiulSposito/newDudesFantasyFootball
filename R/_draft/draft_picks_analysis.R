@@ -2,7 +2,7 @@ library(tidyverse)
 library(glue)
 library(broom)
 
-draft
+draft <- readRDS("./data/draft_2022_picks.rds")
 
 proj <- readRDS("./data/season_proj_stats.rds") %>% 
   filter( avg_type == "average" ) %>% 
@@ -254,3 +254,54 @@ draft_data %>%
   facet_wrap(~team.name) +
   theme_light()
 
+#### performance dos picks
+
+team.pickstrat <- draft_data %>%
+  select(team.id, team.name) %>% 
+  distinct() %>% 
+  arrange(team.id) %>% 
+  mutate( autopick = c(F,T,T,F,F,F,T,T,F,T,F,T,F,T))
+
+pstats <- readRDS("./data/players_points.rds") 
+
+playerPts <- pstats %>% 
+  filter(week==1) %>% 
+  select(playerId, week, weekPts)
+
+draft_data %>% 
+  select(round, pick, team.id, team, nfl_id, player.name, pos) %>% 
+  inner_join(team.pickstrat, by="team.id") %>% 
+  left_join(playerPts, by=c("nfl_id"="playerId")) %>%
+  group_by(team.name, autopick) %>% 
+  summarise(points=sum(weekPts, na.rm = T), .groups="drop") %>% 
+  mutate(team.name=fct_reorder(team.name, points)) %>% 
+  ggplot(aes(y=team.name, x=points, fill=autopick)) +
+  geom_bar(stat="identity") +
+  labs(title="Drafted Picks", subtitles="Fantasy Points Week 1 - all picks", y="team")+ 
+  theme_light() +
+  theme(legend.position = "bottom")
+
+sim <- readRDS("./data/simulation_v5_week1_final.rds")
+
+aTeam <- sim$matchup_sim %>% 
+  select(contains("teamId"), contains("totalPts")) %>% 
+  select(contains("awayTeam")) %>% 
+  set_names(c("team.id", "totalPts", "simPts"))
+
+hTeam <- sim$matchup_sim %>% 
+  select(contains("teamId"), contains("totalPts")) %>% 
+  select(contains("homeTeam")) %>% 
+  set_names(c("team.id", "totalPts", "simPts"))
+
+bind_rows(aTeam, hTeam) %>% 
+  inner_join(team.pickstrat) %>% 
+  group_by(team.name, autopick) %>% 
+  summarise(points=sum(totalPts, na.rm = T), .groups="drop") %>% 
+  mutate(team.name=fct_reorder(team.name, points)) %>% 
+  ggplot(aes(y=team.name, x=points, fill=autopick)) +
+  geom_bar(stat="identity") +
+  labs(title="Total Score", subtitles="Fantasy Points Week 1 - Starters", y="team")+ 
+  theme_light() +
+  theme(legend.position = "bottom")
+  
+  
