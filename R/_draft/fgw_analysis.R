@@ -1,6 +1,6 @@
 library(tidyverse)
 
-pstats <- readRDS("./data/2021/players_points.rds")
+pstats <- readRDS("./data/players_points.rds")
 
 rstats <- pstats %>% 
   select(playerId, researchStatsWeek) %>%
@@ -12,14 +12,13 @@ ppoints <- pstats %>%
 
 pscores <- ppoints %>% 
   inner_join(rstats, by=c("playerId","week")) %>% 
-  filter(!is.na(percentStarted )) %>% 
+  filter(!is.na(percentStarted)) %>% 
   filter(percentStarted > 0, !is.na(weekPts)) %>%
   group_by(week, position) %>% 
   mutate( weekPosAvgPoints = mean(weekPts) ) %>%
   ungroup() %>% 
   select(week, playerId, name, position, weekPts, weekPosAvgPoints, percentStarted) %>% 
   mutate( diffPoints = weekPts - weekPosAvgPoints)
-
 
 sims <- fs::dir_ls("./data/2021") %>%
   .[str_detect(.,"final")] %>% 
@@ -36,7 +35,7 @@ team_points <- sims %>%
 scoreAvg <- team_points$pts %>% mean()
 team_points$pts %>% mean()
 team_points$pts %>% sd()
-scoreAvg <- 112.95
+scoreAvg <- 111.48 
 
 qqnorm(team_points$pts)
 
@@ -45,7 +44,7 @@ fpow <- team_points$pts %>%
 
 fpow %>% summary()
 
-fpow(112.95)
+fpow(scoreAvg)
 
 plot(fpow, xlab="pontos", ylab="probalidade de vitória", main="Cummulative Distribution")  
 
