@@ -118,6 +118,21 @@ _Last Update: `r lubridate::now()`_
 
 - [Individual Players Projections](/reports/2022/ffa_players_projection_week2.html)
 
+### Collected Forecasts
+
+Number of players per site and position.
+
+```{r}
+readRDS(glue("./data/weekly_webscraps_{.week}.rds")) %>% 
+  map_df(~select(.x, data_src, team, id), .id="pos") %>% 
+  count(data_src, pos) %>% 
+  rename(Site=data_src) %>% 
+  pivot_wider(names_from = "pos",values_from="n") %>% 
+  knitr::kable() %>% 
+  kableExtra::kable_styling(font_size = 11)
+```
+
+
 ## Simulation
 
 - [Matchup Simulations preWaivers](/reports/2022/dudes_simulation_v5_week2_preWaivers.html)
