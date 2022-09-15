@@ -1,6 +1,7 @@
 library(tidyverse)
 library(glue)
 library(broom)
+library(ggrepel)
 
 draft <- readRDS("./data/draft_2022_picks.rds")
 
@@ -60,7 +61,8 @@ strengh_RBWR <- draft_data %>%
   summarise(
     pts = sum(points),
     flr = sum(floor),
-    clg = sum(ceiling)
+    clg = sum(ceiling),
+    .groups = "drop"
     # sumPts = sum(points),
     # sumFlr = sum(floor),
     # sumClg = sum(ceiling),
@@ -68,7 +70,6 @@ strengh_RBWR <- draft_data %>%
     # avgFlr = mean(floor),
     # avgClg = mean(ceiling)
   ) %>% 
-  ungroup() %>% 
   arrange(pos) %>% 
   pivot_wider(id_cols = c(team.id, team.name),
               names_from = pos,
@@ -180,7 +181,7 @@ draft_data %>%
   arrange(desc(estimate)) %>% 
   ggplot(aes(estimate, pts, color=pos)) +
   geom_point() +
-  geom_smooth() +
+  #geom_smooth() +
   theme_minimal()
 
 
@@ -280,6 +281,23 @@ draft_data %>%
   labs(title="Drafted Picks", subtitles="Fantasy Points Week 1 - all picks", y="team")+ 
   theme_light() +
   theme(legend.position = "bottom")
+
+draft_data %>% 
+  select(round, pick, team.id, team, nfl_id, player.name, pos) %>% 
+  inner_join(team.pickstrat, by="team.id") %>% 
+  left_join(playerPts, by=c("nfl_id"="playerId")) %>%
+  group_by(round, team.name, autopick) %>% 
+  summarise(points=sum(weekPts, na.rm = T), .groups="drop") %>% 
+  group_by(round) %>% 
+  mutate(team.name=fct_reorder(team.name, points)) %>% 
+  ungroup() %>% 
+  ggplot(aes(y=team.name, x=points, fill=autopick)) +
+  geom_bar(stat="identity") +
+  facet_wrap(~round, scales = "free") +
+  labs(title="Drafted Picks", subtitles="Fantasy Points Week 1 - all picks", y="team")+ 
+  theme_light() +
+  theme(legend.position = "bottom")
+
 
 sim <- readRDS("./data/simulation_v5_week1_final.rds")
 
