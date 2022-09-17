@@ -2,68 +2,92 @@ library(tidyverse)
 library(httr2)
 library(jsonlite)
 
-# step 1: reproduce pagined request
-# fantasy_filter <- fromJSON('{"players":{"filterStatsForSplitTypeIds":{"value":[1]},"filterSlotIds":{"value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,23,24]},"filterStatsForSourceIds":{"value":[1]},"sortAppliedStatTotal":{"sortAsc":false,"sortPriority":3,"value":"1120222"},"sortDraftRanks":{"sortPriority":2,"sortAsc":true,"value":"PPR"},"sortPercOwned":{"sortAsc":false,"sortPriority":4},"limit":50,"offset":0,"filterRanksForScoringPeriodIds":{"value":[2]},"filterRanksForRankTypes":{"value":["PPR"]},"filterRanksForSlotIds":{"value":[0,2,4,6,17,16]},"filterStatsForTopScoringPeriodIds":{"value":2,"additionalValue":["002022","102022","002021","1120222","022022"]}}}')
-
-resp <- request("https://fantasy.espn.com/apis/v3/games/ffl/seasons/2022/segments/0/leaguedefaults/3?scoringPeriodId=0&view=kona_player_info") %>%
-  req_method("GET") %>% 
-  # for pagging set: 'limit' and 'offset'
-  req_headers("x-fantasy-filter"='{"players":{"filterStatsForSplitTypeIds":{"value":[1]},"filterSlotIds":{"value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,23,24]},"filterStatsForSourceIds":{"value":[1]},"sortAppliedStatTotal":{"sortAsc":false,"sortPriority":3,"value":"1120222"},"sortDraftRanks":{"sortPriority":2,"sortAsc":true,"value":"PPR"},"sortPercOwned":{"sortAsc":false,"sortPriority":4},"limit":2000,"offset":0,"filterRanksForScoringPeriodIds":{"value":[2]},"filterRanksForRankTypes":{"value":["PPR"]},"filterRanksForSlotIds":{"value":[0,2,4,6,17,16]},"filterStatsForTopScoringPeriodIds":{"value":2,"additionalValue":["002022","102022","002021","1120222","022022"]}}}') %>% 
-  req_perform()
-
-data <- resp %>% 
-  resp_body_json(simplifyDataFrame=T) 
-
-espn_positions <- tibble(
-  defaultPositionId = c(1,2,3,4,16,5),
-  pos = c("QB","RB","WR","TE","DST","K")
-)
-
-players_proj <- data$players$player %>% 
-  as_tibble() %>% 
-  select(id, defaultPositionId, fullName,  active, injured, injuryStatus, stats) %>% 
-  inner_join(espn_positions, by = "defaultPositionId") %>% 
-  mutate(appliedTotal = map_dbl(stats, function(.st){.st$appliedTotal})) %>% 
-  mutate( stats = map(stats, function(.st){
-    .st$stats %>% 
-      as_tibble() 
+espn_srapeCurrWeekProj <- function(ffa_player_dis) {
+  #### TRATA IDS DOS JOGADORES ENTRE FFA NFLVERSE E ESPN
+  
+  pid_ffa <- ffa_player_dis %>% 
+    select(id, stats_id, numfire_id) %>% 
+    filter(!is.na(stats_id)) %>% 
+    distinct()
+  
+  pid_nflv <- nflreadr::load_rosters(2022) %>% 
+    select(espn_id, yahoo_id, full_name) %>% 
+    filter(!is.na(yahoo_id)) %>% 
+    distinct() %>% 
+    mutate(espn_id = as.integer(espn_id))
+  
+  espn2ffa_ids <- pid_ffa %>% 
+    inner_join(pid_nflv, by=c("stats_id"="yahoo_id")) %>% 
+    select(-stats_id,-numfire_id, -full_name) 
+  
+  ##### ESPN SCRAPPING
+  
+  resp <- request("https://fantasy.espn.com/apis/v3/games/ffl/seasons/2022/segments/0/leaguedefaults/3?scoringPeriodId=0&view=kona_player_info") %>%
+    req_method("GET") %>% 
+    # for pagging set: 'limit' and 'offset'
+    req_headers("x-fantasy-filter"='{"players":{"filterStatsForSplitTypeIds":{"value":[1]},"filterSlotIds":{"value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,23,24]},"filterStatsForSourceIds":{"value":[1]},"sortAppliedStatTotal":{"sortAsc":false,"sortPriority":3,"value":"1120222"},"sortDraftRanks":{"sortPriority":2,"sortAsc":true,"value":"PPR"},"sortPercOwned":{"sortAsc":false,"sortPriority":4},"limit":2000,"offset":0,"filterRanksForScoringPeriodIds":{"value":[2]},"filterRanksForRankTypes":{"value":["PPR"]},"filterRanksForSlotIds":{"value":[0,2,4,6,17,16]},"filterStatsForTopScoringPeriodIds":{"value":2,"additionalValue":["002022","102022","002021","1120222","022022"]}}}') %>% 
+    req_perform()
+  
+  data <- resp %>% 
+    resp_body_json(simplifyDataFrame=T) 
+  
+  ##### POSITION ID E STAT ID
+  
+  espn_positions <- tibble(
+    defaultPositionId = c(1,2,3,4,16,5),
+    pos = c("QB","RB","WR","TE","DST","K")
+  )
+  
+  stat_ids <- xlsx::read.xlsx("./static/exports/espn_stat_ids.xlsx",1) %>% 
+    as_tibble()
+  
+  ##### FINAL DATAFRAME
+  
+  espn_proj <- data$players$player %>% 
+    as_tibble() %>% 
+    select(id, defaultPositionId, fullName,  active, injured, injuryStatus, stats) %>% 
+    inner_join(espn_positions, by = "defaultPositionId") %>% 
+    mutate(appliedTotal = map_dbl(stats, function(.st){.st$appliedTotal})) %>% 
+    mutate( stats = map(stats, function(.st){
+      .st$stats %>% 
+        as_tibble() 
       # bind_cols(select(.st, appliedTotal))
-  })) %>% 
-  mutate( stats = map(stats, function(.st){
-    if(ncol(.st)<1) {return(tibble())}
-    pivot_longer(.st, cols=everything(), names_to = "statId", values_to = "value")
-  }) ) 
+    })) %>% 
+    mutate( stats = map(stats, function(.st,.cols){
+      if(ncol(.st)<1) {return(tibble())}
+      pivot_longer(.st, cols=everything(), names_to = "statId", values_to = "value") %>% 
+        inner_join(.cols, by="statId") %>% 
+        return()
+    }, .cols=stat_ids) ) %>% 
+    rename(src_id=id)
+  
+  ###### CONVERT TO FFA WEB SCRAPE FORMAT
+  
+  espn_scrape <- espn_proj %>% 
+    left_join(espn2ffa_ids, by=c("src_id"="espn_id")) %>%
+    mutate(data_src="ESPN" ) %>% 
+    mutate(position=pos) %>% 
+    select(position, id, src_id, data_src, player=fullName, pos, stats) %>% 
+    unnest(stats) %>% 
+    select(-statId, -shortName, -janName, -group, -header) %>% 
+    filter(!is.na(id)) %>% 
+    mutate(src_id=as.character(src_id)) %>% 
+    group_by(position) %>% 
+    nest() %>% 
+    mutate(data_wider = map(data, 
+                            ~pivot_wider(.x, 
+                                         id_cols = c(id, src_id, data_src, player, pos), 
+                                         names_from = colName, values_from = value, values_fill = 0)
+    ))
+  
+  
+  espnWebScrape <- espn_scrape$data_wider
+  names(espnWebScrape) <- espn_scrape$position
+  
+  return(espnWebScrape)
+}
 
-stat_ids <- xlsx::read.xlsx("./static/exports/espn_stat_ids.xlsx",1) %>% 
-  as_tibble()
-
-pproj_rbs <- players_proj %>% 
-  unnest(stats) %>%
-  inner_join(stat_ids, by="statId") %>% 
-  mutate( data_src = "ESPN", id = as.character(id) ) %>%
-  filter(pos=="RB") %>% 
-  select(player=fullName, pos, src_id = id, data_src, colName, value) %>% 
-  pivot_wider(id_cols = c(data_src, src_id, player, pos), names_from = colName, values_from = value)
-
-webScraps[["RB"]] <- bind_rows(webScraps[["RB"]],pproj_rbs)
-
-# carregando tabelas de "de para" de IDs de Jogadores
-load("../ffanalytics/R/sysdata.rda") 
-pproj_rbs %>% 
-  inner_join(select(player_ids, id, espn_id, numfire_id), by=c("src_id"="espn_id"))
-
-player_ids %>% 
-  filter(str_detect(numfire_id, "jonathan-taylor")) %>% 
-  glimpse()
-
-pproj_rbs[1,]$src_id
-
-webScraps[["RB"]] %>% select(player, data_src, src_id, id)
-
-webScraps %>% 
-  map_df(~select(.x, data_src, team, id), .id="pos") %>% 
-  count(data_src, pos) %>% 
-  pivot_wider(names_from = "pos",values_from="n")
+espnScrape <- espn_srapeCurrWeekProj(player_ids)
 
 source("../ffanalytics/R/calc_projections.R")
 source("../ffanalytics/R/custom_scoring.R")
