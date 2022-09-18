@@ -2,10 +2,10 @@ library(tidyverse)
 library(httr2)
 library(jsonlite)
 
-espn_srapeCurrWeekProj <- function(ffa_player_dis) {
+espn_getEspn2FfaIds <- function(ffa_player_ids){
   #### TRATA IDS DOS JOGADORES ENTRE FFA NFLVERSE E ESPN
   
-  pid_ffa <- ffa_player_dis %>% 
+  pid_ffa <- ffa_player_ids %>% 
     select(id, stats_id, numfire_id) %>% 
     filter(!is.na(stats_id)) %>% 
     distinct()
@@ -18,7 +18,15 @@ espn_srapeCurrWeekProj <- function(ffa_player_dis) {
   
   espn2ffa_ids <- pid_ffa %>% 
     inner_join(pid_nflv, by=c("stats_id"="yahoo_id")) %>% 
-    select(-stats_id,-numfire_id, -full_name) 
+    select(-stats_id,-numfire_id, -full_name) %>% 
+    return()
+  
+}
+
+
+
+
+espn_srapeCurrWeekProj <- function() {
   
   ##### ESPN SCRAPPING
   
@@ -43,7 +51,7 @@ espn_srapeCurrWeekProj <- function(ffa_player_dis) {
   
   ##### FINAL DATAFRAME
   
-  espn_proj <- data$players$player %>% 
+  data$players$player %>% 
     as_tibble() %>% 
     select(id, defaultPositionId, fullName,  active, injured, injuryStatus, stats) %>% 
     inner_join(espn_positions, by = "defaultPositionId") %>% 
@@ -59,12 +67,17 @@ espn_srapeCurrWeekProj <- function(ffa_player_dis) {
         inner_join(.cols, by="statId") %>% 
         return()
     }, .cols=stat_ids) ) %>% 
-    rename(src_id=id)
+    rename(src_id=id) %>% 
+    return()
   
+}
+
+
+espn_rawToFfaScrap <- function(.espn_raw, .espn2ffa_ids, .week, .season){
   ###### CONVERT TO FFA WEB SCRAPE FORMAT
   
-  espn_scrape <- espn_proj %>% 
-    left_join(espn2ffa_ids, by=c("src_id"="espn_id")) %>%
+  espn_scrape <- .espn_raw %>% 
+    left_join(.espn2ffa_ids, by=c("src_id"="espn_id")) %>%
     mutate(data_src="ESPN" ) %>% 
     mutate(position=pos) %>% 
     select(position, id, src_id, data_src, player=fullName, pos, stats) %>% 
@@ -84,14 +97,96 @@ espn_srapeCurrWeekProj <- function(ffa_player_dis) {
   espnWebScrape <- espn_scrape$data_wider
   names(espnWebScrape) <- espn_scrape$position
   
+  attr(espnWebScrape, "season") <- .season
+  attr(espnWebScrape, "week") <-  .week
+  
   return(espnWebScrape)
+  
 }
 
-espnScrape <- espn_srapeCurrWeekProj(player_ids)
+espn_InjectScrap <- function(.espnSrp, .ffaScrp){
+  allScrapes <- left_join(
+    tibble( pos = names(.ffaScrp), webScrape),
+    tibble( pos = names(.espnSrp), espnScrape),
+    by="pos") %>% 
+    mutate( joinScrape = map2(webScrape, espnScrape, function(.w, .e){
+      if(is.null(.e)) return(.w)
+      bind_rows(.w, .e)
+    })) %>% 
+    select(-webScrape, -espnScrape)
+  
+  newScrape <- allScrapes$joinScrape
+  names(newScrape) <- allScrapes$pos
+  
+  attr(newScrape, "season") <- attr(.ffaScrp, "season")
+  attr(newScrape, "week") <-  attr(.ffaScrp, "season")
+  
+  newScrape
+  
+}
+
+
+### teste space
+
+library(ffanalytics)
+load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
+
+espn2ffa_ids <- espn_getEspn2FfaIds(player_ids)
+espnRaw <- espn_srapeCurrWeekProj()
+espnScrape <- espn_rawToFfaScrap(espnRaw, espn2ffa_ids, .week=2, .season=2022)
+
+### É possível gerar a pontuação individual da ESPN?
+webScrape <- readRDS("./data/weekly_webscraps_2.rds")
+
+allScrapes <- espn_InjectScrap(espnScrape, webScrape)
+
+allScrapes %>% 
+  map_df(~select(.x, data_src, team, id), .id="pos") %>% 
+  count(data_src, pos) %>% 
+  pivot_wider(names_from = "pos",values_from="n")
+
+player_proj <- projections_table( allScrapes, 
+                                  yaml::read_yaml("./config/score_settings.yml"))
+
+allScrapes[[3]] %>% 
+  filter(id=="10261")
+
+allScrapes %>% 
+  map(function(.pos){
+    .pos %>% 
+  })
+
+
+x <- allScrapes[[1]] %>% 
+  mutate( src = data_src ) %>% 
+  group_by( src) %>% 
+  nest() %>% 
+  mutate( projTbl = map(data, projections_table, 
+                        yaml::read_yaml("./config/score_settings.yml"), 
+                        avg_type = "average") )
+
+x[1,]$data
+
+library(ffanalytics)
+
+player_ids <- player_ids %>% 
+  select(-espn_id) %>% 
+  left_join(espn2ffa_ids, by="id") %>% 
+  mutate(espn_id=as.character(espn_id))
+
+espn_proj <- projections_table(espnScrape, yaml::read_yaml("./config/score_settings.yml"), avg_type = "average") %>% 
+  add_player_info()
+
+espn_proj %>% summary()
+
+
+player_ids %>% 
+  filter(id=="14802")
+player_table
 
 source("../ffanalytics/R/calc_projections.R")
 source("../ffanalytics/R/custom_scoring.R")
-site_pp <- source_points(webScraps, yaml::read_yaml("./config/score_settings.yml"))
+site_pp <- source_points(espnScrape, yaml::read_yaml("./config/score_settings.yml"))
 
 site_pp %>% 
   count(pos, data_src) %>% 

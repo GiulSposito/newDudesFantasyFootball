@@ -21,7 +21,7 @@ resources:
   src: cover.webp
 params:
   week: 2
-  prefix: posTNF
+  prefix: preSundayGames
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -127,7 +127,7 @@ readRDS(glue("./data/weekly_webscraps_{.week}.rds")) %>%
   map_df(~select(.x, data_src, team, id), .id="pos") %>% 
   count(data_src, pos) %>% 
   rename(Site=data_src) %>% 
-  pivot_wider(names_from = "pos",values_from="n") %>% 
+  pivot_wider(names_from = "pos",values_from="n", values_fill = 0) %>% 
   knitr::kable() %>% 
   kableExtra::kable_styling(font_size = 11)
 ```
@@ -139,8 +139,8 @@ readRDS(glue("./data/weekly_webscraps_{.week}.rds")) %>%
 - [Matchup Simulations posWaivers](/reports/2022/dudes_simulation_v5_week2_posWaivers.html)
 - [Matchup Simulations preTNF](/reports/2022/dudes_simulation_v5_week2_preTNF.html)
 - [Matchup Simulations posTNF](/reports/2022/dudes_simulation_v5_week2_posTNF.html)
-<!--
 - [Matchup Simulations preSundayGames](/reports/2022/dudes_simulation_v5_week2_preSundayGames.html)
+<!--
 - [Matchup Simulations preMNF](/reports/2022/dudes_simulation_v5_week2_preMNF.html)
 -->
 
