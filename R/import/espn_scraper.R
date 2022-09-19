@@ -23,9 +23,6 @@ espn_getEspn2FfaIds <- function(ffa_player_ids){
   
 }
 
-
-
-
 espn_srapeCurrWeekProj <- function() {
   
   ##### ESPN SCRAPPING
@@ -104,16 +101,16 @@ espn_rawToFfaScrap <- function(.espn_raw, .espn2ffa_ids, .week, .season){
   
 }
 
-espn_InjectScrap <- function(.espnSrp, .ffaScrp){
+espn_InjectScrap <- function(.espnScrp, .ffaScrp){
   allScrapes <- left_join(
-    tibble( pos = names(.ffaScrp), webScrape),
-    tibble( pos = names(.espnSrp), espnScrape),
+    tibble( pos = names(.ffaScrp), ffa=.ffaScrp),
+    tibble( pos = names(.espnScrp), espn=.espnScrp),
     by="pos") %>% 
-    mutate( joinScrape = map2(webScrape, espnScrape, function(.w, .e){
+    mutate( joinScrape = map2(ffa, espn, function(.w, .e){
       if(is.null(.e)) return(.w)
       bind_rows(.w, .e)
     })) %>% 
-    select(-webScrape, -espnScrape)
+    select(-ffa, -espn)
   
   newScrape <- allScrapes$joinScrape
   names(newScrape) <- allScrapes$pos
@@ -140,60 +137,20 @@ webScrape <- readRDS("./data/weekly_webscraps_2.rds")
 
 allScrapes <- espn_InjectScrap(espnScrape, webScrape)
 
+
 allScrapes %>% 
   map_df(~select(.x, data_src, team, id), .id="pos") %>% 
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
 
-player_proj <- projections_table( allScrapes, 
-                                  yaml::read_yaml("./config/score_settings.yml"))
+projections_table( allScrapes, yaml::read_yaml("./config/score_settings.yml")) %>% filter(pos=="QB")
+projections_table( webScrape, yaml::read_yaml("./config/score_settings.yml")) %>% filter(pos=="QB")
 
-allScrapes[[3]] %>% 
-  filter(id=="10261")
+allScrapes[["QB"]] %>% 
+  arrange(id) %>% 
+  select(data_src, id, src_id, player, pos, everything()) %>% 
+  View()
 
-allScrapes %>% 
-  map(function(.pos){
-    .pos %>% 
-  })
-
-
-x <- allScrapes[[1]] %>% 
-  mutate( src = data_src ) %>% 
-  group_by( src) %>% 
-  nest() %>% 
-  mutate( projTbl = map(data, projections_table, 
-                        yaml::read_yaml("./config/score_settings.yml"), 
-                        avg_type = "average") )
-
-x[1,]$data
-
-library(ffanalytics)
-
-player_ids <- player_ids %>% 
-  select(-espn_id) %>% 
-  left_join(espn2ffa_ids, by="id") %>% 
-  mutate(espn_id=as.character(espn_id))
-
-espn_proj <- projections_table(espnScrape, yaml::read_yaml("./config/score_settings.yml"), avg_type = "average") %>% 
-  add_player_info()
-
-espn_proj %>% summary()
-
-
-player_ids %>% 
-  filter(id=="14802")
-player_table
-
-source("../ffanalytics/R/calc_projections.R")
-source("../ffanalytics/R/custom_scoring.R")
-site_pp <- source_points(espnScrape, yaml::read_yaml("./config/score_settings.yml"))
-
-site_pp %>% 
-  count(pos, data_src) %>% 
-  pivot_wider(id_cols = data_src, names_from = pos, values_from = n)
-
-site_pp %>% 
-  filter(data_src=="ESPN")
 
 # players_proj %>%
 #   filter(pos %in% c("K")) %>%
