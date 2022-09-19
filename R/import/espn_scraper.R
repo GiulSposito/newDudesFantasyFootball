@@ -5,6 +5,7 @@ library(jsonlite)
 espn_getEspn2FfaIds <- function(ffa_player_ids){
   #### TRATA IDS DOS JOGADORES ENTRE FFA NFLVERSE E ESPN
   
+  # vamos fazer o bind da NFLVERSE e ESPN via "STATS_ID"
   pid_ffa <- ffa_player_ids %>% 
     select(id, stats_id, numfire_id) %>% 
     filter(!is.na(stats_id)) %>% 
@@ -16,11 +17,17 @@ espn_getEspn2FfaIds <- function(ffa_player_ids){
     distinct() %>% 
     mutate(espn_id = as.integer(espn_id))
   
-  espn2ffa_ids <- pid_ffa %>% 
+  # ja a defesa será via espn_id da tabela da FFA
+  pid_dst <- player_ids %>% 
+    select(id, espn_id) %>% 
+    filter(as.integer(id)<=532) %>% 
+    mutate(espn_id=as.integer(espn_id)) 
+  
+  pid_ffa %>% 
     inner_join(pid_nflv, by=c("stats_id"="yahoo_id")) %>% 
     select(-stats_id,-numfire_id, -full_name) %>% 
+    bind_rows(pid_dst) %>% 
     return()
-  
 }
 
 espn_srapeCurrWeekProj <- function() {
@@ -52,7 +59,7 @@ espn_srapeCurrWeekProj <- function() {
     as_tibble() %>% 
     select(id, defaultPositionId, fullName,  active, injured, injuryStatus, stats) %>% 
     inner_join(espn_positions, by = "defaultPositionId") %>% 
-    mutate(appliedTotal = map_dbl(stats, function(.st){.st$appliedTotal})) %>% 
+    # mutate(appliedTotal = map_dbl(stats, function(.st){as.numeric(.st$appliedTotal)})) %>% 
     mutate( stats = map(stats, function(.st){
       .st$stats %>% 
         as_tibble() 
@@ -65,6 +72,8 @@ espn_srapeCurrWeekProj <- function() {
         return()
     }, .cols=stat_ids) ) %>% 
     rename(src_id=id) %>% 
+    # corrige os ids das defesas
+    mutate(src_id=if_else(pos=="DST", -(src_id+16000L)+60000L, src_id)) %>% 
     return()
   
 }
@@ -132,19 +141,17 @@ espn2ffa_ids <- espn_getEspn2FfaIds(player_ids)
 espnRaw <- espn_srapeCurrWeekProj()
 espnScrape <- espn_rawToFfaScrap(espnRaw, espn2ffa_ids, .week=2, .season=2022)
 
-### É possível gerar a pontuação individual da ESPN?
 webScrape <- readRDS("./data/weekly_webscraps_2.rds")
 
 allScrapes <- espn_InjectScrap(espnScrape, webScrape)
-
 
 allScrapes %>% 
   map_df(~select(.x, data_src, team, id), .id="pos") %>% 
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
 
-projections_table( allScrapes, yaml::read_yaml("./config/score_settings.yml")) %>% filter(pos=="QB")
-projections_table( webScrape, yaml::read_yaml("./config/score_settings.yml")) %>% filter(pos=="QB")
+projections_table( allScrapes, yaml::read_yaml("./config/score_settings.yml")) %>% filter(pos=="DST")
+projections_table( webScrape, yaml::read_yaml("./config/score_settings.yml")) %>% filter(pos=="DST")
 
 allScrapes[["QB"]] %>% 
   arrange(id) %>% 
