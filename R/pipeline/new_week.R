@@ -9,32 +9,44 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 2
+week <- 3
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "preSundayGames"
+prefix <- "preWaivers"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
 # SCRAPPING FFA SITES ####
 source("./R/import/ffa_player_projection.R")
-webScraps <- scrapPlayersPredictions(week, season)
+ffaScrape <- scrapPlayersPredictions(week, season)
+
+# carregando tabelas de "de para" de IDs de Jogadores
+load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
+my_player_ids <- player_ids %>%
+  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id))
+
+# SCRAPPING DA ESPN
+source("./R/import/espn_scraper.R")
+espn2ffa_ids <- espn_getEspn2FfaIds(player_ids)
+espnRaw <- espn_srapeCurrWeekProj()
+espnScrape <- espn_rawToFfaScrap(espnRaw, espn2ffa_ids, .week=week, .season=season)
+webScrape <- espn_InjectScrap(espnScrape, ffaScrape)
 
 # checking
-webScraps %>% 
+webScrape %>% 
   map_df(~select(.x, data_src, team, id), .id="pos") %>% 
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
 
-saveScraps(week, webScraps)
+saveScraps(week, webScrape)
 
 #save state
-saveRDS(webScraps, glue("./data/weekly_webscraps_{week}.rds"))
-webScraps <- readRDS(glue("./data/weekly_webscraps_{week}.rds"))
+saveRDS(webScrape, glue("./data/weekly_webscrapes_{week}.rds"))
+webScrape <- readRDS(glue("./data/weekly_webscrapes_{week}.rds"))
 
 # PROJECT FANTASY POINTS
 source("./R/import/ffa_player_projection.R")
-proj_table  <- calcPlayersProjections(webScraps, read_yaml("./config/score_settings.yml"))
+proj_table  <- calcPlayersProjections(webScrape, read_yaml("./config/score_settings.yml"))
 
 #save state
 saveRDS(proj_table, glue("./data/weekly_proj_table_{week}.rds"))
@@ -63,10 +75,6 @@ leagueMatchups <- ffa_league_matchups(config$authToken, config$leagueId, week)
 matchups_games <- ffa_extractMatchups(leagueMatchups)
 teams_rosters  <- ffa_extractTeamsFromMatchups(leagueMatchups)   
 
-# carregando tabelas de "de para" de IDs de Jogadores
-load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
-my_player_ids <- player_ids %>%
-  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id))
 
 # TEST BRANCH: TEAM ROSTERS ####
 team_allocation <- teams_rosters %>% 
@@ -115,7 +123,7 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 # fantasy points por site
 source("../ffanalytics/R/calc_projections.R")
 source("../ffanalytics/R/custom_scoring.R")
-site_pp <- source_points(webScraps, read_yaml("./config/score_settings.yml")) %>% 
+site_pp <- source_points(webScrape, read_yaml("./config/score_settings.yml")) %>% 
   mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
   rename( pts.proj=raw_points ) %>% 
   mutate( id = as.integer(id),
@@ -194,7 +202,6 @@ if(file.exists(glue("./static/exports/{season}/week{week}_full_ppr.csv"))){
 }
 
 ptsproj %>%
-  pivot_wider(id_cols=c(season, week, id, pos), names_from=data_src, values_from=pts.proj) %>%
   inner_join(proj_table,by=c("id","pos")) %>%
   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 
@@ -208,7 +215,7 @@ ptsproj %>%
 #   mutate( season = season, week = week ) %>% 
 #   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 
-files <- map2( names(webScraps), webScraps,
+files <- map2( names(webScrape), webScrape,
                function(.pos, .data){
                  print(.pos)
                  write_csv(.data, file = glue("./static/exports/{season}/week{week}_{.pos}_rawdata.csv"))
