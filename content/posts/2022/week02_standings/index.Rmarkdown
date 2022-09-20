@@ -63,8 +63,6 @@ League Leaders: `r leaders`.
 
 <!--more-->
 
-{{< tweet 1569073387544215554 >}}
-
 ## League Ranking
 
 ```{r ranking}
@@ -197,6 +195,8 @@ cut_rank %>%
   theme(legend.position = "bottom")
 ```
 
+
+{{< tweet 1572032143127101440 >}}
 
 ## Best Players of the Week
 
