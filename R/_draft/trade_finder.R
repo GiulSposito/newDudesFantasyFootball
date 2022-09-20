@@ -21,7 +21,7 @@ season %>%
   labs(x="player", y="season points") +
   theme_light()
 
-sim <- readRDS("./data/simulation_v5_week1_posWaivers.rds")
+sim <- readRDS("./data/simulation_v5_week2_posWaivers.rds")
 
 sim$teams %>% 
   select(teamId, name)
