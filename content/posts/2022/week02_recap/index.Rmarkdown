@@ -116,6 +116,73 @@ resp <- recaps[1,]$leagueHighligths[[1]]$text %>%
 
 ![Trophies](images/trophies.png)
 
+```{r reverseGameWinner, eval=FALSE}
+teamPts <- sim$teams %>% 
+  select(teamId, week.stats) %>% 
+  unnest(week.stats) %>% 
+  select(-week)
+
+
+recaps %>% 
+  select(contains("away"),contains("home")) %>% 
+  left_join(teamPts, by=c("teamId.away"="teamId")) %>% 
+  rename(pts.away=pts) %>% 
+  left_join(teamPts, by=c("teamId.home"="teamId")) %>% 
+  rename(pts.home=pts) %>% 
+  mutate( potencial.away = pts.away - coachPoints.away,
+          potencial.home = pts.home - coachPoints.home) %>% 
+  select(away=name.away, pts.away, potencial.away, potencial.home, pts.home, home=name.home ) %>% 
+  mutate(reverse=(pts.away>pts.home)!=(potencial.away>potencial.home)) %>% 
+  mutate(reverse.away=(potencial.away>pts.home)&(pts.away<pts.home)) %>% 
+  mutate(reverse.home=(potencial.home>pts.away)&(pts.home<pts.away))
+```
+
+```{r benchPoints, eval=FALSE}
+bind_rows(
+  select(recaps, teamId=teamId.away, name=name.away, coachPoints=coachPoints.away),
+  select(recaps, teamId=teamId.home, name=name.home, coachPoints=coachPoints.home)) %>% 
+  inner_join(teamPts, by="teamId") %>% 
+  mutate( benchPoints = -coachPoints,
+          potencial = pts+benchPoints )
+```
+
+
+
+## Team Strengths and Weakness
+
+```{r teamStrength}
+starts_perf <- inner_join(
+  select(sim$players_sim, teamId, teamName, playerId, rosterSlotId),
+  select(sim$players_stats, playerId, name, position, weekPts),
+  by="playerId"
+) %>% 
+  unnest(weekPts) %>% 
+  filter(week==.week, rosterSlotId < 20) %>% 
+  mutate(pos=factor(position, levels = c("DEF","K","TE","RB","WR","QB"),ordered = T)) %>% 
+  select(teamId, teamName, pos, weekPts)
+
+starts_perf %>% 
+  group_by(teamId, teamName, pos) %>% 
+  summarise( pts = sum(weekPts, na.rm = T)) %>% 
+  group_by(pos) %>% 
+  mutate( posAvg   = mean(pts),
+          strength = pts - posAvg) %>% 
+  group_by(teamId, teamName) %>% 
+  mutate( totalPts = round(sum(pts),1) ) %>% 
+  ungroup() %>% 
+  mutate( teamName = fct_reorder(glue("{teamName} ({totalPts})"), -totalPts)) %>% 
+  ggplot(aes(x=pos, y=strength, color=strength>=0, fill=strength>=0)) +
+  geom_point() +
+  geom_bar(stat = "identity", width=.1) +
+  geom_hline(yintercept = 0, color="grey", lty="dashed") +
+  coord_flip() +
+  facet_wrap(teamName~.) +
+  labs(x="", y="", title="Position Strength", subtitle = "Team Position Points vs Starts Average") + 
+  theme_light() +
+  theme(legend.position = "none")
+```
+
+
 
 ## Matchups Recap
 

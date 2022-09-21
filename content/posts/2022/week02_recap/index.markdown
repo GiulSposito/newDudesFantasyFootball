@@ -53,6 +53,17 @@ The 161.88 points scored by Indaiatuba Blues represented the highest total in th
 ![Trophies](images/trophies.png)
 
 
+
+
+
+
+
+## Team Strengths and Weakness
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/teamStrength-1.png" width="672" />
+
+
+
 ## Matchups Recap
 
 ### Paulinia Robots Gets Victory Against Indaiatuba Riders 
