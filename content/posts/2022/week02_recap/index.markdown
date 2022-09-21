@@ -54,7 +54,10 @@ The 161.88 points scored by Indaiatuba Blues represented the highest total in th
 
 
 
+## Points left on bench
 
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/benchPoints-1.png" width="672" />
 
 
 

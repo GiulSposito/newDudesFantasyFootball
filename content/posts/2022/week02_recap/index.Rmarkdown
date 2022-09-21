@@ -116,34 +116,48 @@ resp <- recaps[1,]$leagueHighligths[[1]]$text %>%
 
 ![Trophies](images/trophies.png)
 
-```{r reverseGameWinner, eval=FALSE}
+```{r reverseGameWinner, eval=TRUE}
 teamPts <- sim$teams %>% 
   select(teamId, week.stats) %>% 
   unnest(week.stats) %>% 
   select(-week)
-
-
-recaps %>% 
-  select(contains("away"),contains("home")) %>% 
-  left_join(teamPts, by=c("teamId.away"="teamId")) %>% 
-  rename(pts.away=pts) %>% 
-  left_join(teamPts, by=c("teamId.home"="teamId")) %>% 
-  rename(pts.home=pts) %>% 
-  mutate( potencial.away = pts.away - coachPoints.away,
-          potencial.home = pts.home - coachPoints.home) %>% 
-  select(away=name.away, pts.away, potencial.away, potencial.home, pts.home, home=name.home ) %>% 
-  mutate(reverse=(pts.away>pts.home)!=(potencial.away>potencial.home)) %>% 
-  mutate(reverse.away=(potencial.away>pts.home)&(pts.away<pts.home)) %>% 
-  mutate(reverse.home=(potencial.home>pts.away)&(pts.home<pts.away))
+# 
+# 
+# recaps %>% 
+#   select(contains("away"),contains("home")) %>% 
+#   left_join(teamPts, by=c("teamId.away"="teamId")) %>% 
+#   rename(pts.away=pts) %>% 
+#   left_join(teamPts, by=c("teamId.home"="teamId")) %>% 
+#   rename(pts.home=pts) %>% 
+#   mutate( potencial.away = pts.away - coachPoints.away,
+#           potencial.home = pts.home - coachPoints.home) %>% 
+#   select(away=name.away, pts.away, potencial.away, potencial.home, pts.home, home=name.home ) %>% 
+#   mutate(reverse=(pts.away>pts.home)!=(potencial.away>potencial.home)) %>% 
+#   mutate(reverse.away=(potencial.away>pts.home)&(pts.away<pts.home)) %>% 
+#   mutate(reverse.home=(potencial.home>pts.away)&(pts.home<pts.away))
 ```
 
-```{r benchPoints, eval=FALSE}
+## Points left on bench
+
+
+```{r benchPoints}
+library(ggforce)
+
 bind_rows(
   select(recaps, teamId=teamId.away, name=name.away, coachPoints=coachPoints.away),
   select(recaps, teamId=teamId.home, name=name.home, coachPoints=coachPoints.home)) %>% 
   inner_join(teamPts, by="teamId") %>% 
-  mutate( benchPoints = -coachPoints,
-          potencial = pts+benchPoints )
+  mutate( benchPoints = -round(coachPoints,1),
+          potencial = pts-coachPoints,
+          name = fct_reorder(glue("{name} ({benchPoints})"), potencial)) %>% 
+  ggplot(aes(color=benchPoints)) +
+  geom_link(aes(y=name, x=potencial, yend=name, xend=pts, alpha=stat(index)), size=1, show.legend = F) +
+  scale_color_gradient(low="darkgreen", high="darkred") +
+  geom_text(aes(y=name, x=pts, label=round(pts)), color="black", size=2.7, hjust=1) +
+  geom_text(aes(y=name, x=potencial, label=round(potencial)), color="darkgray", size=2.3, hjust=0) +
+  labs(x="fantasy points", y="Team (points left in bench)", title="Best Roster Potential", subtitle="Actual Score vs Best Roster Score") +
+  theme_light()
+  
 ```
 
 
