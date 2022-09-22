@@ -8,9 +8,11 @@ library(glue)
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
     fantasy.team %in% c(.team,"*FreeAgent"),
+    team!="FA",
     week==.week
   )
 
+players %>%  names()
 # starts
 starters <- tibble(
   pos=c("QB","RB","WR","TE","K","DST"),
@@ -51,16 +53,9 @@ releases <- players %>%
   anti_join(starters) %>% 
   anti_join(bench)
 
-starters %>% select(id, first_name, last_name, position, team, fantasy.team)
-bench  %>% select(id, first_name, last_name, position, team, fantasy.team)
-releases %>% select(id, first_name, last_name, position, team, fantasy.team)
+starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition)
+bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition)
+releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition)
 
-players %>% 
-  filter(id %in% c(14840,14127)) %>% 
-  select(id, first_name, last_name, position, team, fantasy.team, floor, points, ceiling)
-
-
-# 
-# sim <- readRDS(glue("./data/simulation_v5_week{.week}_{.prefix}.rds"))
 
 
