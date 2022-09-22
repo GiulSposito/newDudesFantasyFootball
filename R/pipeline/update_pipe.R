@@ -8,10 +8,10 @@ library(flexdashboard)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 2
+week <- 3
 season <- 2022
 config <- yaml::read_yaml("./config/config.yml")
-prefix <- "final"
+prefix <- "preTNF"
 destPath <- "static/reports/2022"
 sim.version <- 5
 

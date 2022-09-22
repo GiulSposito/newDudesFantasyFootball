@@ -24,7 +24,7 @@ starters <- tibble(
       # filter(!id %in% c(13604,8153, 530) ) %>%  # barkley 13604
       filter(position==.x$pos) %>%
       #filter(is.na(injuryStatus)) %>% 
-      top_n(.x$qtd, floor)
+      top_n(.x$qtd, points)
   }, .players=players)
 
 starters <- players %>% 
@@ -32,7 +32,7 @@ starters <- players %>%
   filter(pos %in% c("WR","RB")) %>% 
   filter(is.na(injuryGameStatus)) %>% 
   anti_join(starters) %>% 
-  top_n(1, floor) %>% 
+  top_n(1, points) %>% 
   bind_rows(starters,.)
 
 ## bench
@@ -53,9 +53,7 @@ releases <- players %>%
   anti_join(starters) %>% 
   anti_join(bench)
 
-starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition)
-bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition)
-releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition)
-
-
+starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling)
+bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling)
+releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling)
 
