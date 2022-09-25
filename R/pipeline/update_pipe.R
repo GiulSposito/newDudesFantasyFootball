@@ -88,7 +88,6 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 
 # SIMULACAO ####
 
-# calcula tabela de pontuacao para todos os jogadores usa na simulacao
 # fantasy points por site
 source("../ffanalytics/R/calc_projections.R")
 source("../ffanalytics/R/custom_scoring.R")
@@ -100,13 +99,20 @@ site_pp <- source_points(scraps, yaml::read_yaml("./config/score_settings.yml"))
   filter(complete.cases(.)) %>% 
   distinct()
 
-# pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
+#save state
+saveRDS(site_pp, glue("./data/weekly_proj_player_site_{week}.rds"))
+site_pp <- readRDS(glue("./data/weekly_proj_player_site_{week}.rds"))
+
+# calcula tabela de pontuacao para todos os jogadores usa na simulacao
+source("./R/simulation/players_projections.R")
+site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml"))
+pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
 # adiciona os erros de projeções passadas
 ptsproj <- site_ptsproj %>% # projecao dos sites
   bind_rows(pts_errors)
 
-#  ptsproj <- site_pp
+# ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 
