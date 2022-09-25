@@ -103,10 +103,10 @@ site_pp <- source_points(scraps, yaml::read_yaml("./config/score_settings.yml"))
 # pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
 # adiciona os erros de projeções passadas
-# ptsproj <- site_ptsproj %>% # projecao dos sites
-#   bind_rows(pts_errors) 
+ptsproj <- site_ptsproj %>% # projecao dos sites
+  bind_rows(pts_errors)
 
-ptsproj <- site_pp
+#  ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 
