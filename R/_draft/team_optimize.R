@@ -12,7 +12,14 @@ players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
     week==.week
   )
 
-players %>%  names()
+pstats <- readRDS("./data/players_points.rds") %>% 
+  select(playerId, nfl_id, name, position, week, weekSeasonPts ) %>% 
+  filter(week==.week)
+
+players <- players %>% 
+  inner_join(pstats, by=c("nfl_id"="playerId"))
+
+
 # starts
 starters <- tibble(
   pos=c("QB","RB","WR","TE","K","DST"),
@@ -24,15 +31,15 @@ starters <- tibble(
       # filter(!id %in% c(13604,8153, 530) ) %>%  # barkley 13604
       filter(position==.x$pos) %>%
       #filter(is.na(injuryStatus)) %>% 
-      top_n(.x$qtd, points)
+      top_n(.x$qtd, floor)
   }, .players=players)
 
 starters <- players %>% 
   # filter(!id %in% c(13604,8153, 530) ) %>%  # barkley 13604
   filter(pos %in% c("WR","RB")) %>% 
   filter(is.na(injuryGameStatus)) %>% 
-  anti_join(starters) %>% 
-  top_n(1, points) %>% 
+  anti_join(starters, by=c("id","pos")) %>% 
+  top_n(1, fllor) %>% 
   bind_rows(starters,.)
 
 ## bench
@@ -45,15 +52,15 @@ bench <- tibble(
     .players %>% 
       filter(position==.x$pos) %>% 
       top_n(.x$qtd, ceiling)
-  }, .players = anti_join(players, starters) )
+  }, .players = anti_join(players, starters, by=c("id","pos")) )
 
 # releases
 releases <- players %>% 
   filter(fantasy.team==.team) %>% 
-  anti_join(starters) %>% 
-  anti_join(bench)
+  anti_join(starters, by=c("id","pos")) %>% 
+  anti_join(bench, by=c("id","pos"))
 
-starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling)
-bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling)
-releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling)
+starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
+bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
+releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
 
