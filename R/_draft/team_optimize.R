@@ -2,7 +2,7 @@ library(tidyverse)
 library(glue)
 
 .team <- "Amparo Bikers"
-.week <- 3
+.week <- 4
 .prefix <- "posWaivers"
 
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
@@ -13,12 +13,12 @@ players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
   )
 
 pstats <- readRDS("./data/players_points.rds") %>% 
-  select(playerId, nfl_id, name, position, week, weekSeasonPts ) %>% 
-  filter(week==.week)
-
-players <- players %>% 
-  inner_join(pstats, by=c("nfl_id"="playerId"))
-
+  filter(week==.week) %>% 
+  select(playerId, weekSeasonPts )
+  
+# 
+# players <- players %>% 
+#   inner_join(pstats, by=c("nfl_id"="playerId"))
 
 # starts
 starters <- tibble(
@@ -28,18 +28,15 @@ starters <- tibble(
   split(1:nrow(.)) %>% 
   map_df(function(.x, .players){
     .players %>% 
-      # filter(!id %in% c(13604,8153, 530) ) %>%  # barkley 13604
       filter(position==.x$pos) %>%
-      #filter(is.na(injuryStatus)) %>% 
-      top_n(.x$qtd, floor)
+      top_n(.x$qtd, points)
   }, .players=players)
 
 starters <- players %>% 
-  # filter(!id %in% c(13604,8153, 530) ) %>%  # barkley 13604
   filter(pos %in% c("WR","RB")) %>% 
   filter(is.na(injuryGameStatus)) %>% 
   anti_join(starters, by=c("id","pos")) %>% 
-  top_n(1, fllor) %>% 
+  top_n(1, points) %>% 
   bind_rows(starters,.)
 
 ## bench

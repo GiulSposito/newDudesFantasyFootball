@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 4
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "posWaivers"
+prefix <- "preTNF"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -206,13 +206,13 @@ ptsproj %>%
   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 
 # ptsproj %>%
-#   mutate( data_src = str_c(data_src, "pts", sep="_") ) %>% 
-#   distinct() %>% 
-#   count(week, pos, id, data_src, sort = T) %>% 
-#   pivot_wider(id_cols=c(id, pos), names_from=data_src, values_from=pts.proj) %>% 
-#   janitor::clean_names() %>% 
-#   inner_join(proj_table,by=c("id","pos")) %>% 
-#   mutate( season = season, week = week ) %>% 
+#   mutate( data_src = str_c(data_src, "pts", sep="_") ) %>%
+#   distinct() %>%
+#   count(week, pos, id, data_src, sort = T) %>%
+#   pivot_wider(id_cols=c(id, pos), names_from=data_src, values_from=pts.proj) %>%
+#   janitor::clean_names() %>%
+#   inner_join(proj_table,by=c("id","pos")) %>%
+#   mutate( season = season, week = week ) %>%
 #   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 
 files <- map2( names(webScrape), webScrape,
