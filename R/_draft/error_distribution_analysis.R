@@ -1,24 +1,30 @@
 library(tidyverse)
 library(glue)
 
+# recupera as projeções (project table) feitas para todas as semanas das temporadas passadas
+# é usada para pegar o tier
 ptsProjs <- 2019:2021 %>% 
   map_df(~readRDS(glue("./data/{.x}/points_projection.rds"))) %>% 
-  bind_rows(readRDS("./data/points_projection.rds")) 
+  bind_rows(readRDS("./data/points_projection.rds")) # fundi com as da temporada atual
 
+# estatísticas semanais de todas as temporadas passadas
 pstats <- 2019:2021 %>% 
   map_df(~mutate(readRDS(glue("./data/{.x}/players_points.rds")), fileSeason=.x)) %>% 
-  bind_rows(mutate(readRDS("./data/players_points.rds"), fileSeason=2022L)) %>% 
+  bind_rows(mutate(readRDS("./data/players_points.rds"), fileSeason=2022L)) %>%  # mais a corrente
   mutate( season = if_else(is.na(season), fileSeason, season) ) %>% 
   select(-fileSeason)
 
+# projecoes dos jogadores por data_src de todas as temporadas passadas
 playerProj <- 2019:2021 %>% 
   map_df(function(.season){
+    # todas as semanas
     1:16 %>% 
       map_df(~mutate(readRDS(glue("./data/{.season}/week{.x}_players_projections.rds")),fileWeek = .x)) %>% 
       mutate( season = .season ) %>% 
       return()
   }) %>% 
   bind_rows({
+    # as correntes
     1:3 %>% 
       map_df(~mutate(readRDS(glue("./data/week{.x}_players_projections.rds")),fileWeek = .x)) %>% 
       mutate( season = 2022 ) %>% 
@@ -26,6 +32,7 @@ playerProj <- 2019:2021 %>%
   }) %>% 
   mutate(playerId = as.integer(nfl_id))
 
+# extrai a informacao do tier do jogador por semana
 tiers <- playerProj %>% 
   select(nfl_id, pos, tier, week, fileWeek, season) %>% 
   mutate( week = if_else(is.na(week), fileWeek, week),
@@ -34,14 +41,21 @@ tiers <- playerProj %>%
   rename(playerId=nfl_id) %>% 
   select(-fileWeek)
   
+# a partir da pontuacao feita
 proj_error_distr <- pstats %>% 
   mutate( playerId = if_else(is.na(playerId), as.integer(nfl_id), playerId)) %>% 
   select(season, week, playerId, id, weekPts = points) %>% 
+  # compoe o tier do jogador
   inner_join(tiers, by = c("playerId", "week", "season")) %>% 
   select(-pos) %>% 
+  # compoe com a projecao
   inner_join(ptsProjs, by = c("id", "week", "season")) %>% 
+  # calcula o erro
   mutate(projError = weekPts-pts.proj) %>% 
   filter(complete.cases(.))
+
+# salva a tabela de erros por fonte por tier por posicao
+saveRDS(proj_error_distr,"./data/hist_tier_proj_error.rds")
 
 
 proj_error_distr %>% 

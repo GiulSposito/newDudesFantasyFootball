@@ -29,14 +29,14 @@ starters <- tibble(
   map_df(function(.x, .players){
     .players %>% 
       filter(position==.x$pos) %>%
-      top_n(.x$qtd, points)
+      top_n(.x$qtd, ceiling)
   }, .players=players)
 
 starters <- players %>% 
   filter(pos %in% c("WR","RB")) %>% 
   filter(is.na(injuryGameStatus)) %>% 
   anti_join(starters, by=c("id","pos")) %>% 
-  top_n(1, points) %>% 
+  top_n(1, ceiling) %>% 
   bind_rows(starters,.)
 
 ## bench
@@ -61,3 +61,8 @@ starters %>% select(id, first_name, last_name, position, team, fantasy.team, ran
 bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
 releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
 
+players %>% 
+  filter(pos=="DST") %>% 
+  top_n(14, ceiling) %>% 
+  select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts) %>% 
+  arrange(desc(weekSeasonPts))
