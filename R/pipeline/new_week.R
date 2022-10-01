@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 4
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "posTNF"
+prefix <- "preSundayGames"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -140,11 +140,11 @@ source("./R/simulation/players_projections.R")
 site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml"))
 pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
-# adiciona os erros de projeções passadas
-ptsproj <- site_ptsproj %>% # projecao dos sites
-  bind_rows(pts_errors)
-
-# ptsproj <- site_pp
+# # adiciona os erros de projeções passadas
+# ptsproj <- site_ptsproj %>% # projecao dos sites
+#   bind_rows(pts_errors)
+# 
+ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 

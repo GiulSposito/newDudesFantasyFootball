@@ -59,17 +59,20 @@ saveRDS(proj_error_distr,"./data/hist_tier_proj_error.rds")
 
 
 proj_error_distr %>% 
-  filter(pos=="RB", tier<10) %>% 
+  filter(pos=="RB", tier>10) %>% 
   ggplot(aes(x=projError, fill=as.factor(tier))) +
   geom_density(alpha=.5) +
   facet_wrap(~data_src, scales = "free_y") +
+  labs(title="Projection Errors", subtitle="Running Backs - Season 2019:2022",
+       fill="Player Tier", x="error", y="frequency") +
   theme_light()
   
 proj_error_distr %>% 
-  filter(pos=="RB", tier<10) %>% 
+  filter(pos=="DEF", tier<10) %>% 
   select(playerId, tier, projError) %>% 
   distinct() %>% 
   ggplot(aes(x=projError, fill=as.factor(tier))) +
+  facet_wrap(~data_src, scales = "free_y") +
   geom_density(alpha=.5) +
   theme_light()
 
