@@ -8,10 +8,10 @@ library(flexdashboard)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 3
+week <- 4
 season <- 2022
 config <- yaml::read_yaml("./config/config.yml")
-prefix <- "final"
+prefix <- "preSundayGames"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -43,7 +43,8 @@ teams_rosters  <- ffa_extractTeamsFromMatchups(leagueMatchups)
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 my_player_ids <- player_ids %>%
-  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id))
+  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id)) %>% 
+  mutate( nfl_id = if_else(id==14108, 2562645L, nfl_id) ) # greg dortch
 
 # TEST BRANCH: TEAM ROSTERS ####
 team_allocation <- teams_rosters %>% 

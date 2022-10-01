@@ -3,14 +3,21 @@ library(glue)
 
 .team <- "Amparo Bikers"
 .week <- 4
-.prefix <- "posWaivers"
+.prefix <- "preSundayGames"
 
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
     fantasy.team %in% c(.team,"*FreeAgent"),
     team!="FA",
     week==.week
+  ) %>% 
+  mutate( injuryGameStatus = if_else(is.na(injuryGameStatus), "", injuryGameStatus)) %>% 
+  mutate(
+    floor   = if_else(injuryGameStatus=="Out", 0, floor), 
+    points  = if_else(injuryGameStatus=="Out", 0, points), 
+    ceiling = if_else(injuryGameStatus=="Out", 0, ceiling)
   )
+
 
 pstats <- readRDS("./data/players_points.rds") %>% 
   filter(week==.week) %>% 
@@ -29,14 +36,14 @@ starters <- tibble(
   map_df(function(.x, .players){
     .players %>% 
       filter(position==.x$pos) %>%
-      top_n(.x$qtd, ceiling)
+      slice_max(ceiling, n=.x$qtd)
   }, .players=players)
 
 starters <- players %>% 
   filter(pos %in% c("WR","RB")) %>% 
-  filter(is.na(injuryGameStatus)) %>% 
+  filter(injuryGameStatus=="") %>% 
   anti_join(starters, by=c("id","pos")) %>% 
-  top_n(1, ceiling) %>% 
+  slice_max(ceiling, n=1) %>% 
   bind_rows(starters,.)
 
 ## bench
@@ -48,7 +55,7 @@ bench <- tibble(
   map_df(function(.x, .players){
     .players %>% 
       filter(position==.x$pos) %>% 
-      top_n(.x$qtd, ceiling)
+      slice_max(ceiling, n=.x$qtd)
   }, .players = anti_join(players, starters, by=c("id","pos")) )
 
 # releases
@@ -57,12 +64,15 @@ releases <- players %>%
   anti_join(starters, by=c("id","pos")) %>% 
   anti_join(bench, by=c("id","pos"))
 
-starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
-bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
-releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts)
+starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
 
 players %>% 
   filter(pos=="DST") %>% 
   top_n(14, ceiling) %>% 
   select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts) %>% 
   arrange(desc(weekSeasonPts))
+
+
+?top_n
