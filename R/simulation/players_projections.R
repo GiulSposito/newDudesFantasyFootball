@@ -1,8 +1,8 @@
 # funcao que aproveita o pacote ffanalytics para fazer a projecao de pontos por jogador
 playerPointsProjections <- function(.scrap, .score.settings){
   
-  source("../ffanalytics/R/calc_projections.R")
-  source("../ffanalytics/R/custom_scoring.R")
+  # source("../ffanalytics/R/calc_projections.R")
+  # source("../ffanalytics/R/custom_scoring.R")
   
   # calcula 
   players.projection  <- source_points(.scrap, .score.settings)
@@ -13,14 +13,14 @@ playerPointsProjections <- function(.scrap, .score.settings){
 calcPointsProjection <- function(.season, .score.settings, saveToFile=T){
   
   points.projection <- readRDS("./data/weeklies_scraps.rds") %>% 
-    map(playerPointsProjections,
-        .score.settings = .score.settings) %>% 
+    map(projections_table_data_sources,
+        .scoring_rules = .score.settings) %>% 
     bind_rows(.id="week") %>% 
     mutate(pos = if_else(pos=="D", "DST", pos)) %>% 
     mutate( season=.season,
             week = as.integer(week),
             id = as.integer(id) ) %>% 
-    rename(pts.proj = raw_points)  %>%
+    rename(pts.proj = points)  %>%
     filter(complete.cases(.)) %>% 
     distinct() %T>% 
     # salva pontuacao projetada

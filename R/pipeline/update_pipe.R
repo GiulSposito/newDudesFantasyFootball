@@ -3,6 +3,7 @@ library(lubridate)
 library(glue)
 library(ffanalytics)
 library(flexdashboard)
+library(yaml)
 
 # Suppress summarise info
 options(dplyr.summarise.inform = FALSE)
@@ -20,11 +21,11 @@ source("./R/import/checkFantasyAPI.R")
 if(!checkFantasyAPI(config$authToken, config$leagueId, week)) stop("Unable to access Fantasy API!")
 
 # SCRAP: RECOVER
-scraps <- readRDS(glue("./data/week{week}_scrap.rds"))
+webScrape <- readRDS(glue("./data/week{week}_scrap.rds"))
 
 # PROJECT FANTASY POINTS
 source("./R/import/ffa_player_projection.R")
-proj_table  <- calcPlayersProjections(scraps, yaml::read_yaml("./config/score_settings.yml"))
+proj_table  <- calcPlayersProjections(webScrape, yaml::read_yaml("./config/score_settings.yml"))
 
 # PLAYERS AND MATCHUPS ####
 # PLAYERS
@@ -89,31 +90,26 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 
 # SIMULACAO ####
 
-# fantasy points por site
-source("../ffanalytics/R/calc_projections.R")
-source("../ffanalytics/R/custom_scoring.R")
-site_pp <- source_points(scraps, yaml::read_yaml("./config/score_settings.yml")) %>% 
-  mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
-  rename( pts.proj=raw_points ) %>% 
-  mutate( id = as.integer(id),
-          pts.proj=round(pts.proj,2)) %>%
-  filter(complete.cases(.)) %>% 
-  distinct()
+# # fantasy points por site
+source("./R/simulation/data_src_proj_table.R")
+site_pp <- projections_table_data_sources(webScrape, read_yaml("./config/score_settings.yml")) %>% 
+  mutate(id=as.integer(id)) %>% 
+  select(pos, data_src, id, pts.proj=points)
 
-#save state
+# save state
 saveRDS(site_pp, glue("./data/weekly_proj_player_site_{week}.rds"))
 site_pp <- readRDS(glue("./data/weekly_proj_player_site_{week}.rds"))
 
-# calcula tabela de pontuacao para todos os jogadores usa na simulacao
+# calcula e aplica os erros de projeção das semanas passadas
 source("./R/simulation/players_projections.R")
-site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml"))
+site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml")) 
 pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
-# adiciona os erros de projeções passadas
-ptsproj <- site_ptsproj %>% # projecao dos sites
-  bind_rows(pts_errors)
+# # adiciona os erros de projeções passadas
+# ptsproj <- site_ptsproj %>% # projecao dos sites
+#   bind_rows(pts_errors)
 
-# ptsproj <- site_pp
+ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 

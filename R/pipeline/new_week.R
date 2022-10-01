@@ -16,15 +16,15 @@ prefix <- "preSundayGames"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
-# SCRAPPING FFA SITES ####
-source("./R/import/ffa_player_projection.R")
-ffaScrape <- scrapPlayersPredictions(week, season)
-
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 my_player_ids <- player_ids %>%
   mutate( id = as.integer(id), nfl_id = as.integer(nfl_id)) %>% 
   mutate( nfl_id = if_else(id==14108, 2562645L, nfl_id) ) # greg dortch
+
+# SCRAPPING FFA SITES ####
+source("./R/import/ffa_player_projection.R")
+ffaScrape <- scrapPlayersPredictions(week, season)
 
 # SCRAPPING DA ESPN
 source("./R/import/espn_scraper.R")
@@ -121,30 +121,25 @@ saveRDS(players_projs, glue("./data/week{week}_players_projections.rds"))
 
 # SIMULACAO ####
 
-# fantasy points por site
-source("../ffanalytics/R/calc_projections.R")
-source("../ffanalytics/R/custom_scoring.R")
-site_pp <- source_points(webScrape, read_yaml("./config/score_settings.yml")) %>% 
-  mutate( pos = if_else(pos=="D", "DST", pos)) %>% 
-  rename( pts.proj=raw_points ) %>% 
-  mutate( id = as.integer(id),
-          pts.proj=round(pts.proj,2)) %>%
-  filter(complete.cases(.)) %>% 
-  distinct()
+# # fantasy points por site
+source("./R/simulation/data_src_proj_table.R")
+site_pp <- projections_table_data_sources(webScrape, read_yaml("./config/score_settings.yml")) %>% 
+  mutate(id=as.integer(id)) %>% 
+  select(pos, data_src, id, pts.proj=points)
 
-#save state
+# save state
 saveRDS(site_pp, glue("./data/weekly_proj_player_site_{week}.rds"))
 site_pp <- readRDS(glue("./data/weekly_proj_player_site_{week}.rds"))
 
-# calcula tabela de pontuacao para todos os jogadores usa na simulacao
+# calcula e aplica os erros de projeção das semanas passadas
 source("./R/simulation/players_projections.R")
-site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml"))
+site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml")) 
 pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
 # # adiciona os erros de projeções passadas
 # ptsproj <- site_ptsproj %>% # projecao dos sites
 #   bind_rows(pts_errors)
-# 
+
 ptsproj <- site_pp
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
