@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 4
+week <- 5
 season <- 2022
 config <- yaml::read_yaml("./config/config.yml")
-prefix <- "final"
+prefix <- "preWaivers"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -106,10 +106,8 @@ site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_set
 pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
 # # adiciona os erros de projeções passadas
-# ptsproj <- site_ptsproj %>% # projecao dos sites
-#   bind_rows(pts_errors)
-
-ptsproj <- site_pp
+ptsproj <- site_ptsproj %>% # projecao dos sites
+  bind_rows(pts_errors)
 
 ###### calcula 95% de intervado de confidencia em cima das projecoes e dos erros
 

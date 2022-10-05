@@ -2,8 +2,8 @@ library(tidyverse)
 library(glue)
 
 .team <- "Amparo Bikers"
-.week <- 4
-.prefix <- "preSundayGames"
+.week <- 5
+.prefix <- "preWaivers"
 
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
@@ -68,11 +68,3 @@ starters %>% select(id, first_name, last_name, position, team, fantasy.team, ran
 bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
 releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
 
-players %>% 
-  filter(pos=="DST") %>% 
-  top_n(14, ceiling) %>% 
-  select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts) %>% 
-  arrange(desc(weekSeasonPts))
-
-
-?top_n
