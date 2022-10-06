@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 5
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "preWaivers"
+prefix <- "posWaivers"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -139,6 +139,8 @@ pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, wee
 # # adiciona os erros de projeções passadas
 ptsproj <- site_ptsproj %>% # projecao dos sites
   bind_rows(pts_errors)
+
+saveRDS(ptsproj, "./data/points_projection_and_errors.rds")
 
 # ptsproj <- site_pp
 
