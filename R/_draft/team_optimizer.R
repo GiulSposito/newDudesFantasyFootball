@@ -4,11 +4,16 @@ library(glue)
 .team <- "Amparo Bikers"
 .week <- 5
 
+readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
+  select(teamId, fantasy.team) %>% 
+  distinct() %>% 
+  arrange(teamId)
+
 # dados dos jogadores
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
     avg_type=="average",
-    fantasy.team %in% c(.team,"*FreeAgent"),
+    fantasy.team %in% c(.team),#",*FreeAgent"),
     team!="FA",
     week==.week
   ) %>% 
@@ -47,19 +52,18 @@ players_proj <- players %>%
           ceiling = map_dbl(pts.proj, quantile, probs=.8, na.rm=T),
           floor   = map_dbl(pts.proj, quantile, probs=.2, na.rm=T))
 
-injury_table <- players_proj %>% 
+
+injury_table <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   select(injuryGameStatus) %>% 
   distinct() %>%
   arrange(injuryGameStatus) %>% 
-  mutate( injuryFactor = c(.5, 0, 0, 0, 0, .75, 0, 1))
+  mutate( injuryFactor = c(.5, 0, 0, 0, 0, 0, .75, 0, 1))
 
 players_proj <- players_proj %>% 
   inner_join(injury_table, by = "injuryGameStatus") %>% 
   mutate( points  = injuryFactor*points,
           ceiling = injuryFactor*ceiling,
           floor   = injuryFactor*floor)
-
-  
 # starts
 starters <- tibble(
   pos=c("QB","RB","WR","TE","K","DST"),
@@ -100,9 +104,9 @@ starters %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, floo
 bench  %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
 releases %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
 
-starters$pts.proj %>% 
-  reduce(`+`) %>% 
-  summary()
+starters$pts.proj %>% reduce(`+`) %>% summary()
+
+
 
 # player_proj_points %>% 
 #   filter(id==14783, week==.week) %>% 

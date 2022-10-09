@@ -135,7 +135,7 @@ ptsproj %>%
   saveRDS(glue("./data/dudesffa_projpoints_week{week}.rds"))
 
 # simulação das partidas
-#source(glue("./R/simulation/points_simulation_v{sim.version}.R"))
+source(glue("./R/simulation/points_simulation_v{sim.version}.R"))
 sim <- simulateGames(week, season, ptsproj, matchups_games, teams_rosters, players_stats, my_player_ids, proj_table)
 
 # salva resultado
