@@ -123,7 +123,8 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations preTNF](/reports/2022/dudes_simulation_v5_week5_preTNF.html)
 - [Matchup Simulations posTNF](/reports/2022/dudes_simulation_v5_week5_posTNF.html)
 - [Matchup Simulations preSundayGames](/reports/2022/dudes_simulation_v5_week5_preSundayGames.html)
-- [Matchup Simulations preSNF](/reports/2022/dudes_simulation_v5_week5_posSNF.html)
+- [Matchup Simulations preSNF](/reports/2022/dudes_simulation_v5_week5_preSNF.html)
+- [Matchup Simulations posSNF](/reports/2022/dudes_simulation_v5_week5_posSNF.html)
 
 ## Collected Projections
 
