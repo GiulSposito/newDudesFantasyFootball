@@ -57,7 +57,8 @@ injury_table <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
   select(injuryGameStatus) %>% 
   distinct() %>%
   arrange(injuryGameStatus) %>% 
-  mutate( injuryFactor = c(.5, 0, 0, 0, 0, 0, .75, 0, 1))
+  mutate( injuryFactor = c(0, 0, 0, 0, 0, .75, 0, 1))
+  # mutate( injuryFactor = c(.5, 0, 0, 0, 0, 0, .75, 0, 1))
 
 players_proj <- players_proj %>% 
   inner_join(injury_table, by = "injuryGameStatus") %>% 
