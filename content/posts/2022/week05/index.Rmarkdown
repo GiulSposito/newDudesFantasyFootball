@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 5
-  prefix: preSundayGames
+  prefix: posSNF
 ---
 
 _Last Update: `r lubridate::now()`_
