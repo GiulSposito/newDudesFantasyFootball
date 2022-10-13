@@ -2,7 +2,7 @@ library(tidyverse)
 library(glue)
 
 .team <- "Amparo Bikers"
-.week <- 5
+.week <- 6
 
 readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   select(teamId, fantasy.team) %>% 
@@ -13,11 +13,11 @@ readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
     avg_type=="average",
-    fantasy.team %in% c(.team),#",*FreeAgent"),
+    fantasy.team %in% c(.team,"*FreeAgent"),
     team!="FA",
     week==.week
-  ) %>% 
-  select(id, playerId=nfl_id, name, pos=position, team = nflTeamAbbr, week, weekPts, weekSeasonPts, teamId, fantasy.team, injuryGameStatus, rankAgainstPosition)
+  ) %>%  
+  select(id, playerId=nfl_id, name, pos=position, team = nflTeamAbbr, week, weekPts, weekSeasonPts, teamId, fantasy.team, injuryGameStatus, rankAgainstPosition, byeWeek)
 
 # projeção de dados "Dudes"
 dudes_proj <- readRDS("./data/points_projection_and_errors.rds") %>% 
@@ -57,11 +57,11 @@ injury_table <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
   select(injuryGameStatus) %>% 
   distinct() %>%
   arrange(injuryGameStatus) %>% 
-  mutate( injuryFactor = c(0, 0, 0, 0, 0, .75, 0, 1))
-  # mutate( injuryFactor = c(.5, 0, 0, 0, 0, 0, .75, 0, 1))
+  mutate( injuryFactor = c(.5,0,0,0,.75,1))
 
 players_proj <- players_proj %>% 
   inner_join(injury_table, by = "injuryGameStatus") %>% 
+  mutate( injuryFactor = if_else(byeWeek==.week,0,injuryFactor)) %>% 
   mutate( points  = injuryFactor*points,
           ceiling = injuryFactor*ceiling,
           floor   = injuryFactor*floor)
@@ -101,12 +101,18 @@ releases <- players_proj %>%
   anti_join(starters, by=c("id","pos")) %>% 
   anti_join(bench, by=c("id","pos"))
 
-starters %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
-bench  %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
-releases %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+starters %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+bench  %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+releases %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
 
 starters$pts.proj %>% reduce(`+`) %>% summary()
 
+
+
+players_proj %>% 
+  arrange(desc(ceiling)) %>% 
+  filter(pos=="RB") %>% 
+  select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
 
 
 # player_proj_points %>% 
