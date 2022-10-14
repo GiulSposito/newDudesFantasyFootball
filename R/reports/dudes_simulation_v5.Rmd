@@ -5,8 +5,8 @@ output:
     orientation: rows
     vertical_layout: fill
 params:
-  week: 0
-  prefix: "preFIX"
+  week: 6
+  prefix: "posTNF"
 ---
 
 ```{r setup, include=FALSE}
@@ -242,11 +242,6 @@ games_summary %>%
 
 ## preparacao dos dados dos rosters
 
-projections <- sim$proj_table %>% 
-  filter(position==pos) %>% 
-  inner_join(readRDS(glue("./data/dudesffa_projpoints_week{.week}.rds")), by="id") %>% 
-  select(id, projPts = estimate, pos_rank,  sd_pts, floor=conf.low, ceiling=conf.high, tier) 
-
 # junta os rosters dos times, estatíticas dos jogadores, a tabela de projecao e
 # uma de-para de apreviacao do Injury Status
 rosters <- sim$teams %>% 
@@ -258,66 +253,90 @@ rosters <- sim$teams %>%
   # statisticas dos jogadores
   inner_join(sim$players_stats, by="playerId") %>%                            # 210 players]
   # estatisticas podem ter mais de uma semana
-  unnest(weekPts) %>% 
+  unnest(weekPts) %>%
+  group_by(id, position) %>% 
+  mutate( avgPts = mean(weekPts, na.rm=T) ) %>% 
+  ungroup() %>% 
   filter(week == .week) %>% 
   # mapeamento da posicao do slot no roster
   left_join(rosterSlots, by="rosterSlotId") %>% 
-  # campos de interesse
-  select(id, playerId, teamId, teamName, name, position, nflTeamAbbr, rosterSlot, 
-         injuryGameStatus, isEditable, isReserveStatus=isReserveStatus.x, isUndroppable, 
-         byeWeek, weekPts, seasonPts) %>% 
-  # adiciona as projecoes
-  left_join(projections, by="id") %>% 
   # adiciona abreviatura do injury game status
-  left_join(readRDS("./data/injuryGameStatusAbbr.rds"), by = "injuryGameStatus") %>%
-  inner_join(readRDS(glue("./data/dudesffa_projpoints_week{.week}.rds")), by="id") %>% 
-  mutate(
-    conf.low  = if_else(injuryAbbr %in% c("IR","IA","Out","CVD"),0,conf.low),
-    estimate  = if_else(injuryAbbr %in% c("IR","IA","Out","CVD"),0,estimate),
-    conf.high = if_else(injuryAbbr %in% c("IR","IA","Out","CVD"),0,conf.high)
-  )
-  
+  left_join(readRDS("./data/injuryGameStatusAbbr.rds"), by = "injuryGameStatus") %>% 
+  mutate( 
+    full_name = case_when(
+      !is.na(injuryGameStatus) ~ paste0(name, " (", injuryAbbr, ")"),
+      is.na(injuryGameStatus) ~ name
+    ),
+    full_name = paste0(full_name, " [", rosterSlot ,"]")
+  ) %>% 
+  # campos de interesse
+  select(week, id, playerId, full_name, teamId, teamName, name, pos=position, nflTeamAbbr, rosterSlot, 
+         injuryGameStatus, isEditable, isReserveStatus=isReserveStatus.x, isUndroppable, 
+         byeWeek, weekPts, avgPts, weekSeasonPts, rankAgainstPosition)
+
+dudes_projections <- readRDS("./data/points_projection_and_errors.rds") %>% 
+  mutate( pos = if_else(pos=="DST", "DEF", pos) ) %>% 
+  inner_join(rosters, by = c("week", "id", "pos")) %>% 
+  filter(week==.week, byeWeek!=.week) %>%
+  select(season, week,id, name, full_name, pos, nflTeamAbbr, rankAgainstPosition, 
+         teamId, teamName, byeWeek, injuryGameStatus, data_src, pts.proj, rosterSlot, isEditable, weekPts) %>% 
+  mutate(adj_factor = case_when(
+    is.na(injuryGameStatus) ~ 1,
+    injuryGameStatus == "Questionable" ~ .5,
+    injuryGameStatus == "Doubtful" ~ .25,
+    T ~ 0
+  )) %>% 
+  mutate(pts.proj = pts.proj * adj_factor) %>% 
+  nest(proj = c(data_src, pts.proj)) %>% 
+  mutate( dudes.proj = map_dbl(proj, ~median(.x$pts.proj, na.rm = T)) ) %>% 
+  mutate( pts.sim = map(proj, function(.dt,.n){
+    
+    if (all(.dt$pts.proj == .dt$pts.proj[1]))
+      return(sample(.dt$pts.proj, .n, T))
+    
+    pdfden <- .dt %>%
+      pull(pts.proj) %>%
+      ecdf() %>%
+      knots() %>%
+      density(from = -10, to = 100)
+    
+    approx(cumsum(pdfden$y) / sum(pdfden$y),
+           pdfden$x, runif(.n))$y %>%
+      return()
+    
+  }, .n=1000) )
+
+
 ## plot do grafico do roster
 plotRoster <- function(.teamId, .rosterData) {
   
-  plotData <- .rosterData %>% 
-    filter(teamId==.teamId, 
-           rosterSlot != "RES") %>% 
+  plotData <- .rosterData %>%
+    filter(teamId == .teamId,
+           rosterSlot != "RES") %>%
     mutate(
       # fixa posicao e slot como fatores fixo para melhorar o gráfico
-      position = factor(position, levels=posLevels),
-      rosterSlot = factor(rosterSlot, levels=slotLevels)
-    ) %>% 
+      pos = factor(pos, levels = posLevels),
+      rosterSlot = factor(rosterSlot, levels = slotLevels)
+    ) %>%
     # decide se em pontos deixa vazio (ainda nao jogou) ou coloca week points (já jogou)
-    mutate(
-      points = case_when(
-        isEditable ~ as.numeric(NA),
-        !isEditable ~ weekPts 
-      )
-    ) %>% 
-    # modifica o label do jogador conforme for o status de lesao
-    mutate(
-      playerLabel = case_when(
-        !is.na(injuryGameStatus) ~ paste0(name, " (",injuryAbbr, ")" ," [", rosterSlot,"]"),
-        T ~ paste0(name," [", rosterSlot,"]")
-      )
-    ) %>% 
-    arrange(rosterSlot, position) %>% 
-    mutate(display.order=1:nrow(.))
+    mutate(points = case_when(isEditable ~ as.numeric(NA),!isEditable ~ weekPts)) %>%
+    arrange(rosterSlot, pos) %>%
+    mutate(display.order = 1:nrow(.))
   
-  plotData %>% 
-    ggplot(aes(x=reorder(playerLabel, -display.order), color=position)) +
-    # original range from ffanalytics
-    geom_pointrange(aes(y=estimate, ymin=conf.low, ymax=conf.high)) +
-    geom_label(aes(y=estimate, label=round(estimate,1)), size = 3,
-               label.padding = unit(0.15, "lines"), show.legend = F) +
-    geom_point(aes(y=points), size=2, color="black") +
-    xlab("") +
-    ylab("Fantasy Points") +
-    ylim(min(c(0,plotData$conf.low)),NA) +
-    coord_flip() +
-    theme_minimal() +
-    theme(legend.position = "bottom")  
+  plotData %>%
+    unnest(proj) %>%
+    ggplot(aes(
+      x = pts.proj,
+      y = reorder(full_name,-display.order),
+      fill = pos
+    )) +
+    geom_density_ridges(scale = 2,
+                        color = "white",
+                        alpha = .7) +
+    theme_ridges() +
+    xlab("Fantasy Points") +
+    ylab("") +
+    theme(legend.position = "bottom") 
 }
 
 ```
@@ -332,12 +351,12 @@ for(i in 1:nrow(games_summary)){
   
   cat("\nColumn\n--------------------------------------------\n")
   cat(paste0("\n### ", matchup$away.name), "\n\n")
-  print(plotRoster(matchup$away.teamId, rosters))
+  print(plotRoster(matchup$away.teamId, dudes_projections))
   cat("\n")
   
   cat("\nColumn\n--------------------------------------------\n")
   cat(paste0("\n### ", matchup$home.name), "\n\n")
-  print(plotRoster(matchup$home.teamId, rosters))
+  print(plotRoster(matchup$home.teamId, dudes_projections))
   cat("\n")
 }
 
