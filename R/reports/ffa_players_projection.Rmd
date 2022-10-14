@@ -5,7 +5,7 @@ output:
     orientation: columns
     vertical_layout: fill
 params:
-  week: 5
+  week: 6
 ---
 
 ```{r setup, include=FALSE}
@@ -49,23 +49,23 @@ pprojs <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
 projections <- pprojs %>% 
   inner_join(readRDS(glue("./data/dudesffa_projpoints_week{.week}.rds")), by="id")
 
-#
-# ppoints <- readRDS("./data/players_points.rds") %>%
-#   filter(week==.week) %>% 
-#   mutate(id = as.integer(id)) %>% 
-#   #filter( points !=0 ) %>% 
-#   rename( pts = weekPts ) %>% 
-#   select( id, week, pts) %>% 
-#   group_by( id ) %>% 
-#   mutate( pts.mean = median(pts, na.rm = T),
-#           pts.sd   = sd(pts, na.rm=T),
-#           pts.max = max(pts, na.rm=T),
-#           pts.min = min(pts, na.rm = T)) %>% 
-#   ungroup() 
-# 
-# projections <- ppoints %>% 
-#   right_join(pprojs, by = "id")
-  
+
+dudes_projections <- readRDS("./data/points_projection_and_errors.rds") %>% 
+  inner_join(projections, by = c("week", "id", "pos")) %>% 
+  filter(week==.week, byeWeek!=.week) %>%
+  select(season, week,id, name, full_name, pos, nflTeamAbbr, rankAgainstPosition, 
+         fantasy.team, byeWeek, injuryGameStatus, floor, points, 
+         ceiling, sd_pts, data_src, pts.proj) %>% 
+  mutate(adj_factor = case_when(
+    is.na(injuryGameStatus) ~ 1,
+    injuryGameStatus == "Questionable" ~ .5,
+    injuryGameStatus == "Doubtful" ~ .25,
+    T ~ 0
+  )) %>% 
+  mutate(pts.proj = pts.proj * adj_factor) %>% 
+  nest(proj = c(data_src, pts.proj)) %>% 
+  mutate( dudes.proj = map_dbl(proj, ~median(.x$pts.proj, na.rm = T)))
+
 ```
 
 QB {data-navmenu="ffanalytics"}
@@ -172,43 +172,27 @@ QB {data-navmenu="dudesAnalytics"}
 ```{r qb_dfa, fig.width=10}
 
 plotDFAProjections <- function(.proj, .pos, .slice=32) {
-  proj_data <- .proj %>% 
-    # select(id, position, pos_rank ) %>% 
-    filter(position==.pos) %>% 
-    distinct() %>% 
-    arrange(desc(estimate)) %>% 
-    top_n(.slice, estimate) %>% 
-    mutate(pos_rank=1:nrow(.))
-  
-  nu_y <- max(proj_data$conf.high, na.rm = T) / 9
-  
-  proj_data %>% 
-    group_by( id ) %>% 
-    mutate( r_pos = max(conf.high, points) ) %>% # posicao do label
-    ungroup() %>% 
-    ggplot(aes(team=team)) +
-    geom_pointrange(aes(x=reorder(pos_rank,desc(pos_rank)),
-                        y=estimate, 
-                        ymin=conf.low, 
-                        ymax=conf.high, 
-                        color=fantasy.team), size=1) +
-    geom_text(aes(x=reorder(pos_rank,desc(pos_rank)), 
-                  y=r_pos, 
-                  color=fantasy.team, 
-                  label=full_name), nudge_y = nu_y, nudge_x = 0.0, size=3) +
-    scale_colour_manual(values = TEAMS_COLOR_SCALE) +
-    theme_classic() + xlab("Rank") + ylab("Points") +
-    theme( panel.grid.major.x=element_line(colour="#EEEEEE") ) +
-    scale_x_discrete(breaks = seq(1,32,4) ) +
-    coord_flip() -> g
-  
-  g %>% 
-    ggplotly() %>% 
+  .proj %>%
+    filter(pos == .pos) %>%
+    slice_max(dudes.proj, n = .slice) %>%
+    mutate(full_name = fct_reorder(full_name, dudes.proj)) %>%
+    unnest(proj) %>%
+    plot_ly(
+      x =  ~ pts.proj,
+      y =  ~ full_name,
+      split =  ~ fantasy.team,
+      orientation = "h",
+      type = "box",
+      boxpoints = "all",
+      jitter = 0.3,
+      pointpos = 0,
+      text = ~ paste('Team: ',nflTeamAbbr,'\nRank againt position: ', rankAgainstPosition),
+      colors = TEAMS_COLOR_SCALE
+    ) %>% 
     return()
-  
 }
 
-plotDFAProjections(projections, "QB", 14+14+5)
+plotDFAProjections(dudes_projections, "QB", 32)
 
 ```
 
@@ -217,7 +201,7 @@ WR {data-navmenu="dudesAnalytics"}
 
 ```{r wr_dfa, fig.width=10}
 
-plotDFAProjections(projections, "WR",(5*16))
+plotDFAProjections(dudes_projections, "WR",(5*14))
 
 ```
 
@@ -226,7 +210,7 @@ RB {data-navmenu="dudesAnalytics"}
 
 ```{r rb_dfa, fig.width=10}
 
-plotDFAProjections(projections, "RB", (5*16))
+plotDFAProjections(dudes_projections, "RB", (5*14))
 
 ```
 
@@ -235,7 +219,7 @@ TE {data-navmenu="dudesAnalytics"}
 
 ```{r te_dfa, fig.width=10}
 
-plotDFAProjections(projections, "TE",(3*14))
+plotDFAProjections(dudes_projections, "TE",(3*14))
 
 ```
 
@@ -245,7 +229,7 @@ K {data-navmenu="dudesAnalytics"}
 
 ```{r k_dfa, fig.width=10}
 
-plotDFAProjections(projections, "K",(2*14))
+plotDFAProjections(dudes_projections, "K",(2*14))
 
 ```
 
@@ -255,7 +239,7 @@ DEF {data-navmenu="dudesAnalytics"}
 
 ```{r def_dfa, fig.width=10}
 
-plotDFAProjections(projections, "DST",32)
+plotDFAProjections(dudes_projections, "DST",32)
 
 ```
 
