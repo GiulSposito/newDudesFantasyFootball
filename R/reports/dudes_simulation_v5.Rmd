@@ -291,6 +291,8 @@ dudes_projections <- readRDS("./data/points_projection_and_errors.rds") %>%
   mutate( dudes.proj = map_dbl(proj, ~median(.x$pts.proj, na.rm = T)) ) %>% 
   mutate( pts.sim = map(proj, function(.dt,.n){
     
+    if(all(.dt$pts.proj == 0)) return(0)
+    
     if (all(.dt$pts.proj == .dt$pts.proj[1]))
       return(sample(.dt$pts.proj, .n, T))
     
@@ -333,11 +335,14 @@ plotRoster <- function(.teamId, .rosterData) {
     geom_density_ridges(scale = 2,
                         color = "white",
                         alpha = .7) +
-    theme_ridges() +
+    geom_vline(xintercept = 0, color="grey", lt="dashed") +
+    geom_point(aes(x=weekPts), shape=24, fill="red", show.legend = F) +
+    theme_light() +
     xlab("Fantasy Points") +
     ylab("") +
     theme(legend.position = "bottom") 
 }
+
 
 ```
 
