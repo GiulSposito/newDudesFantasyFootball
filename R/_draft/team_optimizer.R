@@ -112,7 +112,7 @@ releases %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeW
 
 starters$pts.proj %>% reduce(`+`) %>% summary()
 
-
+16.16+6.60+
 
 players_proj %>% 
   arrange(desc(ceiling)) %>% 
