@@ -4,10 +4,10 @@ library(glue)
 .team <- "Amparo Bikers"
 .week <- 6
 
-readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
-  select(teamId, fantasy.team) %>% 
-  distinct() %>% 
-  arrange(teamId)
+# readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
+#   select(teamId, fantasy.team) %>% 
+#   distinct() %>% 
+#   arrange(teamId)
 
 # dados dos jogadores
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
@@ -46,7 +46,7 @@ ptsproj <- dudes_proj %>%
   }, .n=SIMULATION_SIZE) )
 
 players_proj <- players %>% 
-  select(-week, -weekPts) %>% 
+  select(-week) %>% 
   inner_join(ptsproj, by=c("id","pos")) %>% 
   mutate( points  = map_dbl(pts.proj, quantile, probs=.5, na.rm=T),
           ceiling = map_dbl(pts.proj, quantile, probs=.8, na.rm=T),
@@ -106,18 +106,12 @@ releases <- players_proj %>%
   anti_join(starters, by=c("id","pos")) %>% 
   anti_join(bench, by=c("id","pos"))
 
-starters %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
-bench  %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
-releases %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+starters %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
+bench  %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
+releases %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
 
 starters$pts.proj %>% reduce(`+`) %>% summary()
-
-16.16+6.60+
-
-players_proj %>% 
-  arrange(desc(ceiling)) %>% 
-  filter(pos=="RB") %>% 
-  select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+starters$weekPts %>% sum(na.rm = T)
 
 
 # player_proj_points %>% 
@@ -175,44 +169,44 @@ players_proj %>%
 # # players <- players %>% 
 # #   inner_join(pstats, by=c("nfl_id"="playerId"))
 
-# starts
-starters <- tibble(
-  pos=c("QB","RB","WR","TE","K","DST"),
-  qtd=c(1,2,2,1,1,1)
-) %>% 
-  split(1:nrow(.)) %>% 
-  map_df(function(.x, .players){
-    .players %>% 
-      filter(position==.x$pos) %>%
-      slice_max(ceiling, n=.x$qtd)
-  }, .players=players)
-
-starters <- players %>% 
-  filter(pos %in% c("WR","RB")) %>% 
-  filter(injuryGameStatus=="") %>% 
-  anti_join(starters, by=c("id","pos")) %>% 
-  slice_max(ceiling, n=1) %>% 
-  bind_rows(starters,.)
-
-## bench
-bench <- tibble(
-    pos=c("QB","RB","WR","TE"),
-    qtd=c(1,2,2,1)
-  ) %>% 
-  split(1:nrow(.)) %>% 
-  map_df(function(.x, .players){
-    .players %>% 
-      filter(position==.x$pos) %>% 
-      slice_max(ceiling, n=.x$qtd)
-  }, .players = anti_join(players, starters, by=c("id","pos")) )
-
-# releases
-releases <- players %>% 
-  filter(fantasy.team==.team) %>% 
-  anti_join(starters, by=c("id","pos")) %>% 
-  anti_join(bench, by=c("id","pos"))
-
-starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
-bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
-releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
-
+# # starts
+# starters <- tibble(
+#   pos=c("QB","RB","WR","TE","K","DST"),
+#   qtd=c(1,2,2,1,1,1)
+# ) %>% 
+#   split(1:nrow(.)) %>% 
+#   map_df(function(.x, .players){
+#     .players %>% 
+#       filter(position==.x$pos) %>%
+#       slice_max(ceiling, n=.x$qtd)
+#   }, .players=players)
+# 
+# starters <- players %>% 
+#   filter(pos %in% c("WR","RB")) %>% 
+#   filter(injuryGameStatus=="") %>% 
+#   anti_join(starters, by=c("id","pos")) %>% 
+#   slice_max(ceiling, n=1) %>% 
+#   bind_rows(starters,.)
+# 
+# ## bench
+# bench <- tibble(
+#     pos=c("QB","RB","WR","TE"),
+#     qtd=c(1,2,2,1)
+#   ) %>% 
+#   split(1:nrow(.)) %>% 
+#   map_df(function(.x, .players){
+#     .players %>% 
+#       filter(position==.x$pos) %>% 
+#       slice_max(ceiling, n=.x$qtd)
+#   }, .players = anti_join(players, starters, by=c("id","pos")) )
+# 
+# # releases
+# releases <- players %>% 
+#   filter(fantasy.team==.team) %>% 
+#   anti_join(starters, by=c("id","pos")) %>% 
+#   anti_join(bench, by=c("id","pos"))
+# 
+# starters %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+# bench  %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+# releases %>% select(id, first_name, last_name, position, team, fantasy.team, rankAgainstPosition, floor, points, ceiling, weekSeasonPts, injuryGameStatus)
+# 
