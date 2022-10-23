@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 7
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "preTNF"
+prefix <- "preSundayGames"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -35,9 +35,23 @@ webScrape <- espn_InjectScrap(espnScrape, ffaScrape)
 
 # checking
 webScrape %>% 
-  map_df(~select(.x, data_src, team, id), .id="pos") %>% 
+  map_df(~select(.x, data_src, id), .id="pos") %>% 
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
+
+# ws2 <- webScrape %>% 
+#   map(function(.dt){
+#     .dt %>% 
+#       filter(!is.na(data_src)) %>% 
+#       return()
+#   })
+# 
+# # atributos de controle da FFA
+# attr(ws2, "season") <- attr(webScrape, "season")
+# attr(ws2, "week") <-  attr(webScrape, "season")
+# names(ws2) <- names(webScrape)
+# 
+# webScrape <- ws2
 
 saveScraps(week, webScrape)
 
