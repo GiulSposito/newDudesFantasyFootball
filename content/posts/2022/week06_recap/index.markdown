@@ -18,7 +18,7 @@ resources:
   params:
     description: cover
 params:
-  week: 5
+  week: 6
 ---
 
 <!--more-->
@@ -35,27 +35,23 @@ params:
 
 ## League Highlights
 
-Sorocaba Steelers, Amparo Bikers, and Indaiatuba Riders all won this week, even though none of them had a top-15 scoring QB.
-
 Rio Claro Farmers has now beaten their weekly score projection in each matchup this season.
 
-Paulinia Robots has now beaten their weekly score projection in each matchup this season.
+Limeira Dead Rabbits won this week, even without starting a top-30 scoring RB.
 
-Barao Butchers has now increased their score each of the past three weeks.
+No surprise here: teams have won 83.3% of the time this season when starting the league's top-scoring QB of the week (5-1 overall).
 
-No surprise here: teams have won 80.0% of the time this season when starting the league's top-scoring QB of the week (4-1 overall).
+Teams have won 52.6% of the time this season when they throw no interceptions in a week.
 
-Amparo Bikers has now decreased their score each of the past three weeks.
+Goncalves Miners is on a four-game winning streak.
 
-Goncalves Miners is on a three-game winning streak.
+Sorocaba Steelers is on a three-game winning streak.
 
-Teams have won only 33.3% of the time this season (6-12) when they fail to throw a Pass TD.
+Paulinia Robots probably wishes they had started Brandon Aiyuk. The 28.30 points he scored would have represented the fifth-highest individual score this week.
 
-The 145.42 points scored by Indaiatuba Riders were the most this week and the fifth-highest overall in the league this season.
+Paulinia Robots was favored by the widest margin in the league this week (42.22 points) and delivered with a 47.98-point victory.
 
-Sorocaba Steelers was projected to win by the widest margin this week (24.64 points) but only ended up beating London Knights by 9.10 points.
-
-The average projected score for Week 5 was 107.11 points.
+The average projected score was 103.20 points this week.
 
 
 {{< tweet 1579140412366798849 >}}
@@ -81,97 +77,109 @@ The average projected score for Week 5 was 107.11 points.
 
 ## Matchups Recap
 
-### Paulinia Robots Pulls Off Comeback over Rio Claro Farmers, Takes Over 1st Place 
+### Paulinia Robots Drops the Hammer on London Knights, Captures Control of Career Series, 5-3 
 
-Paulinia Robots was clutch under the lights with 63.98 points on Monday Night Football (49% of their total score) to pull off the comeback against Rio Claro Farmers 130.18 to 115.66. The late heroics were a bit unexpected, since they were originally projected to score 42.31 points on Monday night. Paulinia Robots was led by Travis Kelce this week (25 Rec Yds, 4 TD). Kelce scored four touchdowns and provided 33.50 points to the final tally. Patrick Mahomes also helped the cause with 30.48 points with four passing touchdowns (292 Pas Yds, 28 Rsh Yds, 4 TD). Paulinia Robots (4-1, 649.12 points) climbs into first place, while Rio Claro Farmers (4-1, 592.06 points) drops to third place.
+Paulinia Robots got 20.10 points from Breece Hall (116 Rsh Yds, 1 TD) and 19.62 from Patrick Mahomes (338 Pas Yds, 2 TD/2 Int) to shred London Knights 109.22 to 61.24. Paulinia Robots took a 7.16-point lead on Sunday afternoon and never looked back. This beatdown was revenge for a loss to London Knights in their last meeting a season ago. On top of the loss, London Knights had a starter score zero points (Dalton Schultz). London Knights (2-4, 494.42 points) drops to 11th place and Paulinia Robots (5-1, 758.34 points) remains in first place.
 
- Devin Singletary probably deserved more touches for Rio Claro Farmers, as he put up a whopping 46 total yards on just seven touches.
+ Najee Harris had plenty of chances for Paulinia Robots, but he logged just 49 total yards on 16 touches.
 
- In Week 6, Paulinia Robots plays London Knights (2-3, 433.18), while Rio Claro Farmers gets Limeira Jetsons (4-1, 592.32).
+ With Hall leading the way in Week 6, it means Paulinia Robots continues to have a different top scorer every week this season. Also, with 22 touches this week for Breece Hall, it means that his touches have now increased in four consecutive games.
 
-#### Paulinia Robots
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-1.png" width="672" />
-
-#### Rio Claro Farmers
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-2.png" width="672" />
-
-### Led by a Big Game from Josh Jacobs, Goncalves Miners Rallies Against Sorocaba Wild Mules 
-
-The production of Josh Jacobs led the way, as Goncalves Miners rallied late to beat Sorocaba Wild Mules 136.00 to 114.26. The Las Vegas RB heated up for 30.32 points in a 21.74-point win for Goncalves Miners. He rushed for 154 yards as part of his showcase performance (154 Rsh Yds, 39 Rec Yds, 1 TD). With 136.00 points, Goncalves Miners had their top total of the season. Goncalves Miners (4-1, 556.46 points) climbs into fourth place, while Sorocaba Wild Mules (0-5, 490.28 points) stays locked in the cellar.
-
- Allgeier had plenty of opportunities for Sorocaba Wild Mules, but could only manage 45 total yards on 13 touches.
-
- Goncalves Miners plays Amparo Bikers (2-3, 546.66) in Week 6, while Sorocaba Wild Mules matches up with Limeira Dead Rabbits (3-2, 561.36).
-
-#### Goncalves Miners
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-3.png" width="672" />
-
-#### Sorocaba Wild Mules
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-4.png" width="672" />
-
-### Indaiatuba Riders Pulls Off Comeback over Indaiatuba Blues, Moves to 9th Place 
-
-This week's two highest-scoring teams met in a shootout as Indaiatuba Riders came back from being down 0.00 on Monday night and narrowly defeated Indaiatuba Blues 145.42 to 142.56. This is the most a team has scored this season without getting a victory. Indaiatuba Blues falls to 1-4 (12th place), pushing their losing streak to three. Indaiatuba Blues actually finished with more total touchdowns (9 to 6) and more total yards (950 to 819), despite coming up short on the scoreboard. Leonard Fournette (56 Rsh Yds, 83 Rec Yds, 1 Rsh TD, 1 Rec TD) recorded the second-highest score this week (35.90) and Davante Adams scored 27.40 points to lead Indaiatuba Riders. Josh Allen (424 Pas Yds, 42 Rsh Yds, 4 TD/1 Int) put up the third-highest point total in the league this week (35.16) and Tyler Lockett scored 27.40 points for Indaiatuba Blues.
-
- James Robinson had plenty of chances for Indaiatuba Riders, but he logged just 39 total yards on 12 touches.
-
- Next week, Indaiatuba Riders takes on Campinas Giants (2-3, 547.24), while Indaiatuba Blues battles Sorocaba Steelers (3-2, 529.30).
-
-#### Indaiatuba Blues
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-5.png" width="672" />
-
-#### Indaiatuba Riders
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-6.png" width="672" />
-
-### Amparo Bikers Gets Victory Against Limeira Jetsons, Boots Them from Top Spot 
-
-Amparo Bikers (11th place, 2-3, 546.66 points) pushes Limeira Jetsons (4-1, 592.32 points) out of first after beating them 86.24 to 79.52. Austin Ekeler (173 Rsh Yds, 26 Rec Yds, 1 Rsh TD, 1 Rec TD) got the highest score by a player this week with 35.90 points. Amparo Bikers took a 9.00-point lead on Thursday and remained in front for the rest of the matchup. While each team failed to hit their projections, Amparo Bikers scored 82.1% of their projected 105.02 points to get the win. Limeira Jetsons got zero points from Tee Higgins, which might have made the difference in the outcome.
-
- Darrell Henderson ultimately deserved more touches for Limeira Jetsons, as he put up a whopping 30 total yards on just four touches. There are a couple of spots where Limeira Jetsons wishes they could get a do-over, as Kenneth Walker III could have started in place of Clyde Edwards-Helaire and Geno Smith in place of Justin Herbert. Either of those point differentials would've been enough to change the outcome.
-
- Amparo Bikers plays Goncalves Miners (4-1, 556.46) next week, while Limeira Jetsons gets Rio Claro Farmers (4-1, 592.06).
-
-#### Limeira Jetsons
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-7.png" width="672" />
-
-#### Amparo Bikers
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-8.png" width="672" />
-
-### Sorocaba Steelers Beats London Knights 
-
-Sorocaba Steelers got past London Knights, who labored to score points this week, 89.68 to 80.58. Sorocaba Steelers took a 39.80-point lead on Sunday afternoon and maintained that advantage for the rest of the matchup. This win was revenge for a loss to London Knights in their last meeting a season ago. Both teams could have scored more points as Sorocaba Steelers had one starter turn in zero points and London Knights also had one. Sorocaba Steelers (3-2, 529.30 points) remains in sixth place and London Knights (2-3, 433.18 points) stays in eighth place.
-
- Along with being the one defense to earn a negative score, the Miami Dolphins DEF (on London Knights) represented the lone starter in the whole league to do so. In addition, they had a starter that missed out on some chances. Despite being targeted nine times, Deebo Samuel could only manage two catches.
-
- In Week 6, Sorocaba Steelers faces Indaiatuba Blues (1-4, 648.44), who puts up a strong 129.69 points per game. London Knights takes on first-place Paulinia Robots (4-1, 649.12).
+ Next week, Paulinia Robots matches up against Limeira Jetsons (4-2, 699.74). London Knights plays Indaiatuba Blues (1-5, 720.50), who has averaged a stout 120.08 points this season.
 
 #### London Knights
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-9.png" width="672" />
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-1.png" width="672" />
 
-#### Sorocaba Steelers
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-10.png" width="672" />
+#### Paulinia Robots
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-2.png" width="672" />
 
-### Campinas Giants Tops Indaiatuba Pats, Grabs 10th Place 
+### Behind a Sizzling Showing from Ja'Marr Chase, Limeira Dead Rabbits Gets Win Against Sorocaba Wild Mules 
 
-Campinas Giants got 23.40 points from Christian McCaffrey (54 Rsh Yds, 50 Rec Yds, 1 TD) and 20.20 from Jeff Wilson (120 Rsh Yds, 1 TD) to beat Indaiatuba Pats 112.20 to 106.46. This win was a nice piece of revenge for Campinas Giants following a tough postseason loss last year to Indaiatuba Pats. Indaiatuba Pats was led by Gabe Davis with 32.10 points (171 Rec Yds, 2 TD) and Rhamondre Stevenson, who scored 19.50 (161 Rsh Yds). Indaiatuba Pats got zero points from Tyler Conklin, which might have made the difference in the outcome. Campinas Giants (2-3, 547.24 points) climbs into 10th place and Indaiatuba Pats (3-2, 557.72 points) drops to fifth place.
+The contribution of Ja'Marr Chase played an integral role, as Limeira Dead Rabbits picked up a win against Sorocaba Wild Mules 99.80 to 81.12. Chase went off for 32.20 points in a 18.68-point win for Limeira Dead Rabbits. He scored two touchdowns as part of his signature performance (132 Rec Yds, 2 TD). He also recorded the second-highest point total in the league this week. Limeira Dead Rabbits (4-2, 661.16 points) remains in seventh place, while Sorocaba Wild Mules (0-6, 571.40 points) stays locked in the cellar.
 
- There was one player on Indaiatuba Pats that let some chances slip away. Despite being targeted seven times, A.J. Brown could manage just three catches.
+ There was one starter on Limeira Dead Rabbits that missed out on some opportunities. Despite being targeted nine times, Romeo Doubs could manage just four catches.
 
- Campinas Giants takes on Indaiatuba Riders (2-3, 569.72) in Week 6, while Indaiatuba Pats battles Barao Butchers (1-4, 458.86).
+ Since Chase was the top point-getter for Limeira Dead Rabbits, it means a different player has led the team in each of the last four weeks. With 28.90 points, Mark Andrews paced the squad in Week 3, while J.K. Dobbins (22.30 points) was tops in Week 4 and Jalen Hurts (27.66 points) last week.
 
-#### Campinas Giants
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-11.png" width="672" />
+ Limeira Dead Rabbits plays Amparo Bikers (2-4, 657.90) next week, while Sorocaba Wild Mules faces Indaiatuba Pats (4-2, 681.74).
 
-#### Indaiatuba Pats
-<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-12.png" width="672" />
-
-### Limeira Dead Rabbits Comes Back on Barao Butchers, Captures Career Series Lead 2-1 
-
-Limeira Dead Rabbits had an excellent primetime performance with 54.30 points on Sunday Night Football (43% of their total score) to seal the comeback against Barao Butchers 125.56 to 107.14. The late heroics were somewhat unexpected, since they were originally projected to tally 48.60 points on Sunday night. Limeira Dead Rabbits was led by Jalen Hurts (239 Pas Yds, 61 Rsh Yds, 2 Rsh TD). Hurts scored two touchdowns and contributed 27.66 points to the cause. The 125.56 points represented the highest overall individual total of the season for Limeira Dead Rabbits. Barao Butchers (1-4, 458.86 points) drops to 13th place, while Limeira Dead Rabbits (3-2, 561.36 points) remains in seventh place.
-
- Next week, Limeira Dead Rabbits will meet Sorocaba Wild Mules (0-5, 490.28), the last-place team in the league. Barao Butchers takes on Indaiatuba Pats (3-2, 557.72).
+#### Sorocaba Wild Mules
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-3.png" width="672" />
 
 #### Limeira Dead Rabbits
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-4.png" width="672" />
+
+### Indaiatuba Riders Gets Win Against Campinas Giants, Climbs to 8th Place 
+
+Indaiatuba Riders defeated Campinas Giants, who struggled to put points on the board this week, 86.32 to 76.28. Both sides fell short of hitting their projections, but Indaiatuba Riders scored 87.3% of a projected 98.85 points to pick up the win. Christian McCaffrey led Campinas Giants with 22.80 points (69 Rsh Yds, 89 Rec Yds) while Allen Lazard brought in 17.60 (76 Rec Yds, 1 TD). Indaiatuba Riders (3-3, 656.04 points) climbs into eighth place and Campinas Giants (2-4, 623.52 points) stays in 10th place.
+
+ Fournette has now led Indaiatuba Riders in scoring in consecutive weeks.
+
+ Next week, Indaiatuba Riders plays Barao Butchers (1-5, 561.82), while Campinas Giants matches up against Sorocaba Steelers (4-2, 632.80).
+
+#### Indaiatuba Riders
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-5.png" width="672" />
+
+#### Campinas Giants
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-6.png" width="672" />
+
+### Goncalves Miners Gets Win over Amparo Bikers, Makes It Four in a Row 
+
+A rally on Monday Night Football (43.70 points, 39% of their total score) wasn't enough for Amparo Bikers, as Goncalves Miners earned the 127.20 to 111.24 victory. The late-match efforts were a little unexpected, considering their original Monday projection was only 32.27 points. Goncalves Miners was led by Joe Burrow (300 Pas Yds, 25 Rsh Yds, 3 Pas TD, 1 Rsh TD). Burrow passed for 300 yards and added 32.50 points to the cause. Goncalves Miners (5-1, 683.66 points) climbs into third place, while Amparo Bikers (2-4, 657.90 points) steps into ninth place.
+
+ Along with being the one defense to tally a negative score, the Jacksonville Jaguars DEF (on Amparo Bikers) represented the lone starter in the whole league in the red. Ekeler had lots of opportunities for Amparo Bikers, but could manage just 83 total yards on 24 touches.
+
+ Since Burrow was the top point-getter for Goncalves Miners, it means a different player has led the team in each of the last four weeks. With 23.10 points, Amari Cooper paced the squad in Week 3, while Josh Jacobs (34.50 points) was tops in Week 4 and Justin Jefferson (30.32 points) in Week 5. Also, with 24 touches this week for Austin Ekeler, it means that his touches have now increased in three consecutive games.
+
+ In Week 7, Goncalves Miners takes on Rio Claro Farmers (5-1, 719.36), while Amparo Bikers battles Limeira Dead Rabbits (4-2, 661.16).
+
+#### Amparo Bikers
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-7.png" width="672" />
+
+#### Goncalves Miners
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-8.png" width="672" />
+
+### Sorocaba Steelers Embarrasses Indaiatuba Blues, Streak Now at Three 
+
+The duo of Tyreek Hill and JuJu Smith-Schuster carried the team, as Sorocaba Steelers dismantled Indaiatuba Blues 103.50 to 72.06. That tandem combined to register 52.00 points, significantly outperforming Josh Allen and Cooper Kupp (43.06 combined points), the top two on Indaiatuba Blues. Hill racked up 177 yards, adding 29.70 points (177 Rec Yds). Smith-Schuster also chipped in 22.30 points (113 Rec Yds, 1 TD) for the winners. This beatdown was revenge for a loss to Indaiatuba Blues in their last meeting a season ago. Sorocaba Steelers started one player with zero points while Indaiatuba Blues also served up one goose egg, meaning both sides missed scoring opportunities. Sorocaba Steelers (4-2, 632.80 points) climbs into fifth place and Indaiatuba Blues (1-5, 720.50 points) stays in 12th place.
+
+ While Derrick Henry led Sorocaba Steelers last week with 27.20 points, Hill paved the way this week with 29.70.
+
+ Sorocaba Steelers plays Campinas Giants (2-4, 623.52) next week, while Indaiatuba Blues gets London Knights (2-4, 494.42).
+
+#### Sorocaba Steelers
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-9.png" width="672" />
+
+#### Indaiatuba Blues
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-10.png" width="672" />
+
+### Rio Claro Farmers Beats Limeira Jetsons, Claims 2nd Place 
+
+Rio Claro Farmers registered the highest point total this week to take down Limeira Jetsons 127.30 to 107.42. Rio Claro Farmers took a 67.20-point lead on Sunday afternoon and maintained that advantage for the rest of the matchup. This win was revenge for a loss to Limeira Jetsons in their last meeting a season ago. Alec Pierce (acquired via free agency in Week 5) made a big impact, posting 13.90 points. Rio Claro Farmers (5-1, 719.36 points) climbs into second place and Limeira Jetsons (4-2, 699.74 points) drops to sixth place.
+
+ There was one player on Rio Claro Farmers that left points out on the field. Despite being targeted seven times, Alec Pierce could manage just three catches.
+
+ Since Barkley was the top point-getter for Rio Claro Farmers, it means a different player has led the team in each of the last four weeks. With 39.42 points, Lamar Jackson paced the squad in Week 3, while Marquise Brown (20.80 points) was tops in Week 4 and Alvin Kamara (23.40 points) last week.
+
+ Rio Claro Farmers will face Goncalves Miners (5-1, 683.66) next week. Limeira Jetsons gets Paulinia Robots (5-1, 758.34), who sits in first place.
+
+#### Rio Claro Farmers
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-11.png" width="672" />
+
+#### Limeira Jetsons
+<img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-12.png" width="672" />
+
+### Indaiatuba Pats Beats Barao Butchers, Fighting Past Strong Outings by a Couple of Indianapolis Colts 
+
+The top performances by a dynamic duo of Indianapolis Colts (Deon Jackson and Michael Pittman) weren't enough, as Indaiatuba Pats got a victory over Barao Butchers 124.02 to 102.96. That tandem teamed up to tally 54.50 points in defeat. Jackson (42 Rsh Yds, 79 Rec Yds, 1 TD) led the way with 28.10 points, while Pittman (134 Rec Yds) pitched in with 26.40. Also, Rhamondre Stevenson recorded his highest point total of the season. Adding insult to injury, Barao Butchers got zero points from Marquez Valdes-Scantling. Indaiatuba Pats (4-2, 681.74 points) climbs into fourth place, while Barao Butchers (1-5, 561.82 points) stays in 13th place.
+
+ Barao Butchers had one notable starter that left points out on the field. Even though DK Metcalf saw a total of seven targets, he only reeled in two catches.
+
+ Since Stevenson was the leading point-getter for Indaiatuba Pats, it means a different player has now topped the team in each of the past five weeks. With 32.00 points, Aaron Jones paced the squad in Week 2, while A.J. Brown put up 19.50 points to lead the way in Week 3. Jared Goff (33.22 points) was tops in Week 4 and Gabe Davis (32.10 points) led last week.
+
+ Next week, Indaiatuba Pats meets Sorocaba Wild Mules (0-6, 571.40), the last-place team in the league. Barao Butchers gets Indaiatuba Riders (3-3, 656.04).
+
+#### Indaiatuba Pats
 <img src="{{< blogdown/postref >}}index_files/figure-html/listRecap-13.png" width="672" />
 
 #### Barao Butchers
