@@ -41,7 +41,7 @@ teams <- sim$teams %>%
   select(id=teamId, name=nickname)
 
 
-games <- 1:3 %>% 
+games <- 1:7 %>% 
   map_df(function(.w){
     
     sim <- glue("./data/simulation_v5_week{.w}_final.rds") %T>% 
@@ -70,8 +70,59 @@ teams_div <- teams %>%
   mutate(sim=1, conf="dudes", division="dudes") %>% 
   select(sim, team=name, conf, division)
 
-
 res <- compute_division_ranks(games, teams_div, 2, T)
 
-res$standings %>% 
-  arrange(div_rank)
+full_schedule <- 1:14 %>% 
+  map(~ffa_league_matchups(config$authToken, config$leagueId, .x, F))
+
+remaining_schedule <- full_schedule %>% 
+  map_df(ffa_extractMatchups) %>%
+  filter(homeTeam.outcome=="") %>% 
+  select(week, away_id=awayTeam.teamId, home_id=homeTeam.teamId) %>% 
+  left_join(teams, by=c("away_id"="id")) %>% 
+  rename(away_team=name) %>% 
+  left_join(teams, by=c("home_id"="id")) %>% 
+  rename(home_team=name) %>% 
+  select(week, away_team, home_team)
+
+
+game_sims <- 1:1000 %>%
+  map_df(function(.sim, .rschd, .games) {
+    .rschd %>%
+      mutate(result = rnorm(nrow(.), 0, sd(.games$result))) %>%
+      bind_rows(.games) %>%
+      mutate(sim = .sim, game_type="REG") %>%
+      return()
+  }, .rschd = remaining_schedule, .games = games) %>% 
+  arrange(sim, week) %>% 
+  select(sim, week, away_team, home_team, result, game_type)
+
+teams_div_sim <-   1:1000 %>% 
+  map_df(function(.sim, .teams){
+    .teams %>% 
+      mutate(sim=.sim, conf="dudes", division="dudes") %>% 
+      select(sim, team=name, conf, division)
+  }, .teams=teams)
+
+res <- compute_division_ranks(game_sims, teams_div_sim, tiebreaker_depth = 3, .debug=T)
+
+plff <- res$standings %>% 
+  select(sim, team, div_rank) %>% 
+  mutate(playoffs = div_rank<7) %>% 
+  count(team, playoffs) %>% 
+  mutate(pct = round(100*n/1000)) %>% 
+  pivot_wider(id_cols = team, names_from = playoffs, values_from = pct) %>% 
+  select(team, playoffs=`TRUE`) %>% 
+  mutate(playoffs = if_else(is.na(playoffs), 0, playoffs)) %>% 
+  arrange(desc(playoffs))
+
+pos <- res$standings %>% 
+  count(team, div_rank) %>% 
+  mutate(div_rank = paste0("rnk_", div_rank),
+         pct=round(100*(n/1000))) %>% 
+  mutate(pct=if_else(is.na(pct), 0, pct)) %>% 
+  pivot_wider(team, names_from = div_rank, values_from = pct)
+
+plff %>% 
+  inner_join(pos, by="team") %>% 
+  arrange(desc(playoffs))
