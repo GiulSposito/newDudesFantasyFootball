@@ -29,6 +29,8 @@ res$h2h %>%
 
 library(tidyverse)
 library(glue)
+source("./R/api/ffa_league.R")
+config <- yaml::read_yaml("./config/config.yml")
 
 ### DATA SET PREPARATION
 
@@ -41,7 +43,7 @@ teams <- sim$teams %>%
   select(id=teamId, name=nickname)
 
 
-games <- 1:7 %>% 
+games <- 1:8 %>% 
   map_df(function(.w){
     
     sim <- glue("./data/simulation_v5_week{.w}_final.rds") %T>% 
@@ -85,7 +87,6 @@ remaining_schedule <- full_schedule %>%
   rename(home_team=name) %>% 
   select(week, away_team, home_team)
 
-
 game_sims <- 1:1000 %>%
   map_df(function(.sim, .rschd, .games) {
     .rschd %>%
@@ -118,10 +119,11 @@ plff <- res$standings %>%
 
 pos <- res$standings %>% 
   count(team, div_rank) %>% 
-  mutate(div_rank = paste0("rnk_", div_rank),
+  mutate(rank = fct_reorder(paste0("rnk_", div_rank), div_rank),
          pct=round(100*(n/1000))) %>% 
+  arrange(div_rank) %>% 
   mutate(pct=if_else(is.na(pct), 0, pct)) %>% 
-  pivot_wider(team, names_from = div_rank, values_from = pct)
+  pivot_wider(team, names_from = rank, values_from = pct)
 
 plff %>% 
   inner_join(pos, by="team") %>% 

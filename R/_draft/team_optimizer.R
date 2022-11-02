@@ -2,12 +2,7 @@ library(tidyverse)
 library(glue)
 
 .team <- "Amparo Bikers"
-.week <- 8
-
-# readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
-#   select(teamId, fantasy.team) %>% 
-#   distinct() %>% 
-#   arrange(teamId)
+.week <- 9
 
 # dados dos jogadores
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
