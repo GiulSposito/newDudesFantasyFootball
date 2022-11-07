@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 9
-  prefix: preSNF
+  prefix: posSNF
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -124,9 +124,9 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations posTNF](/reports/2022/dudes_simulation_v5_week9_posTNF.html)
 - [Matchup Simulations preSundayGames](/reports/2022/dudes_simulation_v5_week9_preSundayGames.html)
 - [Matchup Simulations preSNF](/reports/2022/dudes_simulation_v5_week9_preSNF.html)
+- [Matchup Simulations posSNF](/reports/2022/dudes_simulation_v5_week9_posSNF.html)
 <!--
 - [Matchup Simulations preLondonGame](/reports/2022/dudes_simulation_v5_week9_preLondonGame.html)
-- [Matchup Simulations posSNF](/reports/2022/dudes_simulation_v5_week9_posSNF.html)
 -->
 
 ## Collected Projections
