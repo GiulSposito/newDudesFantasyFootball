@@ -30,6 +30,8 @@ params:
 
 
 
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Mike McDaniel telling Justin Fields to “Stop it” 😂 <a href="https://t.co/Ceg0IwzLzU">pic.twitter.com/Ceg0IwzLzU</a></p>&mdash; PFF (@PFF) <a href="https://twitter.com/PFF/status/1589356354149683200?ref_src=twsrc%5Etfw">November 6, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 ## Best Coachs: Roster Ranking
 
 Total de pontos que foram deixados de ganhar na melhor escalação possível, acumulado ao longo das rodadas.
@@ -405,3 +407,6 @@ Trade, release and new contracts points balance
   </tr>
 </tbody>
 </table>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Mike McDaniel is HILARIOUS 😂😂🤣 <a href="https://t.co/U8dWXHDW6V">pic.twitter.com/U8dWXHDW6V</a></p>&mdash; Warren Sharp (@SharpFootball) <a href="https://twitter.com/SharpFootball/status/1589785435727089666?ref_src=twsrc%5Etfw">November 8, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
