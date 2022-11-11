@@ -43,7 +43,7 @@ ptsproj <- dudes_proj %>%
 players_proj <- players %>% 
   select(-week) %>% 
   inner_join(ptsproj, by=c("id","pos")) %>% 
-  mutate( points  = map_dbl(pts.proj, quantile, probs=.5, na.rm=T),
+  mutate( points  = map_dbl(pts.proj, quantile, probs=.8, na.rm=T),
           ceiling = map_dbl(pts.proj, quantile, probs=.8, na.rm=T),
           floor   = map_dbl(pts.proj, quantile, probs=.2, na.rm=T))
 
