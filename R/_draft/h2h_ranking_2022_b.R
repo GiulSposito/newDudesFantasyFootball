@@ -44,7 +44,7 @@ teams <- sim$teams %>%
   select(id=teamId, name=nickname)
 
 
-games <- 1:10 %>% 
+games <- 1:11 %>% 
   map_df(function(.w){
     
     sim <- glue("./data/simulation_v5_week{.w}_final.rds") %T>% 
