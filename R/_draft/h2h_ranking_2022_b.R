@@ -44,7 +44,7 @@ teams <- sim$teams %>%
   select(id=teamId, name=nickname)
 
 
-games <- 1:11 %>% 
+games <- 1:12 %>% 
   map_df(function(.w){
     
     sim <- glue("./data/simulation_v5_week{.w}_final.rds") %T>% 
@@ -73,7 +73,7 @@ teams_div <- teams %>%
   mutate(sim=1, conf="dudes", division="dudes") %>% 
   select(sim, team=name, conf, division)
 
-res <- compute_division_ranks(games, teams_div, 2, T)
+# res <- compute_division_ranks(games, teams_div, 2, T)
 
 full_schedule <- 1:14 %>% 
   map(~ffa_league_matchups(config$authToken, config$leagueId, .x, F))
