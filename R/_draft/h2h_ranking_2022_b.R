@@ -44,7 +44,7 @@ teams <- sim$teams %>%
   select(id=teamId, name=nickname)
 
 
-games <- 1:12 %>% 
+games <- 1:13 %>% 
   map_df(function(.w){
     
     sim <- glue("./data/simulation_v5_week{.w}_final.rds") %T>% 
@@ -126,6 +126,15 @@ pos <- res$standings %>%
   mutate(pct=if_else(is.na(pct), 0, pct)) %>% 
   pivot_wider(team, names_from = rank, values_from = pct)
 
-plff %>% 
+r <- res$standings %>% 
+  count(team, div_rank) %>% 
+  group_by(team) %>% 
+  filter(n==max(n)) %>% 
+  ungroup() %>% 
+  select(team, rank=div_rank)
+
+r %>% 
+  inner_join(plff, by="team") %>% 
   inner_join(pos, by="team") %>% 
-  arrange(desc(playoffs))
+  arrange(desc(-rank)) %>% 
+  select(-rank)
