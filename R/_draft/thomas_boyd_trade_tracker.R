@@ -1,7 +1,7 @@
 library(tidyverse)
 library(glue)
 
-.week <- 7
+.week <- 13
 
 players <- readRDS(glue("./data/week{.week}_players_projections.rds"))
 
