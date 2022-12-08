@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 14
-  prefix: preWaivers
+  prefix: preTNF
 ---
 
 _Last Update: `r lubridate::now()`_
