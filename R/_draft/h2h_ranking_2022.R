@@ -11,7 +11,7 @@ teams <- sim$teams %>%
   mutate(nickname=janitor::make_clean_names(nickname)) %>% 
   select(id=teamId, name=nickname)
 
-h2h <- 1:2 %>% 
+h2h <- 1:13 %>% 
   map_df(function(.w){
     
     sim <- glue("./data/simulation_v5_week{.w}_final.rds") %T>% 
@@ -82,7 +82,8 @@ computeRank <- . %>%
     balance = cumsum(pro.pts-agt.pts),
     bal.cum = cumsum(balance)
   ) %>% 
-  ungroup()
+  ungroup() %>% 
+  mutate( win.pct = wins/(losses+wins))
 
 
 rankH2H <- function(tieGroup, fullScore) {
