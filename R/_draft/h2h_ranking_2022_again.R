@@ -3,15 +3,66 @@
 # computar o rank acumulado na .week
 # segregar a pontuacao (pontos pro eh o desempate)
 
-rank_l1 <- h2h_full %>% 
+.h2h_full <- h2h_full
+.week <- 10
+
+# computa o rank original
+# computa o max score
+
+standing_l1 <- .h2h_full %>% 
+  filter(week <= .week) %>% 
   computeRank() %>% 
-  filter(week==8) %>% 
-  arrange(desc(wins)) %>% 
+  filter(week == .week) %>% 
   select(team.id, team.nm, wins, losses, pro.pts, win.pct) %>% 
   mutate(pos=rank(-win.pct)) %>% 
-  add_count(win.pct)
+  add_count(win.pct) %>% 
+  arrange(pos)
 
-rank_l1
+score_pro <- standing_l1 %>% 
+  select(team.id, pro.pts)
+
+# tem algum grupo empatado?
+any(standing_l1$n>1)
+
+# para cada grupo empatado
+tied <- standing_l1 %>% 
+  filter( n>1 ) %>% 
+  group_by(pos, n) %>% 
+  nest() 
+
+tied %>% 
+  mutate( untied = map(data, function(.tied_group, .h2hm, .week){
+    # pega os ids empatados (de cada grupo)
+    tied_ids <- .tied_group %>% 
+      pull(team.id)
+    
+    # computa o h2h do grupo
+    .h2h_full %>% 
+      filter( team.id %in% tied_ids, 
+              opp.id  %in% tied_ids,
+              week <= .week ) %>%
+      computeRank() %>% 
+      group_by(team.id) %>% 
+      filter( week==max(week)) %>% 
+      ungroup() %>% 
+      select(team.id, team.nm, wins, losses, pro.pts, win.pct) %>% 
+      mutate(sub_pos=rank(-win.pct)) %>% 
+      arrange(sub_pos) %>% 
+      mutate(sub_change = scale(sub_pos, scale = F)[,1])
+    
+    
+  },
+  .h2hm = .h2h_full, 
+  .week = .week) ) %>% 
+  unnest(untied) %>% 
+  mutate( pos = pos + sub_change ) %>% 
+  select( -sub_pos, -sub_change, -data ) %>% 
+  bind_rows( filter(standing_l1, n==1) ) %>% 
+  arrange(pos)
+
+
+
+.tied_group <- tied[2,]$data[[1]]
 
 
 
