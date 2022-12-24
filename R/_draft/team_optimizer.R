@@ -8,7 +8,7 @@ library(glue)
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
     avg_type=="average",
-    fantasy.team %in% c(.team,"*FreeAgent"),
+    fantasy.team %in% c(.team), # ,"*FreeAgent"),
     team!="FA",
     week==.week
   ) %>%  
@@ -64,7 +64,7 @@ players_proj <- players_proj %>%
   mutate( injuryFactor = if_else(byeWeek==.week,0,injuryFactor)) %>% 
   mutate( points  = injuryFactor*points,
           ceiling = injuryFactor*ceiling,
-          floor   = injuryFactor*floor)
+          floor   = injuryFactor*floor) 
 # starts
 starters <- tibble(
   pos=c("QB","RB","WR","TE","K","DST"),
