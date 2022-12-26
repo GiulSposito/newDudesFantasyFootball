@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 16
-  prefix: preSundayGames
+  prefix: posSNF
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -126,12 +126,13 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations posTNF](/reports/2022/dudes_simulation_v5_week16_posTNF.html)
 - [Matchup Simulations Pre Saturday Games](/reports/2022/dudes_simulation_v5_week16_preSaturdayGames.html)
 - [Matchup Simulations preSundayGames](/reports/2022/dudes_simulation_v5_week16_preSundayGames.html)
+- [Matchup Simulations posSNF](/reports/2022/dudes_simulation_v5_week16_posSNF.html)
 
 <!--
 - [Matchup Simulations preWaivers](/reports/2022/dudes_simulation_v5_week16_preWaivers.html)
 - [Matchup Simulations preTNF](/reports/2022/dudes_simulation_v5_week16_preTNF.html)
 - [Matchup Simulations preSundayGames](/reports/2022/dudes_simulation_v5_week16_preSundayGames.html)
-- [Matchup Simulations posSNF](/reports/2022/dudes_simulation_v5_week16_posSNF.html)
+
 - [Matchup Simulations preThanksGivingGames](/reports/2022/dudes_simulation_v5_week16_preThurdaysGames.html)
 - [Matchup Simulations preSNF](/reports/2022/dudes_simulation_v5_week16_preSNF.html)
 
