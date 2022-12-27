@@ -7,7 +7,7 @@ scrapPlayersPredictions <- function(.week, .season) {
   # quais sites (default)
   #  
   # 
-  sources <- c("CBS", "ESPN", "FantasyData", "FantasyPros", "FantasySharks", "FFToday",
+  sources <- c("CBS", "ESPN", "FantasyData", "FantasyPros", "FantasySharks","FFToday",
                "FleaFlicker", "NumberFire", "Yahoo", "FantasyFootballNerd", "NFL", "RTSports",
                "Walterfootball")
   

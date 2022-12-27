@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 16
+week <- 17
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "preSundayGames"
+prefix <- "preWaivers"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -39,10 +39,10 @@ webScrape %>%
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
 
-# ws2 <- webScrape %>% 
+# ws2 <- webScrape %>%
 #   map(function(.dt){
-#     .dt %>% 
-#       filter(!is.na(data_src)) %>% 
+#     .dt %>%
+#       filter(!is.na(data_src)) %>%
 #       return()
 #   })
 # 
