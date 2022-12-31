@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 17
 season <- 2022
 config <- read_yaml("./config/config.yml")
-prefix <- "posWaivers"
+prefix <- "preSaturdayGames"
 destPath <- "static/reports/2022"
 sim.version <- 5
 
@@ -39,19 +39,19 @@ webScrape %>%
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
 
-# ws2 <- webScrape %>%
-#   map(function(.dt){
-#     .dt %>%
-#       filter(!is.na(data_src)) %>%
-#       return()
-#   })
-# 
-# # atributos de controle da FFA
-# attr(ws2, "season") <- attr(webScrape, "season")
-# attr(ws2, "week") <-  attr(webScrape, "season")
-# names(ws2) <- names(webScrape)
-# 
-# webScrape <- ws2
+ws2 <- webScrape %>%
+  map(function(.dt){
+    .dt %>%
+      filter(!is.na(data_src)) %>%
+      return()
+  })
+
+# atributos de controle da FFA
+attr(ws2, "season") <- attr(webScrape, "season")
+attr(ws2, "week") <-  attr(webScrape, "season")
+names(ws2) <- names(webScrape)
+
+webScrape <- ws2
 
 saveScraps(week, webScrape)
 
