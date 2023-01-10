@@ -20,7 +20,16 @@ resources:
 
 <!--more-->
 
-![](images/trophies.jpg)
+### Season 2022
+
+<span class="emoji">🏆</span> 1st Place: **Paulínia Robots** (Leonel)<br/>
+<span class="emoji">🥈</span> 2nd Place: **Gonçalves Miners** (Fávero)<br/>
+<span class="emoji">🥉</span> 3rd Place: **Limeira Jetsons** (Roander)<br/>
+<br/>
+<span class="emoji">🥇️</span> Reg Season 1st Place: **Gonçalves Miners** (Fávero)<br/>
+<span class="emoji">🎖</span> Highest Scoring: **Gonçalves Miners** (Fávero)<br/>
+<span class="emoji">🏅</span> Survival Champion: **Gonçalves Miners** (Fávero)<br/>
+
 
 ### Season 2021
 🏆 1st Place: **Barão Butchers** (Kadu)<br/>
