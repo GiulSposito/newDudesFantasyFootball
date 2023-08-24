@@ -7,6 +7,7 @@ library(glue)
 source("./R/api/ffa_league.R")
 config <- yaml::read_yaml("./config/config.yml")
 teams_resp <- ffa_league_teams(config$authToken,config$leagueId)
+year <- 2023
 
 # transforma a resposta de lista para dataframe
 teams <- teams_resp$content$games[[1]]$leagues[[1]]$teams %>% 
@@ -24,7 +25,7 @@ team_ids <- teams$teamId
 recap_list <- team_ids %>% 
   map(function(x){
     # URL do json do draft recap eh fixa muda so o ano.
-    GET(glue("https://nfl-fantasy.automatedinsights.com/content-prod/2022/draftrecap/eb70/3940933/{x}.json.gzip")) %>% 
+    GET(glue("https://nfl-fantasy.automatedinsights.com/content-prod/{year}/draftrecap/eb70/3940933/{x}.json.gzip")) %>% 
       content(as="text") %>% 
       # na verdade é uma chamada js passando o conteúdo json, removo o entorno da chamaa
       str_remove("YUI.Env.onDraftRecapLoaded\\(  ") %>% 
