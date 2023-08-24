@@ -1,18 +1,16 @@
 library(tidyverse)
 library(ffanalytics)
+library(magrittr)
 
 my_scrape <- scrape_data(pos = c("QB", "RB", "WR", "TE", "DST", "K"),
-                         season = 2022, week = 0)
+                         season = 2023, week = 0)
 
 
 my_projections <-  projections_table(my_scrape,scoring_rules = yaml::read_yaml("./config/score_settings.yml"))
-
-library(magrittr)
-proj_stats <- my_projections %>% 
-  add_ecr() %>% 
-  add_adp() %>% 
-  add_aav() %>%
-  add_uncertainty()
+proj_stats <- add_ecr(my_projections)
+proj_stats <- add_adp(proj_stats) 
+proj_stats <- add_aav(proj_stats)
+proj_stats <- add_uncertainty(proj_stats)
 
 proj_info <- proj_stats %>% 
   add_player_info()
@@ -32,7 +30,7 @@ proj_info %>%
   slice_max(points_vor, n=30) %>% 
   ggplot(aes(x=points_vor, y=-rank, color=uncertainty)) +
   geom_point() +
-  geom_text(aes(x=ceiling_vor,label=paste0(first_name, " ", last_name)), hjust=0) +
+  geom_text(aes(x=ceiling_vor,label=paste0(first_name, " ", last_name))) +
   geom_errorbarh(aes(xmax=ceiling_vor, xmin=floor_vor)) +
   theme_light()
 

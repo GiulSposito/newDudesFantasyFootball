@@ -39,7 +39,7 @@ my_player_ids <- player_ids %>%
   as_tibble() 
 
 # season projection
-proj <- readRDS("./data/season_projtable.rds") %>% 
+proj <- readRDS("./data/season_proj_stats.rds") %>% 
   mutate( id = as.integer(id) )
 
 drafted_season_proj <- teams_rosters %>% 
