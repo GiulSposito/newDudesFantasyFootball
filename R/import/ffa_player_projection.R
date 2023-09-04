@@ -4,17 +4,15 @@ library(glue)
 scrapPlayersPredictions <- function(.week, .season) {
   # # faz o scraping de projeção dos sites
   
-  # quais sites (default)
-  #  
-  # 
-  sources <- c("CBS", "ESPN", "FantasyData", "FantasyPros", "FantasySharks","FFToday",
-               "FleaFlicker", "NumberFire", "Yahoo", "FantasyFootballNerd", "NFL", "RTSports",
-               "Walterfootball")
+  # defaults 
+  sources <- c("CBS", "ESPN", "FantasyPros", "FantasySharks", "FFToday", "FleaFlicker",
+               "NumberFire", "FantasyFootballNerd", "NFL", "RTSports", "Walterfootball")
   
- 
+  # CBS is projecting the season
+  sources <- sources[-1]
   
   scrap <- scrape_data(
-    # src = sources,
+    src = sources,
     pos = c("QB", "RB", "WR", "TE", "K", "DST"),
     season = .season,
     week = .week
@@ -23,7 +21,7 @@ scrapPlayersPredictions <- function(.week, .season) {
   return(scrap)
 }
 
-saveScraps <- function(.week, .scrps){
+accumulateWeeklyScrape <- function(.week, .scrps){
 # salva arquivos temporariamente
   .scrps %>% saveRDS(glue("./data/week{.week}_scrap.rds"))
   
