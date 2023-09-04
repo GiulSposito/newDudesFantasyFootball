@@ -35,10 +35,12 @@ espn_getEspn2FfaIds <- function(ffa_player_ids){
     return()
 }
 
-espn_srapeCurrWeekProj <- function() {
+espn_srapeCurrWeekProj <- function(.season) {
   
   ##### ESPN SCRAPPING (só tem um jeito de pedir: current week all players)
-  resp <- request("https://fantasy.espn.com/apis/v3/games/ffl/seasons/2022/segments/0/leaguedefaults/3?scoringPeriodId=0&view=kona_player_info") %>%
+  resp <- request(
+      glue("https://fantasy.espn.com/apis/v3/games/ffl/seasons/{.season}/segments/0/leaguedefaults/3?scoringPeriodId=0&view=kona_player_info")
+    ) %>%
     req_method("GET") %>% 
     # for pagging set: 'limit' and 'offset'
     req_headers("x-fantasy-filter"='{"players":{"filterStatsForSplitTypeIds":{"value":[1]},"filterSlotIds":{"value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,23,24]},"filterStatsForSourceIds":{"value":[1]},"sortAppliedStatTotal":{"sortAsc":false,"sortPriority":3,"value":"1120222"},"sortDraftRanks":{"sortPriority":2,"sortAsc":true,"value":"PPR"},"sortPercOwned":{"sortAsc":false,"sortPriority":4},"limit":2000,"offset":0,"filterRanksForScoringPeriodIds":{"value":[2]},"filterRanksForRankTypes":{"value":["PPR"]},"filterRanksForSlotIds":{"value":[0,2,4,6,17,16]},"filterStatsForTopScoringPeriodIds":{"value":2,"additionalValue":["002022","102022","002021","1120222","022022"]}}}') %>% 
