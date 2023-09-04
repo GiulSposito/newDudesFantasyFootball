@@ -22,9 +22,7 @@ calcPointsProjection <- function(.season, .score.settings, saveToFile=T){
             id = as.integer(id) ) %>% 
     rename(pts.proj = points)  %>%
     filter(complete.cases(.)) %>% 
-    distinct() %T>% 
-    # salva pontuacao projetada
-    saveRDS("./data/points_projection.rds") %>% 
+    distinct() %>% 
     return()
   
 }
