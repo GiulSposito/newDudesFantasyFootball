@@ -9,7 +9,7 @@ scrapPlayersPredictions <- function(.week, .season) {
                "NumberFire", "FantasyFootballNerd", "NFL", "RTSports", "Walterfootball")
   
   # CBS is projecting the season
-  sources <- sources[-1]
+  # sources <- sources[-1]
   
   scrap <- scrape_data(
     src = sources,
