@@ -2,13 +2,13 @@ library(tidyverse)
 library(glue)
 
 .team <- "Amparo Bikers"
-.week <- 17
+.week <- 1
 
 # dados dos jogadores
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
   filter(
     avg_type=="average",
-    fantasy.team %in% c(.team), # ,"*FreeAgent"),
+    fantasy.team %in% c(.team,"*FreeAgent"),
     team!="FA",
     week==.week
   ) %>%  
@@ -40,6 +40,27 @@ ptsproj <- dudes_proj %>%
     
   }, .n=SIMULATION_SIZE) )
 
+pdfden <- ptsproj |> 
+  filter(id==13116) |> 
+  unnest(data, names_sep = "_") |> 
+  pull(data_pts.proj) |> 
+  ecdf() |> 
+  knots() |> 
+  density(from=-10, to=100)
+
+approx( cumsum(pdfden$y)/sum(pdfden$y), 
+        pdfden$x, runif(100) )$y |> 
+  hist()
+
+tibble( x=pdfden$x, y=pdfden$y ) |> 
+  filter(y>.1) |> 
+  ggplot(aes(x,y)) +
+  geom_point() +
+  theme_minimal()
+
+ptsproj |> 
+  unnest(pts.proj, names_sep="_")
+
 players_proj <- players %>% 
   select(-week) %>% 
   inner_join(ptsproj, by=c("id","pos")) %>% 
@@ -48,23 +69,23 @@ players_proj <- players %>%
           floor   = map_dbl(pts.proj, quantile, probs=.2, na.rm=T))
 
 
-injury_table <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
-  select(injuryGameStatus) %>% 
-  distinct() %>%
-  arrange(injuryGameStatus) %>% 
-  mutate( injuryFactor = case_when(
-    is.na(injuryGameStatus) ~ 1,
-    injuryGameStatus == "Questionable" ~ 0.5,
-    injuryGameStatus == "Doubtful" ~ 0.25,
-    T ~ 0
-  ))
-
-players_proj <- players_proj %>% 
-  inner_join(injury_table, by = "injuryGameStatus") %>% 
-  mutate( injuryFactor = if_else(byeWeek==.week,0,injuryFactor)) %>% 
-  mutate( points  = injuryFactor*points,
-          ceiling = injuryFactor*ceiling,
-          floor   = injuryFactor*floor) 
+# injury_table <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
+#   select(injuryGameStatus) %>% 
+#   distinct() %>%
+#   arrange(injuryGameStatus) %>% 
+#   mutate( injuryFactor = case_when(
+#     is.na(injuryGameStatus) ~ 1,
+#     injuryGameStatus == "Questionable" ~ 0.5,
+#     injuryGameStatus == "Doubtful" ~ 0.25,
+#     T ~ 0
+#   ))
+# 
+# players_proj <- players_proj %>% 
+#   inner_join(injury_table, by = "injuryGameStatus") %>% 
+#   mutate( injuryFactor = if_else(byeWeek==.week,0,injuryFactor)) %>% 
+#   mutate( points  = injuryFactor*points,
+#           ceiling = injuryFactor*ceiling,
+#           floor   = injuryFactor*floor) 
 # starts
 starters <- tibble(
   pos=c("QB","RB","WR","TE","K","DST"),
