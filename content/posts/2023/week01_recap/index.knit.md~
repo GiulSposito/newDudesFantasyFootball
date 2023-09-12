@@ -1,0 +1,57 @@
+---
+title: 'Week 01 | Matchups Recap and Teams Performances'
+author: Giuliano Sposito
+date: '2023-09-12T01:00:00-03:00'
+slug: s23_w01_recap
+categories:
+  - recap
+  - ranking
+tags:
+  - rank
+  - recap
+dropCap: yes
+draft: true
+displayInMenu: no
+displayInList: yes
+resources:
+- name: featuredImage
+  src: "cover.jpg"
+  params:
+    description: cover
+params:
+  week: 1
+---
+
+<!--more-->
+
+
+
+
+
+
+## Teams Performances
+
+<img src="index_files/figure-html/teamPerf-1.png" width="672" />
+
+
+## League Highlights
+
+
+
+<!--
+## Weekly Trophies
+
+![Trophies](images/trophies.png)
+-->
+
+
+
+## Points left on bench
+
+
+
+
+
+
+
+

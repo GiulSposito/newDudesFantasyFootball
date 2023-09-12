@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 1
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "preMNF"
+prefix <- "final"
 destPath <- "static/reports/2023"
 sim.version <- 5
 
@@ -168,43 +168,47 @@ sim <- simulateGames(week, season, ptsproj, matchups_games, teams_rosters, playe
 # salva resultado
 saveRDS(sim, glue("./data/simulation_v{sim.version}_week{week}_{prefix}.rds"))
 
-# REPORT RENDERS: PLAYERS PROJECTION ####
-rmarkdown::render(
-  input = "./R/reports/ffa_players_projection.Rmd",
-  output_file = glue("../../{destPath}/ffa_players_projection_week{week}.html"),
-  output_format = "flex_dashboard",
-  params = list(week=week)
-)
-
-# REPORT RENDERS: MATCHUP SIMULATIONS ####
-
-rmarkdown::render(
-  input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
-  output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),
-  output_format = "flex_dashboard",
-  params = list(week=week, prefix=prefix)
-)
-
-
-# EXPORT: FULL PPR ####
-
-if(file.exists(glue("./static/exports/{season}/week{week}_full_ppr.csv"))){
-  file.remove(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
+if(prefix!="final"){
+  # REPORT RENDERS: PLAYERS PROJECTION ####
+  rmarkdown::render(
+    input = "./R/reports/ffa_players_projection.Rmd",
+    output_file = glue("../../{destPath}/ffa_players_projection_week{week}.html"),
+    output_format = "flex_dashboard",
+    params = list(week=week)
+  )
+  
+  # REPORT RENDERS: MATCHUP SIMULATIONS ####
+  
+  rmarkdown::render(
+    input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
+    output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),
+    output_format = "flex_dashboard",
+    params = list(week=week, prefix=prefix)
+  )
+  
+  
+  # EXPORT: FULL PPR ####
+  
+  if(file.exists(glue("./static/exports/{season}/week{week}_full_ppr.csv"))){
+    file.remove(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
+  }
+  
+  ptsproj %>%
+    inner_join(proj_table,by=c("id","pos")) %>%
+    write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
+  
+  # ptsproj %>%
+  #   mutate( data_src = str_c(data_src, "pts", sep="_") ) %>%
+  #   distinct() %>%
+  #   count(week, pos, id, data_src, sort = T) %>%
+  #   pivot_wider(id_cols=c(id, pos), names_from=data_src, values_from=pts.proj) %>%
+  #   janitor::clean_names() %>%
+  #   inner_join(proj_table,by=c("id","pos")) %>%
+  #   mutate( season = season, week = week ) %>%
+  #   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
+  
 }
 
-ptsproj %>%
-  inner_join(proj_table,by=c("id","pos")) %>%
-  write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
-
-# ptsproj %>%
-#   mutate( data_src = str_c(data_src, "pts", sep="_") ) %>%
-#   distinct() %>%
-#   count(week, pos, id, data_src, sort = T) %>%
-#   pivot_wider(id_cols=c(id, pos), names_from=data_src, values_from=pts.proj) %>%
-#   janitor::clean_names() %>%
-#   inner_join(proj_table,by=c("id","pos")) %>%
-#   mutate( season = season, week = week ) %>%
-#   write_csv(glue("./static/exports/{season}/week{week}_full_ppr.csv"))
 
 # EXPORT: RAW DATASETS ####
 
