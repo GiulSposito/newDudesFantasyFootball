@@ -23,7 +23,7 @@ params:
   week: 2
   prefix: posWaivers
 ---
- 
+
 _Last Update: `r lubridate::now()`_
 
 <!--more-->

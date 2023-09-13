@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 1
+week <- 2
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "final"
+prefix <- "posWaivers"
 destPath <- "static/reports/2023"
 sim.version <- 5
 
@@ -120,13 +120,19 @@ source("./R/simulation/players_projections.R")
 site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml")) 
 saveRDS(site_ptsproj, "./data/points_projection.rds") # salva pontuacao projetada
 
-# compara a pontuacao real com a pontuacao projetada
-# a aplica as variações das semanas anteriores na semana atual
-pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
-
-# "apenda" os erros calculados juntamente com a projecao da semana
-ptsproj <- site_ptsproj %>% # projecao dos sites
-  bind_rows(pts_errors)
+# so faz o calculo de erro se eu tenho pelo menos duas semanas
+if (week>2) {
+  # compara a pontuacao real com a pontuacao projetada
+  # a aplica as variações das semanas anteriores na semana atual
+  pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
+  
+  # "apenda" os erros calculados juntamente com a projecao da semana
+  ptsproj <- site_ptsproj %>% # projecao dos sites
+    bind_rows(pts_errors)
+} else {
+  # senao usa apenas as projecoes mesmo
+  ptsproj <- site_ptsproj
+}
 
 # salva as projecoes de pontos da semana
 # que é os pontos calculados para cada site da semana
