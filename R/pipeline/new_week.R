@@ -32,31 +32,33 @@ ffaScrape %>%
   count(data_src, pos) %>% 
   pivot_wider(names_from = "pos",values_from="n")
 
+webScrape <- ffaScrape
+
 # SCRAPPING: ESPN ####
-source("./R/import/espn_scraper.R")
-espn2ffa_ids <- espn_getEspn2FfaIds(player_ids)
-espnRaw <- espn_srapeCurrWeekProj(season)
-espnScrape <- espn_rawToFfaScrap(espnRaw, espn2ffa_ids, .week=week, .season=season)
-webScrape <- espn_InjectScrap(espnScrape, ffaScrape)
-
-# checking
-webScrape %>% 
-  map_df(~select(.x, data_src, id), .id="pos") %>% 
-  count(data_src, pos) %>% 
-  pivot_wider(names_from = "pos",values_from="n")
-
-ws2 <- webScrape %>%
-  map(function(.dt){
-    .dt %>%
-      filter(!is.na(data_src)) %>%
-      return()
-  })
-
-# atributos de controle da FFA
-attr(ws2, "season") <- attr(webScrape, "season")
-attr(ws2, "week") <-  attr(webScrape, "season")
-names(ws2) <- names(webScrape)
-webScrape <- ws2
+# source("./R/import/espn_scraper.R")
+# espn2ffa_ids <- espn_getEspn2FfaIds(player_ids)
+# espnRaw <- espn_srapeCurrWeekProj(season)
+# espnScrape <- espn_rawToFfaScrap(espnRaw, espn2ffa_ids, .week=week, .season=season)
+# webScrape <- espn_InjectScrap(espnScrape, ffaScrape)
+# 
+# # checking
+# webScrape %>% 
+#   map_df(~select(.x, data_src, id), .id="pos") %>% 
+#   count(data_src, pos) %>% 
+#   pivot_wider(names_from = "pos",values_from="n")
+# 
+# ws2 <- webScrape %>%
+#   map(function(.dt){
+#     .dt %>%
+#       filter(!is.na(data_src)) %>%
+#       return()
+#   })
+# 
+# # atributos de controle da FFA
+# attr(ws2, "season") <- attr(webScrape, "season")
+# attr(ws2, "week") <-  attr(webScrape, "season")
+# names(ws2) <- names(webScrape)
+# webScrape <- ws2
 
 # SCRAPPING: MERGE AND SAVE ####
 accumulateWeeklyScrape(week, webScrape)
@@ -162,14 +164,20 @@ site_pp <- readRDS(glue("./data/weekly_proj_player_site_{week}.rds"))
 source("./R/simulation/players_projections.R")
 site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_settings.yml")) 
 saveRDS(site_ptsproj, "./data/points_projection.rds") # salva pontuacao projetada
-  
-# compara a pontuacao real com a pontuacao projetada
-# a aplica as variações das semanas anteriores na semana atual
-pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
 
-# "apenda" os erros calculados juntamente com a projecao da semana
-ptsproj <- site_ptsproj %>% # projecao dos sites
-  bind_rows(pts_errors)
+# so faz o calculo de erro se eu tenho pelo menos duas semanas
+if (week>2) {
+  # compara a pontuacao real com a pontuacao projetada
+  # a aplica as variações das semanas anteriores na semana atual
+  pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
+  
+  # "apenda" os erros calculados juntamente com a projecao da semana
+  ptsproj <- site_ptsproj %>% # projecao dos sites
+    bind_rows(pts_errors)
+} else {
+  # senao usa apenas as projecoes mesmo
+  ptsproj <- site_ptsproj
+}
 
 # salva as projecoes de pontos da semana
 # que é os pontos calculados para cada site da semana
