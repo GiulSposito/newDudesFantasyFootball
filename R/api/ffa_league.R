@@ -133,6 +133,17 @@ ffa_extractTeams <- function(teamsResp){
 }
 
 
+ffa_extractTeamOwners  <- function(teamsResp){
+  teamsResp$content$users |> 
+    tibble(owner=_) |> 
+    unnest_wider(owner) |> 
+    mutate(
+      userId = as.integer(userId),
+      name = str_trim(name)
+    ) |> 
+    select(ownerUserId=userId, name)
+}
+
 
 # extrai o time e o roster
 ffa_extractTeamsFromMatchups <- function(leagueMatchupsResp){
