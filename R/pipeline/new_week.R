@@ -266,4 +266,6 @@ files <- map2( names(webScrape), webScrape,
                  return(glue("./static/exports/{season}/week{week}_{.pos}_rawdata.csv"))
                })
 
+blogdown::build_site(build_rmd = "timestamp")
+
 

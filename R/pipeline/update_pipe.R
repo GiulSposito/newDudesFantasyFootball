@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 2
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "posTNF"
+prefix <- "preSNF"
 destPath <- "static/reports/2023"
 sim.version <- 5
 
@@ -242,3 +242,4 @@ if (prefix=="final") {
 }
 
 
+blogdown::build_site(build_rmd = "timestamp")
