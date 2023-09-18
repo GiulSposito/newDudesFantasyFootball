@@ -5,8 +5,8 @@ output:
     orientation: rows
     vertical_layout: fill
 params:
-  week: 6
-  prefix: "posTNF"
+  week: 2
+  prefix: "preMNF"
 ---
 
 ```{r setup, include=FALSE}
@@ -336,7 +336,8 @@ plotRoster <- function(.teamId, .rosterData) {
                         color = "white",
                         alpha = .7) +
     geom_vline(xintercept = 0, color="grey", lt="dashed") +
-    geom_point(aes(x=weekPts), shape=24, fill="red", show.legend = F) +
+    geom_point(aes(x=weekPts), shape=24, color="red", fill="red", show.legend = F, alpha=.8) +
+    geom_hline(aes(yintercept=reorder(full_name,-display.order), color=pos),alpha=.3) +
     theme_light() +
     xlab("Fantasy Points") +
     ylab("") +
