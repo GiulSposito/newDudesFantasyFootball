@@ -81,6 +81,12 @@ dm_draw(nfl_db, view_type="all")
 
 # PLAYERS
 source("./R/api/ffa_players.R")
+
+players <- ffa_players(.authToken = config$authToken, .leagueId = config$leagueId)
+
+players |> ffa_extractPlayers()
+
+
 players_stats <- ffa_players_stats(config$authToken, config$leagueId, .season, 1:.week) %>%  
   ffa_extractPlayersStats()
 
