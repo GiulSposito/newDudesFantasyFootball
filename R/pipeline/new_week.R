@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 3
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "preTNF"
+prefix <- "preSundayGames"
 destPath <- "static/reports/2023"
 sim.version <- 5
 

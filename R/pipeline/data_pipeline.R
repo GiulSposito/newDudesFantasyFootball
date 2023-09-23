@@ -2,12 +2,11 @@ library(tidyverse)
 library(dm)
 library(glue)
 library(ffanalytics)
-library()
 
 # MASTER PARAMETERS ####
 config <- yaml::read_yaml("./config/config.yml")
 .season <- 2023
-.week <- 2
+.week <- 3
 .leagueId <- config$leagueId
 
 # FFA ####
@@ -55,9 +54,8 @@ ffa_db <- dm(ffa_player_ids, ffa_players, ffa_projtable, ffa_proj_source_points)
 
 dm_draw(ffa_db, view_type = "all", column_types = F)
 
-dm_flatten_to_tbl(ffa_db, ffa_proj_source_points, .recursive = T) |> 
-  arrange(id, pos) |> 
-  View()
+ffa_db |> 
+  saveRDS("./new_db/ffa_db_w03_s23.rds")
 
 # NFL ####
 
