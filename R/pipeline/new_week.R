@@ -166,7 +166,7 @@ site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_set
 saveRDS(site_ptsproj, "./data/points_projection.rds") # salva pontuacao projetada
 
 # so faz o calculo de erro se eu tenho pelo menos duas semanas
-if (week>2) {
+if (week>3) {
   # compara a pontuacao real com a pontuacao projetada
   # a aplica as variações das semanas anteriores na semana atual
   pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)
