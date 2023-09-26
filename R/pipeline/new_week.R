@@ -9,10 +9,10 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 3
+week <- 4
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "preSundayGames"
+prefix <- "preWaivers"
 destPath <- "static/reports/2023"
 sim.version <- 5
 
