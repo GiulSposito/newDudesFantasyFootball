@@ -1,7 +1,7 @@
 ---
 title: 'Week 03 | Matchups Recap and Teams Performances'
 author: Giuliano Sposito
-date: '2023-09-25T01:00:00-03:00'
+date: '2023-09-26T01:00:00-03:00'
 slug: s23_w03_recap
 categories:
   - recap
