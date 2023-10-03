@@ -12,9 +12,10 @@ options(dplyr.summarise.inform = FALSE)
 week <- 4
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "preMNF"
+prefix <- "final"
 destPath <- "static/reports/2023"
-sim.version <- 5
+rep.version <- 5
+sim.version <- 6
 
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
@@ -36,8 +37,8 @@ if(!checkFantasyAPI(config$authToken, config$leagueId, week)) stop("Unable to ac
 
 # PLAYERS
 source("./R/api/ffa_players.R")
-players_stats <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week) %>%  
-  ffa_extractPlayersStats()
+players_stats_resp <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week)  
+players_stats <- ffa_extractPlayersStats(players_stats_resp)
 
 players_stats %>% 
   mutate( week = week ) %>% 
@@ -172,7 +173,7 @@ source(glue("./R/simulation/points_simulation_v{sim.version}.R"))
 sim <- simulateGames(week, season, ptsproj, matchups_games, teams_rosters, players_stats, my_player_ids, proj_table)
 
 # salva resultado
-saveRDS(sim, glue("./data/simulation_v{sim.version}_week{week}_{prefix}.rds"))
+saveRDS(sim, glue("./data/simulation_v{rep.version}_week{week}_{prefix}.rds"))
 
 if(prefix!="final"){
   # REPORT RENDERS: PLAYERS PROJECTION ####
@@ -186,8 +187,8 @@ if(prefix!="final"){
   # REPORT RENDERS: MATCHUP SIMULATIONS ####
   
   rmarkdown::render(
-    input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
-    output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),
+    input = glue("./R/reports/dudes_simulation_v{rep.version}.Rmd"),
+    output_file = glue("../../{destPath}/dudes_simulation_v{rep.version}_week{week}_{prefix}.html"),
     output_format = "flex_dashboard",
     params = list(week=week, prefix=prefix)
   )

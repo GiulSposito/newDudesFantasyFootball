@@ -2,7 +2,7 @@ library(tidyverse)
 library(glue)
 
 .team <- "Amparo Bikers"
-.week <- 1
+.week <- 4
 
 # dados dos jogadores
 players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
@@ -39,6 +39,48 @@ ptsproj <- dudes_proj %>%
       return()
     
   }, .n=SIMULATION_SIZE) )
+
+fitted <- dudes_proj |> 
+  filter(id==14783) |> 
+  pull(pts.proj) |> 
+  fitdist("weibull")
+
+
+str(fitted)
+
+bootdist(fitted)
+
+fitdistrplus::
+
+par(mfrow=c(2,2))
+plot.legend <- c("Weibull", "lognormal", "gamma")
+denscomp(list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+cdfcomp (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+qqcomp  (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+ppcomp  (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+
+
+library(fitdistrplus)
+
+
+
+
+
+
+
+ptsproj |> 
+  unnest(data, names_sep = "_") |> 
+  filter(id==14783) |> 
+  pull(data_pts.proj) |> 
+  hist()
+
+ptsproj |> 
+  unnest(pts.proj, names_sep = "_") |> 
+  filter(id==14783) |> 
+  pull(pts.proj) |> 
+  hist()
+
+
 
 pdfden <- ptsproj |> 
   filter(id==13116) |> 

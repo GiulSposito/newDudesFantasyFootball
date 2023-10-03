@@ -116,7 +116,7 @@ ffa_players_advanced <- function(.authToken, .leagueId, .season, .weeks, .player
 # convert uma resposta em um dataframe
 ffa_extractPlayersStats <- function(playersStatsResp){
   
-  playersStatsResp$content$games[[1]]$players %>% 
+  stats_pt1 <- playersStatsResp$content$games[[1]]$players %>% 
     tibble(players=.) %>% 
     unnest_wider(players) %>% 
     hoist(stats, seasonPts = c(1, 1, "pts")) %>% 
@@ -128,7 +128,9 @@ ffa_extractPlayersStats <- function(playersStatsResp){
         mutate(across(everything(), as.numeric)) %>% 
         mutate(week = as.integer(week))
     })) %>% 
-    hoist(advanced, rankAgainstPosition = c("opponent","rankAgainstPosition")) %>% 
+    hoist(advanced, rankAgainstPosition = c("opponent","rankAgainstPosition")) 
+  
+  stats_pt1 |> 
     mutate( weekPts = map(weekStats, function(wp){
       wp %>% 
         map(~ purrr::pluck(.x, "pts", .default = NA)) %>% 

@@ -9,12 +9,13 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 4
+week <- 5
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "preLondonGame"
+prefix <- "preWaivers"
 destPath <- "static/reports/2023"
-sim.version <- 5
+rep.version <- 5
+sim.version <- 6
 
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
@@ -213,11 +214,11 @@ ptsproj %>%
 # SIMULACAO: SIMULACAO DAS PARTIDAS ####
 
 # simulação das partidas
-source(glue("./R/simulation/points_simulation_v{sim.version}.R"))
+source(glue("./R/simulation/points_simulation_v{rep.version}.R"))
 sim <- simulateGames(week, season, ptsproj, matchups_games, teams_rosters, players_stats, my_player_ids, proj_table)
 
 # salva resultado
-saveRDS(sim, glue("./data/simulation_v{sim.version}_week{week}_{prefix}.rds"))
+saveRDS(sim, glue("./data/simulation_v{rep.version}_week{week}_{prefix}.rds"))
 
 # REPORT RENDERS: PLAYERS PROJECTION ####
 rmarkdown::render(
@@ -230,8 +231,8 @@ rmarkdown::render(
 # REPORT RENDERS: MATCHUP SIMULATIONS ####
 
 rmarkdown::render(
-  input = glue("./R/reports/dudes_simulation_v{sim.version}.Rmd"),
-  output_file = glue("../../{destPath}/dudes_simulation_v{sim.version}_week{week}_{prefix}.html"),
+  input = glue("./R/reports/dudes_simulation_v{rep.version}.Rmd"),
+  output_file = glue("../../{destPath}/dudes_simulation_v{rep.version}_week{week}_{prefix}.html"),
   output_format = "flex_dashboard",
     params = list(week=week, prefix=prefix)
   )

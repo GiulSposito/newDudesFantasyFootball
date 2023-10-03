@@ -42,6 +42,7 @@ simulateGames <- function(.week, .season, .ptsproj, .matchup_games, .teams_roste
     nest(data=c(data_src, pts.proj)) %>% 
     mutate( pts.proj = map(data, function(.dt,.n){
 
+      if(length(.dt$pts.proj)<2) return(sample(.dt$pts.proj, .n, T))
       if(all(.dt$pts.proj == .dt$pts.proj[1])) return(sample(.dt$pts.proj, .n, T))
       
       # print(head(.dt))
