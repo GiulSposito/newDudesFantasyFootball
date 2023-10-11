@@ -9,7 +9,7 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 5
+week <- 6
 season <- 2023
 config <- read_yaml("./config/config.yml")
 prefix <- "posWaivers"

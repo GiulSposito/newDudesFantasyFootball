@@ -15,7 +15,7 @@ displayInMenu: no
 displayInList: yes
 resources:
 - name: featuredImage
-  src: backup_cover.jpeg
+  src: cover.jpg
   params:
     description: cover
 params:

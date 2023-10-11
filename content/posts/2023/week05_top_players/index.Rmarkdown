@@ -13,7 +13,7 @@ displayInMenu: no
 displayInList: yes
 resources:
 - name: featuredImage
-  src: "backup_cover.png"
+  src: "cover.jpg"
   params:
     description: cover
 params:
