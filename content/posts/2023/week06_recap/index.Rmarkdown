@@ -1,8 +1,8 @@
 ---
-title: 'Week 05 | Matchups Recap and Teams Performances'
+title: 'Week 06 | Matchups Recap and Teams Performances'
 author: Giuliano Sposito
-date: '2023-10-10T01:00:00-03:00'
-slug: s23_w05_recap
+date: '2023-10-17T01:00:00-03:00'
+slug: s23_w06_recap
 categories:
   - recap
   - ranking
@@ -18,7 +18,7 @@ resources:
   params:
     description: cover
 params:
-  week: 5
+  week: 6
 ---
 
 <!--more-->
