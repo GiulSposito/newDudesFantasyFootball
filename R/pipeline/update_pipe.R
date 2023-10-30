@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE)
 week <- 8
 season <- 2023
 config <- read_yaml("./config/config.yml")
-prefix <- "preSNF"
+prefix <- "preMNF"
 destPath <- "static/reports/2023"
 rep.version <- 5
 sim.version <- 6
@@ -20,8 +20,7 @@ sim.version <- 6
 # carregando tabelas de "de para" de IDs de Jogadores
 load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 my_player_ids <- player_ids %>%
-  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id)) %>% 
-  mutate( nfl_id = if_else(id==14108, 2562645L, nfl_id) ) # greg dortch
+  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id)) 
 
 
 # RECOVER PROJECTIONS ####
