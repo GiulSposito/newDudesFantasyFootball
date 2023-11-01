@@ -124,11 +124,11 @@ _Last Update: `r lubridate::now()`_
 ## Simulation
 
 - [Matchup Simulations preWaivers](/reports/2023/dudes_simulation_v5_week9_preWaivers.html)
+- [Matchup Simulations posWaivers](/reports/2023/dudes_simulation_v5_week9_posWaivers.html)
 
 
 <!--
 - [Matchup Simulations preMNF](/reports/2023/dudes_simulation_v5_week9_preMNF.html)
-- [Matchup Simulations posWaivers](/reports/2023/dudes_simulation_v5_week9_posWaivers.html)
 - [Matchup Simulations preTNF](/reports/2023/dudes_simulation_v5_week9_preTNF.html)
 - [Matchup Simulations posTNF](/reports/2023/dudes_simulation_v5_week9_posTNF.html)
 - [Matchup Simulations preSundayGames](/reports/2023/dudes_simulation_v5_week9_preSundayGames.html)
