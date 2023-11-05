@@ -22,7 +22,7 @@ sim.version <- 6
 # FFA PLAYER IDS: TRATANDO IDS NAO MAPEADOS ####
 mis_player_ids <- readRDS("./data/missing_player_ids.rds")
 
-ffa_player_ids <- ffanalytics:::player_ids |> 
+my_player_ids <- ffanalytics:::player_ids |> 
   anti_join(mis_player_ids, by=join_by(id)) |> 
   bind_rows(mis_player_ids) |> 
   mutate( id = as.integer(id), nfl_id = as.integer(nfl_id)) 
