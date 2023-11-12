@@ -3,7 +3,7 @@ library(glue)
 
 ### DATA SET PREPARATION
 
-sim <- readRDS("./data/simulation_v5_week1_final.rds")
+sim <- readRDS("./data/simulation_v5_week9_final.rds")
 
 teams <- sim$teams %>% 
   select(teamId, name) %>% 
@@ -11,7 +11,7 @@ teams <- sim$teams %>%
   mutate(nickname=janitor::make_clean_names(nickname)) %>% 
   select(id=teamId, name=nickname)
 
-h2h <- 1:14 %>% 
+h2h <- 1:9 %>% 
   map_df(function(.w){
     
     sim <- glue("./data/simulation_v5_week{.w}_final.rds") %T>% 
@@ -38,6 +38,7 @@ h2h_raw <- h2h %>%
           away.win = if_else(away.win=="win",1L,0L),
           home.los = if_else(home.win==1L,0L,1L),
           away.los = if_else(away.win==1L,0L,1L))
+
 
 a <- bind_cols(
   h2h_raw %>% 
@@ -67,7 +68,6 @@ b <- bind_cols(
 
 # FULL RESULT DATASET
 h2h_full <- bind_rows(a,b) 
-
 
 h2h_full
 
