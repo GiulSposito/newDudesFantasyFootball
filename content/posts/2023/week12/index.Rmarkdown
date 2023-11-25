@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 12
-  prefix: posTNF
+  prefix: posThanksGiving
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -126,6 +126,7 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations preWaivers](/reports/2023/dudes_simulation_v5_week12_preWaivers.html)
 - [Matchup Simulations posWaivers](/reports/2023/dudes_simulation_v5_week12_posWaivers.html)
 - [Matchup Simulations posTNF](/reports/2023/dudes_simulation_v5_week12_posTNF.html)
+- [Matchup Simulations posThanksGiving](/reports/2023/dudes_simulation_v5_week12_posThanksGiving.html)
 
 <!--
 - [Matchup Simulations preTNF](/reports/2023/dudes_simulation_v5_week12_preTNF.html)
