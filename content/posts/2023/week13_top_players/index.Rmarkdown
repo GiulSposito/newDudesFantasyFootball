@@ -1,7 +1,7 @@
 ---
 title: 'Week 13 | Fantasy Top Players'
 author: "Giuliano Sposito"
-date: '2023-12-08T03:00:00-03:00'
+date: '2023-12-05T03:00:00-03:00'
 slug: s23_w13_top_players
 categories:
   - ranking
