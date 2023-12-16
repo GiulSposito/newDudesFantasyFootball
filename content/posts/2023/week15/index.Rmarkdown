@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 15
-  prefix: posTNF
+  prefix: preSaturday
 ---
 
 _Last Update: `r lubridate::now()`_
