@@ -21,7 +21,7 @@ resources:
   src: cover.jpg
 params:
   week: 16
-  prefix: preSunday
+  prefix: preMonday
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -128,6 +128,7 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations preTNF](/reports/2023/dudes_simulation_v5_week16_preTNF.html)
 - [Matchup Simulations posTNF](/reports/2023/dudes_simulation_v5_week16_posTNF.html)
 - [Matchup Simulations preSunday](/reports/2023/dudes_simulation_v5_week16_preSunday.html)
+- [Matchup Simulations preMonday](/reports/2023/dudes_simulation_v5_week16_preMonday.html)
 
 <!--
 
