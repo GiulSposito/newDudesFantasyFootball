@@ -29,6 +29,7 @@ projections_table_data_sources <- function(.webscrape, .scoring_rules) {
     data_src = site_sources,
     scrape = source_scrapes
   ) %>% 
+    filter(!is.na(data_src)) %>%
     # aplica o calculo da projeção para cada jogodor xdatasource
     mutate( proj_table = map(scrape, 
                              projections_table, 
