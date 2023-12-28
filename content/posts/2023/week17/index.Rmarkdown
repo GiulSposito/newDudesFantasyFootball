@@ -120,13 +120,14 @@ _Last Update: `r lubridate::now()`_
 ## Projections
 
 - [Individual Players Projections](/reports/2023/ffa_players_projection_week17.html)
-- [Matchup Simulations posWaivers](/reports/2023/dudes_simulation_v5_week17_posWaivers.html)
 
 ## Simulation
 
 - [Matchup Simulations preWaivers](/reports/2023/dudes_simulation_v5_week17_preWaivers.html)
-<!--
+- [Matchup Simulations posWaivers](/reports/2023/dudes_simulation_v5_week17_posWaivers.html)
 - [Matchup Simulations preTNF](/reports/2023/dudes_simulation_v5_week17_preTNF.html)
+
+<!--
 - [Matchup Simulations posTNF](/reports/2023/dudes_simulation_v5_week17_posTNF.html)
 - [Matchup Simulations preSaturday](/reports/2023/dudes_simulation_v5_week17_preSaturday.html)
 - [Matchup Simulations preSunday](/reports/2023/dudes_simulation_v5_week17_preSunday.html)
