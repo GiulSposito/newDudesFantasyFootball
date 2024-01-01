@@ -88,6 +88,6 @@ resources:
 |<img src='https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/ubbam2rpn7xfbhvzvjyn' style='width:45px;height:60px'>                            |Amon-Ra St. Brown   |WR       |DET     |    303.50|<img src='https://image.fantasy.nfl.com/image/81e9ca9e01ac58835b2c263bb1e39f3f.jpg?x=50&y=50&sig=a9cab28b7db8d6f48658cae189b4f771' style='width:50px;height:50px' alt='Indaiatuba Pats'>      |
 
 
-## To be continued in 2023...
+## To be continued in 2024...
 
-![The Madden Curse](images/leonel_madden.jpg)
+![The Madden Curse](images/abdala_madden.jpg)
