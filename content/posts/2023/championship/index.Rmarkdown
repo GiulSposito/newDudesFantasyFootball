@@ -1,0 +1,247 @@
+---
+title: 'Season 2023 | Championship'
+author: Giuliano Sposito
+date: '2024-01-01T12:00:00-03:00'
+slug: s23_championship
+categories:
+  - ranking
+tags:
+  - championship
+toc: no
+dropCap: no
+displayInMenu: no
+displayInList: yes
+draft: yes
+resources:
+- name: featuredImage
+  src: "cover.jpg"
+  params:
+    description: cover
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+# put rnotbook in the same workdir
+knitr::opts_knit$set(root.dir = normalizePath(rprojroot::find_rstudio_root_file())) 
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+<!--more-->
+
+## Championship
+
+<span class="emoji">🏆</span> 1st Place: **Indaiatuba Pats** (Abdala)<br/>
+<span class="emoji">🥈</span> 2nd Place: **Rio Claro Farmers** (Vinicius)<br/>
+<span class="emoji">🥉</span> 3rd Place: **Limeira Jetsons** (Roander)<br/>
+<br/>
+<span class="emoji">🥇️</span> Reg Season 1st Place: **London Knights** (FH)<br/>
+<span class="emoji">🎖</span> Highest Scoring: **Indaiatuba Pats** (Abdala)<br/>
+<span class="emoji">🏅</span> Survival Winner: **Rio Claro Farmers** (Vinicius)<br/>
+
+
+## Playoffs
+
+![Playoffs Positions](images/playoffs.png)
+
+## Season
+
+### Season Standing
+
+```{r}
+library(tidyverse)
+library(glue)
+library(ggimage)
+
+# pega o resultado pos semana
+sim <- readRDS(glue("./data/simulation_v5_week14_final.rds"))
+
+ranking <- 1:14 %>% 
+  #map(formatC, width = 2, flag = "0") %>% 
+  map(~glue("./data/rank_week{.x}.rds")) %>% 
+  map_df(readRDS)
+
+
+ranking %>% 
+  filter(week==14) %>% 
+  mutate( 
+    pct=round(wins/(wins+losses),3),
+    img=glue("<img src='{imageUrl}' style='width:40px;height:40px' alt=''>")
+  ) %>% 
+  select(rank, img, name, record, pts=season.pts, agains=season.ptsAgainst ) %>% 
+  arrange(rank) %>% 
+  knitr::kable()
+
+```
+
+### Season Playoffs Racing
+
+```{r standingsHistory, fig.height=8, fig.height=6}
+
+TEAMS_COLOR_SCALE <- c("#B3995D","black","#03202F","#0B2265","#fb9a99","#A5ACAF","#0085CA",
+  "#ff7f00","#203731","#6a3d9a","#A71930","#A71930","#FFB612","#004953")
+
+invalidAvatars <- c("https://static.www.nfl.com/league/apps/fantasy/logos/avatar/240x240/OAK_1.png")
+genericAvatar <- "https://static.www.nfl.com/league/apps/fantasy/logos/200x213/NO.png"
+
+# libs
+ranking %>% 
+  mutate(record = paste0(wins, "-", losses)) %>% 
+  mutate(imageUrl=if_else(imageUrl %in% invalidAvatars, genericAvatar, imageUrl)) %>% 
+  select(week, teamId, team=name, rank, record, imageUrl) %>% 
+  # inner_join(select(sim$teams, teamId, imageUrl), by="teamId") %>% 
+  ggplot(aes(x=week, y=reorder(rank,-rank), group=team)) +
+  geom_line(aes(color=team), size=2, alpha=.4) +
+  geom_image(aes(image=imageUrl), size=.04) +
+  geom_text(aes(label=record), size=2.5, color="black", nudge_y = -.40) +
+  geom_hline(yintercept = 8.5, linetype="dashed", size=1, color="darkgrey") +
+  geom_text(x=1.4, y=8.65, label="playoff clinch", size=3, color="darkgrey") +
+  geom_hline(yintercept = 12.5, linetype="dashed", size=1, color="darkgrey") +
+  geom_text(x=1.4, y=12.65, label="bye", size=3, color="darkgrey") +
+  scale_colour_manual(values = TEAMS_COLOR_SCALE) +
+  ylab("rank") +
+  theme_void() +
+  theme(legend.position = "none")
+
+```
+
+### Season Score Ranking
+
+```{r points Ranking, fig.height=9, fig.height=6}
+
+TEAMS_COLOR_SCALE <- c("#B3995D","black","#03202F","#0B2265","#fb9a99","#A5ACAF","#0085CA",
+  "#ff7f00","#203731","#6a3d9a","#A71930","#A71930","#FFB612","#004953")
+
+# load final results
+week_points <- 1:14 %>% 
+  map_df(function(.w){
+    readRDS(glue("./data/simulation_v5_week{.w}_final.rds")) %>% 
+      pluck("teams") %>% 
+      # extract week score
+      select(teamId, name, imageUrl, week.stats) %>% 
+      unnest(week.stats) %>% 
+      return()
+  })
+
+# build  accumulated points a weekly points ranking
+rank_pts <- week_points %>% 
+  group_by(teamId) %>% 
+  arrange(teamId, week) %>% 
+  mutate(cumpts = cumsum(pts)) %>% 
+  ungroup() %>% 
+  arrange(week, desc(cumpts)) %>% 
+  mutate(rank=rep(1:14,14)) %>% 
+  rename(team=name)
+
+# plot ranking
+rank_pts %>% 
+  mutate(imageUrl=if_else(imageUrl %in% invalidAvatars, genericAvatar, imageUrl)) %>% 
+  ggplot(aes(x=week, y=reorder(rank,-rank), group=team)) +
+  geom_line(aes(color=team), size=2, alpha=.4) +
+  geom_image(aes(image=imageUrl), size=.04) +
+  geom_text(aes(label=cumpts), size=2.5, color="black", nudge_y = -.40) +
+  scale_colour_manual(values = TEAMS_COLOR_SCALE) +
+  ylab("rank") +
+  theme_void() +
+  theme(legend.position = "bottom")
+
+```
+
+### Season Survival Race
+
+```{r survRanking, fig.height=8, fig.height=6}
+rank_pts <- week_points %>% 
+  group_by(teamId) %>% 
+  arrange(teamId, week) %>% 
+  mutate(cumpts = cumsum(pts)) %>% 
+  ungroup() %>% 
+  arrange(week, desc(pts)) %>% 
+  mutate(rank=rep(1:14,14)) %>% 
+  rename(team=name)
+
+cut_rank <- rank_pts
+
+for(dropWeek in 1:13){
+
+  dropId <- cut_rank %>% 
+    filter(week==dropWeek) %>% 
+    filter(pts==min(pts)) %>% 
+    pull(teamId)
+  
+  cut_rank <- cut_rank %>% 
+    filter( !(teamId==dropId & week>dropWeek) )
+  
+} 
+    
+cut_rank <- cut_rank %>% 
+  group_by(week) %>% 
+  arrange(desc(pts)) %>% 
+  mutate(rank=row_number())
+  
+cut_rank %>% 
+  mutate(imageUrl=if_else(imageUrl %in% invalidAvatars, genericAvatar, imageUrl)) %>% 
+  ggplot(aes(x=week, y=reorder(rank,-rank), group=team)) +
+  geom_line(aes(color=team), size=2, alpha=.4) +
+  geom_image(aes(image=imageUrl), size=.04) +
+  geom_text(aes(label=pts), size=2.5, color="black", nudge_y = -.40) +
+  scale_colour_manual(values = TEAMS_COLOR_SCALE) +
+  ylab("rank") +
+  theme_void() +
+  theme(legend.position = "bottom")
+```
+
+## Dream Team
+
+```{r loadData}
+
+sim <- readRDS(glue("./data/simulation_v5_week17_final.rds"))
+
+players <- sim$players_stats %>% 
+  select(playerId, name, nflTeam=nflTeamAbbr, position, weekPts, smallImageUrl) %>% 
+  unnest(weekPts) %>% 
+  filter(week==17) %>% 
+  select(-week, -weekPts) %>% 
+  rename(seasonPts = weekSeasonPts) 
+
+teams <- sim$teams %>% 
+  unnest(rosters) %>% 
+  select(playerId, teamId, team=name, imageUrl)
+
+top_players <- players %>% 
+  left_join(teams, by="playerId") %>% 
+  group_by(position) %>% 
+  #top_n(.ranksize, seasonPts) %>% 
+  arrange(position, desc(seasonPts)) %>% 
+  ungroup() %>% 
+  mutate(img = glue("<img src='{smallImageUrl}' style='width:45px;height:60px'>")) %>%
+  mutate(imageUrl = if_else(is.na(imageUrl), "https://static.nfl.com/static/content/public/static/img/fantasy/avatar/240x240/fan_avatars_NFL.png", imageUrl)) %>% 
+  mutate(teamLogo = glue("<img src='{imageUrl}' style='width:50px;height:50px' alt='{team}'>"))
+
+
+best_team <- tibble(
+  pos = c("QB","RB","WR","TE","K","DEF"),
+  qtd = c(1,2,2,1,1,1)
+) %>%
+  split(1:nrow(.)) %>% 
+  map_df(function(.p, .players){
+    
+    .players %>% 
+      dplyr::filter(position==.p$pos) %>% 
+      top_n(.p$qtd, seasonPts) %>% 
+      return()
+    
+  }, .players=top_players )
+
+top_players %>%
+  anti_join(best_team, by="playerId") %>% 
+  filter(position %in% c("WR","RB")) %>% 
+  top_n(1, seasonPts) %>% 
+  bind_rows(best_team, .) %>% 
+  select(player=img, name, position, nflTeam, seasonPts, fantasyTeam=teamLogo) %>%
+  knitr::kable() 
+
+
+```
+
+
+## To be continued in 2023...
+
+![The Madden Curse](images/leonel_madden.jpg)
