@@ -9,19 +9,18 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 17
-season <- 2023
+week <- 1
+season <- 2024
 config <- read_yaml("./config/config.yml")
-prefix <- "preSunday"
-destPath <- "static/reports/2023"
+prefix <- "preTNF"
+destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6
 
-# carregando tabelas de "de para" de IDs de Jogadores
-# load("../ffanalytics/R/sysdata.rda") # <<- Players IDs !!!
 # FFA PLAYER IDS: TRATANDO IDS NAO MAPEADOS ####
 mis_player_ids <- readRDS("./data/missing_player_ids.rds")
 
+# TABELA DE JOGADORES (DO PACOTE E ACHADOS MANUALMENTE)
 my_player_ids <- ffanalytics:::player_ids |> 
   anti_join(mis_player_ids, by=join_by(id)) |> 
   bind_rows(mis_player_ids) |> 
@@ -38,32 +37,6 @@ ffaScrape %>%
   pivot_wider(names_from = "pos",values_from="n")
 
 webScrape <- ffaScrape
-
-# SCRAPPING: ESPN ####
-# source("./R/import/espn_scraper.R")
-# espn2ffa_ids <- espn_getEspn2FfaIds(player_ids)
-# espnRaw <- espn_srapeCurrWeekProj(season)
-# espnScrape <- espn_rawToFfaScrap(espnRaw, espn2ffa_ids, .week=week, .season=season)
-# webScrape <- espn_InjectScrap(espnScrape, ffaScrape)
-# 
-# # checking
-# webScrape %>% 
-#   map_df(~select(.x, data_src, id), .id="pos") %>% 
-#   count(data_src, pos) %>% 
-#   pivot_wider(names_from = "pos",values_from="n")
-# 
-# ws2 <- webScrape %>%
-#   map(function(.dt){
-#     .dt %>%
-#       filter(!is.na(data_src)) %>%
-#       return()
-#   })
-# 
-# # atributos de controle da FFA
-# attr(ws2, "season") <- attr(webScrape, "season")
-# attr(ws2, "week") <-  attr(webScrape, "season")
-# names(ws2) <- names(webScrape)
-# webScrape <- ws2
 
 # SCRAPPING: MERGE AND SAVE ####
 accumulateWeeklyScrape(week, webScrape)

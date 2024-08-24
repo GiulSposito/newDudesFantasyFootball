@@ -9,11 +9,11 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE)
 
 # EXECUTION PARAMETERS ####
-week <- 17
-season <- 2023
+week <- 1
+season <- 2024
 config <- read_yaml("./config/config.yml")
 prefix <- "final"
-destPath <- "static/reports/2023"
+destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6
 

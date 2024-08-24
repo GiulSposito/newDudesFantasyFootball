@@ -60,7 +60,7 @@ ffa_api_endpoint <- function(.url, .path, .query, .auth){
 }
 
 
-ffa_api <- function(.path, .query, .auth) ffa_api_endpoint("https://api.fantasy.nfl.com/", .path, .query, .auth)
+ffa_api <- function(.path, .query, .auth) ffa_api_endpoint("https://api2.fantasy.nfl.com/", .path, .query, .auth)
 
 # S3 class = "ffa_api" print
 print.ffa_api <- function(x, ...) {
