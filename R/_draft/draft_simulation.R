@@ -8,13 +8,19 @@
 library(tidyverse)
 
 # parameters
-teams<- tibble( team_id = 1:14, strat="ADP" )
+teams <- tibble(team_id = 1:14,
+                strat = sample(
+                  c("ADP", "NoiseADP", "NoiseADP10", "VOR", "AAV", "Tier", "Rank", "Proj"),
+                  size = 14,
+                  replace = T
+                ))
+
 slot_pos <- c("QB", "WR", "WR", "RB", "RB",  "TE", "W/R", "K", "DST")
 draft_pos <- c(rep(c(1:14,14:1),4.5),1:14) 
 
-proj <- readRDS("./data/season_projtable.rds") |> filter(avg_type=="robust")
+proj_org <- readRDS("./data/season_projtable.rds") |> filter(avg_type=="robust")
 
-proj <- proj |> 
+proj <- proj_org |> 
   bind_rows(
     proj |> 
       filter(pos%in%c("RB","WR")) |> 
@@ -22,7 +28,7 @@ proj <- proj |>
   )
 
 
-# tabela de jogadores escolhisdos
+# tabela de jogadores escolhidas
 team_picks <- tibble(
   slot_id = 1:9,
   slot_pos = slot_pos,
@@ -63,6 +69,54 @@ draft <- draft_pos |>
         slice_head(n=1)
     }
     
+    if(strat=="NoiseADP"){
+      pick <- cand_players |> 
+        slice_min(adp, n=5) |> 
+        slice_sample(n=1)
+    }
+    
+    if(strat=="NoiseADP10"){
+      pick <- cand_players |> 
+        slice_min(adp, n=10) |> 
+        slice_sample(n=1)
+    }
+    
+    if(strat=="VOR"){
+      pick <- cand_players |> 
+        slice_max(points_vor, n=1) |> 
+        slice_sample(n=1)
+    }
+    
+    if(strat=="AAV"){
+      pick <- cand_players |> 
+        slice_max(aav, n=1) |> 
+        slice_sample(n=1)
+    }
+    
+    if(strat=="ECR"){
+      pick <- cand_players |> 
+        slice_min(ecr, n=1) |> 
+        slice_sample(n=1)
+    }
+    
+    if(strat=="Tier"){
+      pick <- cand_players |> 
+        slice_min(tier, n=1) |> 
+        slice_sample(n=1)
+    }
+    
+    if(strat=="Proj"){
+      pick <- cand_players |> 
+        slice_max(points, n=1) |> 
+        slice_sample(n=1)
+    }
+    
+    if(strat=="Rank"){
+      pick <- cand_players |> 
+        slice_min(tier, n=1) |> 
+        slice_sample(n=1)
+    }
+    
     # coloca no roster
     pick_slot_id <- team_picks |> 
       filter(team_id==on_the_clock, slot_pos==pick$pos, is.na(player_id)) |> 
@@ -88,11 +142,12 @@ team_proj <- team_picks |>
 
 picks <- draft |> 
   mutate( pick_number = 1:n() ) |> 
+  inner_join(select(proj_org, id, pos), join_by(player_id==id)) |> 
   nest(.by=team_id) |> 
   mutate( pick_seq = map_chr(data, function(.x){
     .x |> 
       arrange(pick_number) |> 
-      pull(slot_pos) |> 
+      pull(pos) |> 
       paste(collapse = ".")
   })) |> 
   select(-data)
@@ -111,6 +166,4 @@ team_proj |>
   geom_text(aes(x=team_id, y=floor, label=pick_seq), angle=270, hjust=-.1, show.legend = F) +
   ylim(0,NA) +
   theme_light()
-
-  
 
