@@ -25,7 +25,7 @@ read_html(draft_file) %>%
 read_html(draft_file) %>% 
   html_nodes("a.teamName") %>% 
   html_attr("href") %>% 
-  str_replace("/league/3940933/team/","") %>% 
+  str_replace("https://fantasy.nfl.com/league/3940933/team/","") %>% 
   as.integer() -> teamIds
 
 draft <- tibble(
@@ -37,4 +37,4 @@ draft <- tibble(
   team.name   = teamNames
 )
 
-saveRDS(draft, "./data/draft_2022_picks.rds")
+saveRDS(draft, "./data/draft_2024_picks.rds")
