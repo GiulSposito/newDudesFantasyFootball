@@ -1,6 +1,7 @@
 library(tidyverse)
 
-draft_picks <- readRDS("./data/draft_2024_picks.rds")
+draft_picks <- readRDS("./data/draft_2024_picks.rds") |> 
+  rename(nfl_id = player.id )
 season_proj <- readRDS("./data/season_projtable.rds") |> 
   filter(avg_type=="robust") |> 
   mutate(id=as.integer(id))
@@ -15,10 +16,15 @@ season_proj <- readRDS("./data/season_projtable.rds") |>
 #   ) |> 
 #   saveRDS("./data/missing_player_id.rds")
 
+my_player_ids <- ffanalytics:::player_ids |>
+  select(id, nfl_id) |> 
+  mutate(across(id:nfl_id,as.integer))
+
 pick_proj <- draft_picks |> 
-  left_join(select(my_player_ids, id, player.id = nfl_id), by = join_by(player.id)) |> 
+  left_join(my_player_ids, by = join_by(nfl_id)) |> 
   left_join(season_proj, by=join_by(id)) 
 
+saveRDS(pick_proj, "./data/draft_pick_projections.rds")
 
 teams_proj <- draft_picks |> 
   distinct(team.id, team.name) |> 
@@ -46,8 +52,6 @@ teams_proj <- draft_picks |>
       slice_min(n = 1, order_by = pick) %>% 
       bind_rows(starters,.)    
     
-  }, proj=pick_proj, .id="team.id")
+  }, proj=pick_proj, .id="team_id")
 
-teams_proj |> 
-  summarise(total=sum(points),.by=c(team.id, team.name))
-ß
+saveRDS(teams_proj, "./data/draft_teams_projections.rds")

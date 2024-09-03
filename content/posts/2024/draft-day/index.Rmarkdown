@@ -42,6 +42,8 @@ library(glue)
 library(kableExtra)
 
 draft_recap <- readRDS("./data/draft_recap_rank.rds")
+pick_proj <- readRDS("./data/draft_pick_projections.rds")
+team_proj <- readRDS("./data/draft_teams_projections.rds")
 
 draft_recap %>% 
   select(-teamId, -imageUrl, -title, -text, -rank_with_t, -ties, -rank) %>% 
@@ -53,23 +55,26 @@ draft_recap %>%
 
 ```
 
+## Dude's Season Points Projection
 
 ```{r dudesPoints}
 
-## Dude's Season Points Projection
-
-# _soon_
-
-# readRDS("./data/drafted_season_projection.rds") %>% 
-#   ungroup() %>% 
-#   mutate( team = fct_reorder(name,points) ) %>% 
-#   ggplot(aes(x=team,y=points, ymin=ceiling, ymax=floor, color=team, fill=team)) +
-#   geom_crossbar(width=.04) +
-#   geom_point(size=2) +
-#   coord_flip() +
-#   labs(title="Season Points",subtitle = "All team's players points projection", x="teams", y="points") +
-#   theme_minimal() +
-#   theme( legend.position = "none" )
+team_proj |> 
+  summarise(
+    ceiling = sum(ceiling, na.rm = T),
+    points = sum(points, na.rm = T),
+    floor = sum(floor, na.rm = T),
+    .by=team.name
+  ) |> 
+  #rename(team=team.name) |> 
+  mutate(team = fct_reorder(team.name,points) ) |> 
+  ggplot(aes(x=team,y=points, ymin=ceiling, ymax=floor, color=team, fill=team)) +
+  geom_crossbar(width=.04) +
+  geom_point(size=2) +
+  coord_flip() +
+  labs(title="Season Points",subtitle = "Team's starters points projection", x="teams", y="points") +
+  theme_minimal() +
+  theme( legend.position = "none" )
 
 ```
 
@@ -79,7 +84,7 @@ draft_recap %>%
 
 out <- draft_recap %>% 
   split(1:nrow(.)) %>% 
-  map(function(.team){
+  map(function(.team, .picks){
     
     cat(glue("### <img src='{imageUrl}' style='width: 50px; height: 50px'/> {team}\n\n\n", 
              team      = .team$teamName,
@@ -88,13 +93,18 @@ out <- draft_recap %>%
     cat(.team$title)
     cat("\n\n")
     cat(.team$text)
+    cat("\n\n")
+    
+    .picks |> 
+      filter(team.id==.team$teamId) |> 
+      select(round, pick, player.name, pos, rank, points) |>
+      kable(format = "html") |> 
+      kable_styling(font_size = 12) |> 
+      cat()
+    
     cat("\n\n\n")
-    # .team %>%
-    #   mutate(imageUrl =  %>% 
-    #   glue("#### {teamName}") %>% 
-    #   cat()
-      
-  })
+    
+  }, .picks=pick_proj)
 
 
 ```
