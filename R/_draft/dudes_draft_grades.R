@@ -1,4 +1,5 @@
 library(tidyverse)
+library(ggridges)
 
 draft_picks <- readRDS("./data/draft_2024_picks.rds") |> 
   rename(nfl_id = player.id )
@@ -55,3 +56,35 @@ teams_proj <- draft_picks |>
   }, proj=pick_proj, .id="team_id")
 
 saveRDS(teams_proj, "./data/draft_teams_projections.rds")
+
+season_pp_site <- readRDS("./data/season_player_proj_sites.rds")
+
+teams_proj |> 
+  select(team_id, team.name, round, pick, player.name, id) |> 
+  inner_join(season_pp_site, join_by(id)) |> 
+  select(team_id, team.name, pick, points) |> 
+  group_by(team_id, team.name, pick) |> 
+  nest() |> 
+  mutate(points = map(data, pull, points)) |> 
+  mutate(sim = map(points, sample, size=100, replace=T)) |> 
+  group_by(team_id, team.name) |> 
+  group_split() |> 
+  map_df(function(team){
+    tibble(
+      team_id = team$team_id[1],
+      team_name = team$team.name[1],
+      team_sim = list(reduce(team$sim, `+`))
+    )
+  }) |> 
+  mutate( sim_mean = map_dbl(team_sim, mean),
+          team_name = fct_reorder(team_name, sim_mean) )  |> 
+  unnest(team_sim) |> 
+  ggplot(aes(x=team_sim, y=team_name, fill=team_id)) +
+  geom_density_ridges(scale = 2,
+                      color = "white",
+                      alpha = .7, show.legend = F) +
+  labs(x="Season Points", y="Teams") +
+  theme_light()
+
+
+    

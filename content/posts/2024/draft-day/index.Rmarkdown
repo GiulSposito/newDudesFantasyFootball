@@ -40,6 +40,7 @@ library(tidyverse)
 library(knitr)
 library(glue)
 library(kableExtra)
+library(ggridges)
 
 draft_recap <- readRDS("./data/draft_recap_rank.rds")
 pick_proj <- readRDS("./data/draft_pick_projections.rds")
@@ -59,22 +60,53 @@ draft_recap %>%
 
 ```{r dudesPoints}
 
+# team_proj |> 
+#   summarise(
+#     ceiling = sum(ceiling, na.rm = T),
+#     points = sum(points, na.rm = T),
+#     floor = sum(floor, na.rm = T),
+#     .by=team.name
+#   ) |> 
+#   #rename(team=team.name) |> 
+#   mutate(team = fct_reorder(team.name,points) ) |> 
+#   ggplot(aes(x=team,y=points, ymin=ceiling, ymax=floor, color=team, fill=team)) +
+#   geom_crossbar(width=.04) +
+#   geom_point(size=2) +
+#   coord_flip() +
+#   labs(title="Season Points",subtitle = "Team's starters points projection", x="teams", y="points") +
+#   theme_minimal() +
+#   theme( legend.position = "none" )
+
+season_pp_site <- readRDS("./data/season_player_proj_sites.rds")
+
 team_proj |> 
-  summarise(
-    ceiling = sum(ceiling, na.rm = T),
-    points = sum(points, na.rm = T),
-    floor = sum(floor, na.rm = T),
-    .by=team.name
-  ) |> 
-  #rename(team=team.name) |> 
-  mutate(team = fct_reorder(team.name,points) ) |> 
-  ggplot(aes(x=team,y=points, ymin=ceiling, ymax=floor, color=team, fill=team)) +
-  geom_crossbar(width=.04) +
-  geom_point(size=2) +
-  coord_flip() +
-  labs(title="Season Points",subtitle = "Team's starters points projection", x="teams", y="points") +
-  theme_minimal() +
-  theme( legend.position = "none" )
+  filter(avg_type=="robust") |> 
+  select(team_id, team.name, round, pick, player.name, id) |> 
+  inner_join(season_pp_site, join_by(id)) |> 
+  select(team_id, team.name, pick, points) |> 
+  group_by(team_id, team.name, pick) |> 
+  nest() |> 
+  mutate(points = map(data, pull, points)) |> 
+  mutate(sim = map(points, sample, size=100, replace=T)) |> 
+  group_by(team_id, team.name) |> 
+  group_split() |> 
+  map_df(function(team){
+    tibble(
+      team_id = team$team_id[1],
+      team_name = team$team.name[1],
+      team_sim = list(reduce(team$sim, `+`))
+    )
+  }) |> 
+  mutate( sim_mean = map_dbl(team_sim, mean),
+          team_name = fct_reorder(team_name, sim_mean) )  |> 
+  unnest(team_sim) |> 
+  ggplot(aes(x=team_sim, y=team_name, fill=team_id)) +
+  geom_density_ridges(scale = 2,
+                      color = "white",
+                      alpha = .7, show.legend = F) +
+  labs(x="Season Points", y="Teams",
+       title="Season Points",subtitle = "Team's starters points projection") +
+  theme_light()
 
 ```
 
