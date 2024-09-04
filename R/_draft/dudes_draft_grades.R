@@ -83,8 +83,13 @@ teams_proj |>
   geom_density_ridges(scale = 2,
                       color = "white",
                       alpha = .7, show.legend = F) +
+  geom_hline(aes(yintercept = team_name), color="grey", show.legend = F) +
   labs(x="Season Points", y="Teams") +
   theme_light()
+  # geom_vline(xintercept = 0, color="grey", lt="dashed") +
+  # geom_point(aes(x=weekPts), shape=24, color="red", fill="red", show.legend = F,   
+  
 
+  
 
     
