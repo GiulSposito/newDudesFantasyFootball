@@ -22,4 +22,4 @@ ignoreFiles:
 ignoreErrors: 
 - "error-remote-getjson"
 # config.yaml
-timeout: 6000  # Aumenta o timeout para 300 segundos
+timeout: 600000  # Aumenta o timeout para 300 segundos

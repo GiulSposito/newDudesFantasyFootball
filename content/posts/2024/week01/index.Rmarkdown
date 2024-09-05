@@ -123,7 +123,7 @@ _Last Update: `r lubridate::now()`_
 
 ## Simulation
 
-- [Matchup Simulations preWaivers](/reports/2024/dudes_simulation_v5_week1_preTNF.html)
+- [Matchup Simulations preTNF](/reports/2024/dudes_simulation_v5_week1_preTNF.html)
 
 <!--
 - [Matchup Simulations posWaivers](/reports/2024/dudes_simulation_v5_week1_posWaivers.html)
