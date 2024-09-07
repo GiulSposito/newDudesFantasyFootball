@@ -5,15 +5,14 @@ library(ffanalytics)
 
 # MASTER PARAMETERS ####
 config <- yaml::read_yaml("./config/config.yml")
-.season <- 2023
-.week <- 3
+.season <- 2024
+.week <- 1
 .leagueId <- config$leagueId
 
 # FFA ####
 
 # player ids
-load("../ffanalytics/R/sysdata.rda")
-ffa_player_ids <- player_ids
+ffa_player_ids <- ffanalytics:::player_ids 
 
 # proj table
 webScrape <- readRDS(glue("./data/weekly_webscrapes_{.week}.rds"))
@@ -55,7 +54,7 @@ ffa_db <- dm(ffa_player_ids, ffa_players, ffa_projtable, ffa_proj_source_points)
 dm_draw(ffa_db, view_type = "all", column_types = F)
 
 ffa_db |> 
-  saveRDS("./new_db/ffa_db_w03_s23.rds")
+  saveRDS("./new_db/ffa_db_w01_s24.rds")
 
 # NFL ####
 
