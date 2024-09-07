@@ -147,8 +147,6 @@ Number of players per site and position.
 </tbody>
 </table>
 
-{{< tweet 1587254131139428353 >}}
-
 ## Data Base
 
 - [Full PPR Projection Table](/exports/2022/week9_full_ppr.csv)

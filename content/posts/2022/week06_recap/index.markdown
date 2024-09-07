@@ -54,8 +54,6 @@ Paulinia Robots was favored by the widest margin in the league this week (42.22 
 The average projected score was 103.20 points this week.
 
 
-{{< tweet 1579140412366798849 >}}
-
 ## Weekly Trophies
 
 ![Trophies](images/trophies.png)

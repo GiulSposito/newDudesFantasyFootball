@@ -49,9 +49,6 @@ _Last Update: 2022-09-12 08:56:57_
 - [Matchup Simulations preSundayGames](/reports/2022/dudes_simulation_v5_week1_preSundayGames.html)
 - [Matchup Simulations preMNF](/reports/2022/dudes_simulation_v5_week1_preMNF.html)
 
-
-{{< tweet 1568067320974655488 >}}
-
 ## Data Base
 
 - [Full PPR Projection Table](/exports/2022/week1_full_ppr.csv)
@@ -62,4 +59,3 @@ _Last Update: 2022-09-12 08:56:57_
 - [K Raw Data](/exports/2022/week1_K_rawdata.csv)
 - [DEF Raw Data](/exports/2022/week1_DST_rawdata.csv)
 
-{{< tweet 1568057119328374784 >}}

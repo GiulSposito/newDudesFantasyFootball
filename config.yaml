@@ -8,7 +8,7 @@ params:
   brand: It's Football, Dudes! Fantasy League
   description: NFL Fantasy League
   bgimg: /img/wilson_background_w.jpg
-googleAnalytics: "UA-148711241-1"
+googleAnalytics: "G-V2S4TQ4T62"
 markup:
   highlight:
     style: igor

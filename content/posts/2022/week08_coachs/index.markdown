@@ -210,8 +210,6 @@ Total de pontos que foram deixados de ganhar na melhor escalação possível, ac
 </tbody>
 </table>
 
-{{< tweet 1587063084727820292 >}}
-
 ## Best Managers
 
 Trade, release and new contracts points balance

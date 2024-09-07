@@ -48,8 +48,6 @@ params:
 |<img src='https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/nkb9x92lbea6ayknzoba' style='width:45px;height:60px'> |Kyler Murray        |QB       |ARI     |    155.62|<img src='https://static.www.nfl.com/league/apps/fantasy/logos/avatar/240x240/NYG_5.png' style='width:50px;height:50px' alt='Campinas Giants'>                                                |
 |<img src='https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/zdstmm4sloqnichybgja' style='width:45px;height:60px'> |Justin Jefferson    |WR       |MIN     |    148.42|<img src='https://image.fantasy.nfl.com/image/2e2e87f937ca70cc5ce0ec49133f1ee1.jpg?x=50&y=50&sig=bfbec6257f27b92a4b3e9bd9b7db7006' style='width:50px;height:50px' alt='Goncalves Miners'>     |
 
-{{< tweet 1586826591941718016 >}}
-
 ## By Position
 
 ### Quaterback

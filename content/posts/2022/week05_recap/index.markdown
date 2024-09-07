@@ -57,9 +57,6 @@ Sorocaba Steelers was projected to win by the widest margin this week (24.64 poi
 
 The average projected score for Week 5 was 107.11 points.
 
-
-{{< tweet 1579140412366798849 >}}
-
 ## Weekly Trophies
 
 ![Trophies](images/trophies.png)

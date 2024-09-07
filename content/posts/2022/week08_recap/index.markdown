@@ -61,9 +61,6 @@ Indaiatuba Pats was projected to win by the widest margin this week (19.42 point
 
 The average projected score was 101.40 points this week.
 
-
-{{< tweet 1579140412366798849 >}}
-
 ## Weekly Trophies
 
 ![Trophies](images/trophies.png)

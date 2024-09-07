@@ -149,4 +149,3 @@ Number of players per site and position.
 - [K Raw Data](/exports/2022/week3_K_rawdata.csv)
 - [DEF Raw Data](/exports/2022/week3_DST_rawdata.csv)
 
-{{< tweet 1571970433032896512 >}}

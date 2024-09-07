@@ -24,14 +24,6 @@ params:
 <!--more-->
 
 
-
-
-
-{{< tweet 1459007952690585602 >}}
-
-{{< tweet 1459006452589334529 >}}
-
-
 ## Teams Performances
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/teamPerf-1.png" width="672" />

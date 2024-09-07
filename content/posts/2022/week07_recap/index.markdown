@@ -55,9 +55,6 @@ Teams have won a mere 32.0% of the time this season (8-17) when they fail to thr
 
 The average projected score for Week 7 was 102.86 points.
 
-
-{{< tweet 1579140412366798849 >}}
-
 ## Weekly Trophies
 
 ![Trophies](images/trophies.png)

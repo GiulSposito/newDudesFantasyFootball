@@ -66,9 +66,6 @@ League Leaders: Robots, Jetsons, Farmers, Rabbits, Pats, Miners.
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/survRanking-1.png" width="672" />
 
-
-{{< tweet 1572032143127101440 >}}
-
 ## Best Players of the Week
 
 ### Team Players

@@ -5,6 +5,7 @@ scrapPlayersPredictions <- function(.week, .season) {
   # # faz o scraping de projeção dos sites
   
   # defaults 
+  # removing FFToday
   src <- c("CBS", "ESPN", "FantasyPros", "FantasySharks", "FleaFlicker", "NumberFire", "FantasyFootballNerd", 
           "NFL", "RTSports", "Walterfootball")
   

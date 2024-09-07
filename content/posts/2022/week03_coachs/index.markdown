@@ -26,10 +26,6 @@ params:
 
 <!--more-->
 
-
-
-{{< tweet 1569535049825124352 >}}
-
 ## Best Coachs: Roster Ranking
 
 Total de pontos que foram deixados de ganhar na melhor escalação possível, acumulado ao longo das rodadas.

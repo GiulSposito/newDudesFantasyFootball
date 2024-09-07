@@ -38,8 +38,6 @@ _Last Update: 2022-09-19 07:39:56_
 
 _Last Update: 2022-09-19 07:39:58_
 
-{{< tweet 1569484253284519936 >}}
- 
 ## Projections
 
 - [Individual Players Projections](/reports/2022/ffa_players_projection_week2.html)
