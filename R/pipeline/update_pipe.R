@@ -6,13 +6,13 @@ library(flexdashboard)
 library(yaml)
 
 # Suppress summarise info
-options(dplyr.summarise.inform = FALSE)
+options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
 week <- 1
 season <- 2024
 config <- read_yaml("./config/config.yml")
-prefix <- "final"
+prefix <- "preSundayGames"
 destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6
