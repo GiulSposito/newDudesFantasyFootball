@@ -1,133 +1,149 @@
 library(tidyverse)
 library(glue)
+# library(fitdistrplus)
 
 .team <- "Amparo Bikers"
-.week <- 4
+.week <- 2
+# 
+# # dados dos jogadores
+# players <- 2:4 |>
+#   map(~glue("./data/week{.x}_players_projections.rds")) |>
+#   map_df(readRDS) |>
+#   filter(
+#     avg_type=="robust",
+#     fantasy.team %in% c(.team,"*FreeAgent"),
+#     team!="FA",
+#     week %in% c(2:4)) |> 
+#   select(id, playerId=nfl_id, name, pos=position, team = nflTeamAbbr, week, weekPts, weekSeasonPts, teamId, fantasy.team, injuryGameStatus, rankAgainstPosition, byeWeek)
 
-# dados dos jogadores
-players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
+
+players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
   filter(
-    avg_type=="average",
+    avg_type=="robust",
     fantasy.team %in% c(.team,"*FreeAgent"),
     team!="FA",
     week==.week
-  ) %>%  
+  ) %>%
   select(id, playerId=nfl_id, name, pos=position, team = nflTeamAbbr, week, weekPts, weekSeasonPts, teamId, fantasy.team, injuryGameStatus, rankAgainstPosition, byeWeek)
-
-# projeção de dados "Dudes"
-dudes_proj <- readRDS("./data/points_projection_and_errors.rds") %>% 
-  filter(week==.week)
+# 
+# # projeção de dados "Dudes"
+dudes_proj <- readRDS("./data/points_projection_and_errors.rds") %>%
+  filter(week %in% 2:4)
 
 SIMULATION_SIZE = 1000
 
-ptsproj <- dudes_proj %>% 
-  nest(data=c(data_src, pts.proj)) %>% 
+ptsproj <- dudes_proj %>%
+  nest(data=c(data_src, pts.proj)) %>%
   mutate( pts.proj = map(data, function(.dt,.n){
-  
+
     if(all(.dt$pts.proj == .dt$pts.proj[1])) return(sample(.dt$pts.proj, .n, T))
-    
+
     # print(head(.dt))
-    
-    pdfden <- .dt %>% 
-      pull(pts.proj) %>% 
-      ecdf() %>% 
-      knots() %>% 
+
+    pdfden <- .dt %>%
+      pull(pts.proj) %>%
+      ecdf() %>%
+      knots() %>%
       density(from=-10, to=100)
-    
-    approx( cumsum(pdfden$y)/sum(pdfden$y), 
-            pdfden$x, runif(.n) )$y %>% 
+
+    approx( cumsum(pdfden$y)/sum(pdfden$y),
+            pdfden$x, runif(.n) )$y %>%
       return()
-    
+
   }, .n=SIMULATION_SIZE) )
-
-fitted <- dudes_proj |> 
-  filter(id==14783) |> 
-  pull(pts.proj) |> 
-  fitdist("weibull")
-
-
-str(fitted)
-
-bootdist(fitted)
-
-fitdistrplus::
-
-par(mfrow=c(2,2))
-plot.legend <- c("Weibull", "lognormal", "gamma")
-denscomp(list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
-cdfcomp (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
-qqcomp  (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
-ppcomp  (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
-
-
-library(fitdistrplus)
-
-
-
-
-
-
-
-ptsproj |> 
-  unnest(data, names_sep = "_") |> 
-  filter(id==14783) |> 
-  pull(data_pts.proj) |> 
-  hist()
-
-ptsproj |> 
-  unnest(pts.proj, names_sep = "_") |> 
-  filter(id==14783) |> 
-  pull(pts.proj) |> 
-  hist()
-
-
-
-pdfden <- ptsproj |> 
-  filter(id==13116) |> 
-  unnest(data, names_sep = "_") |> 
-  pull(data_pts.proj) |> 
-  ecdf() |> 
-  knots() |> 
-  density(from=-10, to=100)
-
-approx( cumsum(pdfden$y)/sum(pdfden$y), 
-        pdfden$x, runif(100) )$y |> 
-  hist()
-
-tibble( x=pdfden$x, y=pdfden$y ) |> 
-  filter(y>.1) |> 
-  ggplot(aes(x,y)) +
-  geom_point() +
-  theme_minimal()
-
-ptsproj |> 
-  unnest(pts.proj, names_sep="_")
-
-players_proj <- players %>% 
-  select(-week) %>% 
-  inner_join(ptsproj, by=c("id","pos")) %>% 
+# 
+# fitted <- dudes_proj |> 
+#   filter(id==14783) |> 
+#   pull(pts.proj) |> 
+#   fitdist("weibull")
+# 
+# 
+# str(fitted)
+# 
+# bootdist(fitted)
+# 
+# fitdistrplus::
+# 
+# par(mfrow=c(2,2))
+# plot.legend <- c("Weibull", "lognormal", "gamma")
+# denscomp(list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+# cdfcomp (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+# qqcomp  (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+# ppcomp  (list(fit_w, fit_g, fit_ln), legendtext = plot.legend)
+# 
+# 
+# library(fitdistrplus)
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# ptsproj |> 
+#   unnest(data, names_sep = "_") |> 
+#   filter(id==14783) |> 
+#   pull(data_pts.proj) |> 
+#   hist()
+# 
+# ptsproj |> 
+#   unnest(pts.proj, names_sep = "_") |> 
+#   filter(id==14783) |> 
+#   pull(pts.proj) |> 
+#   hist()
+# 
+# 
+# 
+# pdfden <- ptsproj |> 
+#   filter(id==13116) |> 
+#   unnest(data, names_sep = "_") |> 
+#   pull(data_pts.proj) |> 
+#   ecdf() |> 
+#   knots() |> 
+#   density(from=-10, to=100)
+# 
+# approx( cumsum(pdfden$y)/sum(pdfden$y), 
+#         pdfden$x, runif(100) )$y |> 
+#   hist()
+# 
+# tibble( x=pdfden$x, y=pdfden$y ) |> 
+#   filter(y>.1) |> 
+#   ggplot(aes(x,y)) +
+#   geom_point() +
+#   theme_minimal()
+# 
+# ptsproj |> 
+#   unnest(pts.proj, names_sep="_")
+# 
+players_proj <- players %>%
+  dplyr::select(-week) %>%
+  inner_join(ptsproj, by=c("id","pos")) %>%
   mutate( points  = map_dbl(pts.proj, quantile, probs=.5, na.rm=T),
           ceiling = map_dbl(pts.proj, quantile, probs=.8, na.rm=T),
           floor   = map_dbl(pts.proj, quantile, probs=.2, na.rm=T))
-
-
-# injury_table <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
-#   select(injuryGameStatus) %>% 
-#   distinct() %>%
-#   arrange(injuryGameStatus) %>% 
-#   mutate( injuryFactor = case_when(
-#     is.na(injuryGameStatus) ~ 1,
-#     injuryGameStatus == "Questionable" ~ 0.5,
-#     injuryGameStatus == "Doubtful" ~ 0.25,
-#     T ~ 0
-#   ))
 # 
-# players_proj <- players_proj %>% 
-#   inner_join(injury_table, by = "injuryGameStatus") %>% 
-#   mutate( injuryFactor = if_else(byeWeek==.week,0,injuryFactor)) %>% 
-#   mutate( points  = injuryFactor*points,
-#           ceiling = injuryFactor*ceiling,
-#           floor   = injuryFactor*floor) 
+# 
+# # injury_table <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
+# #   select(injuryGameStatus) %>%
+# #   distinct() %>%
+# #   arrange(injuryGameStatus) %>%
+# #   mutate( injuryFactor = case_when(
+# #     is.na(injuryGameStatus) ~ 1,
+# #     injuryGameStatus == "Questionable" ~ 0.5,
+# #     injuryGameStatus == "Doubtful" ~ 0.25,
+# #     T ~ 0
+# #   ))
+# # # 
+# # players_proj <- players_proj %>%
+# #   inner_join(injury_table, by = "injuryGameStatus") %>%
+# #   mutate( injuryFactor = if_else(byeWeek==.week,0,injuryFactor)) %>%
+# #   mutate( points  = injuryFactor*points,
+# #           ceiling = injuryFactor*ceiling,
+# #           floor   = injuryFactor*floor)
+
+
+
+
 # starts
 starters <- tibble(
   pos=c("QB","RB","WR","TE","K","DST"),
@@ -164,9 +180,9 @@ releases <- players_proj %>%
   anti_join(starters, by=c("id","pos")) %>% 
   anti_join(bench, by=c("id","pos"))
 
-starters %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
-bench  %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
-releases %>% select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
+starters %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
+bench  %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
+releases %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
 
 starters$pts.proj %>% reduce(`+`) %>% summary()
 starters$weekPts %>% sum(na.rm = T)
