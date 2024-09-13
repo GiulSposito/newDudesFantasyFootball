@@ -10,12 +10,14 @@ options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
 week <- 2
+.week<-week
 season <- 2024
 config <- read_yaml("./config/config.yml")
-prefix <- "posWaivers"
+prefix <- "preTNF"
 destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6
+apply.previous.season.errors <- F
 
 # FFA PLAYER IDS: TRATANDO IDS NAO MAPEADOS ####
 mis_player_ids <- readRDS("./data/missing_player_ids.rds")
@@ -157,6 +159,29 @@ if (week>3) {
   ptsproj <- site_ptsproj
 }
 
+# applica erros de projecao da temporada anterior na projecao da semana
+if (apply.previous.season.errors) {
+  
+  # errors da temporada anterior
+  s23_proj_errors <- readRDS("./data/season_2023_projections_errors.rds") |> 
+    select(id, pos, data_src, err_week=week, proj_error=proj.error)
+  
+  # aplica todos os erros da temporada anterior e gera 
+  applied_errors <- ptsproj |>
+    rename(current_week_proj=pts.proj) |> 
+    filter(week==.week) |> 
+    inner_join(s23_proj_errors, by = join_by(data_src, id, pos)) |> 
+    mutate(data_src=glue("{data_src}_s23_w{err_week}_error"),
+           pts.proj = current_week_proj + proj_error) |> 
+    select(week, data_src, id, pos, pts.proj, season)
+  
+  # ptsproj 
+  ptsproj <- ptsproj %>% # projecao dos sites
+    bind_rows(applied_errors)
+}
+
+
+
 # salva as projecoes de pontos da semana
 # que é os pontos calculados para cada site da semana
 # adicionado das projecoes de erros das semanas passadas
@@ -170,9 +195,6 @@ saveRDS(ptsproj, "./data/points_projection_and_errors.rds")
 tidy.ttest <- function(x) broom::tidy(t.test(x))
 # versao segura que nao falha se nao der para colocar NULL
 sttest <- safely(tidy.ttest)
-
-# pega os pontos projetados (com erros) da semana em questão
-.week<-week
 
 ptsproj %>% 
   filter(week==.week) %>% 
