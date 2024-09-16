@@ -2,7 +2,7 @@ baseurl: https://dudesfootball.netlify.app/
 title: "It's Football, Dudes! Fantasy League"
 author: "Giuliano Sposito"
 canonifyurls: yes
-paginate: 6
+pagination.pagerSize: 6
 theme: aether
 params:
   brand: It's Football, Dudes! Fantasy League
