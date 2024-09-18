@@ -17,7 +17,7 @@ prefix <- "preWaivers"
 destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6
-apply.previous.season.errors <- F
+apply.previous.season.errors <- T
 
 # FFA PLAYER IDS: TRATANDO IDS NAO MAPEADOS ####
 mis_player_ids <- readRDS("./data/missing_player_ids.rds")
@@ -146,7 +146,7 @@ site_ptsproj <- calcPointsProjection(season, yaml::read_yaml("./config/score_set
 saveRDS(site_ptsproj, "./data/points_projection.rds") # salva pontuacao projetada
 
 # so faz o calculo de erro se eu tenho pelo menos duas semanas
-if (week>3) {
+if (TRUE) { #(week>3) {
   # compara a pontuacao real com a pontuacao projetada
   # a aplica as variações das semanas anteriores na semana atual
   pts_errors <- projectErrorPoints(players_stats, site_ptsproj, my_player_ids, week)

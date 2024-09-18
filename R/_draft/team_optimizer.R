@@ -3,7 +3,7 @@ library(glue)
 # library(fitdistrplus)
 
 .team <- "Amparo Bikers"
-.week <- 2
+.week <- 3
 # 
 # # dados dos jogadores
 # players <- 2:4 |>
@@ -28,7 +28,7 @@ players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
 # 
 # # projeção de dados "Dudes"
 dudes_proj <- readRDS("./data/points_projection_and_errors.rds") %>%
-  filter(week %in% 2:4)
+  filter(week==3)
 
 SIMULATION_SIZE = 1000
 
@@ -165,7 +165,7 @@ starters <- players_proj %>%
 ## bench
 bench <- tibble(
   pos=c("QB","RB","WR","TE"),
-  qtd=c(1,2,2,1)
+  qtd=c(1,1,3,1)
 ) %>% 
   split(1:nrow(.)) %>% 
   map_df(function(.x, .players){
@@ -183,6 +183,8 @@ releases <- players_proj %>%
 starters %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
 bench  %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
 releases %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
+
+releases |> View()
 
 starters$pts.proj %>% reduce(`+`) %>% summary()
 starters$weekPts %>% sum(na.rm = T)
