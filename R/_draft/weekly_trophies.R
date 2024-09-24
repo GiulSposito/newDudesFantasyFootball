@@ -1,12 +1,14 @@
 library(tidyverse)
+library(glue)
 
+WEEK <- 3
 
-sim <- readRDS("./data/simulation_v5_week2_final.rds")
+sim <- readRDS(glue("./data/simulation_v5_week{WEEK}_final.rds"))
 
 points <- sim$players_stats |> 
   select(playerId, playerName=name, position, weekPts) |> 
   unnest(weekPts) |> 
-  filter(week==2) |> 
+  filter(week==WEEK) |> 
   select(-weekSeasonPts) |> 
   rename(points=weekPts)
 
@@ -27,7 +29,7 @@ rosters |>
   filter(rosterSlotId>=20) |> 
   filter(points==max(points, na.rm = T))
 
-# melhor banco
+# melhor dupla
 rosters |> 
   inner_join(points, by = join_by(playerId)) |> 
   filter(rosterSlotId<20) |> 
