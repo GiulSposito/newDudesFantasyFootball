@@ -93,21 +93,24 @@ ranking %>%
 TEAMS_COLOR_SCALE <- c("#B3995D","black","#03202F","#0B2265","#fb9a99","#A5ACAF","#0085CA",
   "#ff7f00","#203731","#6a3d9a","#A71930","#A71930","#FFB612","#004953")
 
+library(ggbump)
+
 # libs
 ranking %>% 
   mutate(record = paste0(wins, "-", losses)) %>% 
   mutate(imageUrl=if_else(imageUrl %in% invalidAvatars, genericAvatar, imageUrl)) %>% 
   select(week, teamId, team=name, rank, record, imageUrl) %>% 
   ggplot(aes(x=week, y=reorder(rank,-rank), group=team)) +
-  geom_line(aes(color=team), size=2, alpha=.4) +
+  # geom_line(aes(color=team), size=2, alpha=.4) +
+  geom_bump(aes(color=team), smooth = 10, size=1.5, lineend="round") +
   geom_image(aes(image=imageUrl), size=.04) +
   geom_text(aes(label=record), size=2.5, color="black", nudge_y = -.40) +
   geom_hline(yintercept = 6.5, linetype="dashed", size=1, color="darkgrey") +
-  geom_text(x=1.4, y=6.65, label="playoff clinch", size=3, color="darkgrey") +
+  geom_text(x=1.2, y=6.65, label="playoff clinch", size=3, color="darkgrey") +
   scale_colour_manual(values = TEAMS_COLOR_SCALE) +
   ylab("rank") +
   theme_void() +
-  theme(legend.position = "none")
+  theme(legend.position = "bottom")
 
 ```
 
@@ -142,7 +145,8 @@ rank_pts <- week_points %>%
 rank_pts %>% 
   mutate(imageUrl=if_else(imageUrl %in% invalidAvatars, genericAvatar, imageUrl)) %>% 
   ggplot(aes(x=week, y=reorder(rank,-rank), group=team)) +
-  geom_line(aes(color=team), size=2, alpha=.4) +
+  # geom_line(aes(color=team), size=2, alpha=.4) +
+  geom_bump(aes(color=team), smooth = 10, size=1.5, lineend="round") +
   geom_image(aes(image=imageUrl), size=.04) +
   geom_text(aes(label=cumpts), size=2.5, color="black", nudge_y = -.40) +
   scale_colour_manual(values = TEAMS_COLOR_SCALE) +
@@ -186,7 +190,8 @@ cut_rank <- cut_rank %>%
 cut_rank %>% 
   mutate(imageUrl=if_else(imageUrl %in% invalidAvatars, genericAvatar, imageUrl)) %>% 
   ggplot(aes(x=week, y=reorder(rank,-rank), group=team)) +
-  geom_line(aes(color=team), size=2, alpha=.4) +
+  # geom_line(aes(color=team), size=2, alpha=.4) +
+  geom_bump(aes(color=team), smooth = 10, size=1.5, lineend="round")+
   geom_image(aes(image=imageUrl), size=.04) +
   geom_text(aes(label=pts), size=2.5, color="black", nudge_y = -.40) +
   scale_colour_manual(values = TEAMS_COLOR_SCALE) +
