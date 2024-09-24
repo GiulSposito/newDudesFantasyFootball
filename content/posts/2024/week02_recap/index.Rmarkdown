@@ -111,11 +111,84 @@ resp <- recaps[1,]$leagueHighligths[[1]]$text %>%
 
 ```
 
-<!--
 ## Weekly Trophies
 
-![Trophies](images/trophies.png)
--->
+```{r weeklyTrophiesQuery}
+
+# dados da semana
+sim <- readRDS(glue("./data/simulation_v5_week{.week}_final.rds"))
+
+# imagens
+players_image <- sim$players_stats %>% 
+  select(playerId, nflTeam=nflTeamAbbr,smallImageUrl) %>% 
+  distinct()
+
+teams_image <- sim$teams %>% 
+  select(teamId, team=name, imageUrl)
+
+# pontos feitos na semana
+points <- sim$players_stats |> 
+  select(playerId, playerName=name, position, weekPts) |> 
+  unnest(weekPts) |> 
+  filter(week==.week) |> 
+  select(-weekSeasonPts) |> 
+  rename(points=weekPts)
+
+# escalacoes
+rosters <- sim$teams |>
+  select(teamId, teamName=name, rosters) |> 
+  unnest(rosters) |> 
+  select(teamId, teamName, rosterSlotId, playerId) |> 
+  inner_join(points, by = join_by(playerId)) |> 
+  inner_join(teams_image, by="teamId") |> 
+  inner_join(players_image, by="playerId") |> 
+  mutate(
+    playerImg = glue("<img src='{smallImageUrl}' style='width:45px;height:60px' alt='{playerName}'>"),
+    teamLogo = glue("<img src='{imageUrl}' style='width:50px;height:50px' alt='{team}'>"
+  ))
+```
+
+### 🏆 Top Player
+
+```{r topPlayer}
+# melhor escalação
+rosters |> 
+  filter(rosterSlotId<20) |> 
+  filter(points==max(points, na.rm = T)) |> 
+  select(playerImg, playerName, position, nflTeam, points, teamLogo) |> 
+  set_names(c("player","name", "pos", "team", "points", "fantasy")) |> 
+  knitr::kable()
+```
+
+### 💣 Top Bench
+
+```{r topBench}
+# melhor banco
+rosters |>
+  filter(rosterSlotId>=20) |>
+  filter(points==max(points, na.rm = T)) |> 
+  select(playerImg, playerName, position, nflTeam, points, teamLogo)  |> 
+  set_names(c("player","name", "pos", "team", "points", "fantasy")) |> 
+  knitr::kable()
+```
+
+### 🚀 Best Duo
+
+```{r bestDuo}
+# melhor dupla
+rosters |>
+  filter(rosterSlotId<20) |>
+  group_by(teamId) |>
+  slice_max(points, n=2) |>
+  mutate(joinPoints=sum(points)) |>
+  ungroup() |>
+  filter(joinPoints==max(joinPoints)) |> 
+  select(playerImg, playerName, position, nflTeam, points, teamLogo)  |> 
+  set_names(c("player","name", "pos", "team", "points", "fantasy")) |> 
+  knitr::kable()
+```
+
+
 
 ```{r reverseGameWinner, eval=TRUE}
 teamPts <- sim$teams %>% 

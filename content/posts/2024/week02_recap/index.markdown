@@ -47,11 +47,33 @@ Indaiatuba Riders beat their projections by a higher percentage than anyone else
 
 Barao Butchers scored 132.64 points, the highest mark in the league this week.
 
-<!--
 ## Weekly Trophies
 
-![Trophies](images/trophies.png)
--->
+
+
+### 🏆 Top Player
+
+
+|player                                                                                                                                              |name         |pos |team | points|fantasy                                                                                                                                          |
+|:---------------------------------------------------------------------------------------------------------------------------------------------------|:------------|:---|:----|------:|:------------------------------------------------------------------------------------------------------------------------------------------------|
+|<img src='https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/tl9enad6kiwv6cukf4vt' style='width:45px;height:60px' alt='Alvin Kamara'> |Alvin Kamara |RB  |NO   |     44|<img src='https://fantasy.nfl.com/image/f59d87887585694b1b0bb52b47e5360b.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Indaiatuba Riders'> |
+
+### 💣 Top Bench
+
+
+|player                                                                                                                                              |name          |pos |team | points|fantasy                                                                                                                                        |
+|:---------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:---|:----|------:|:----------------------------------------------------------------------------------------------------------------------------------------------|
+|<img src='https://static.www.nfl.com/image/upload/w_65,h_90,c_fill/league/tmeij0cfgylmurfybs74' style='width:45px;height:60px' alt='Calvin Ridley'> |Calvin Ridley |WR  |TEN  |   24.7|<img src='https://static.www.nfl.com/league/apps/fantasy/logos/avatar/240x240/NYG_5.png' style='width:50px;height:50px' alt='Campinas Giants'> |
+
+### 🚀 Best Duo
+
+
+|player                                                                                                                                              |name         |pos |team | points|fantasy                                                                                                                                          |
+|:---------------------------------------------------------------------------------------------------------------------------------------------------|:------------|:---|:----|------:|:------------------------------------------------------------------------------------------------------------------------------------------------|
+|<img src='https://static.www.nfl.com/image/private/w_65,h_90,c_fill/league/tl9enad6kiwv6cukf4vt' style='width:45px;height:60px' alt='Alvin Kamara'> |Alvin Kamara |RB  |NO   |  44.00|<img src='https://fantasy.nfl.com/image/f59d87887585694b1b0bb52b47e5360b.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Indaiatuba Riders'> |
+|<img src='https://static.www.nfl.com/image/upload/w_65,h_90,c_fill/league/myvg8siij2bn9ecx7btm' style='width:45px;height:60px' alt='Brock Purdy'>   |Brock Purdy  |QB  |SF   |  13.96|<img src='https://fantasy.nfl.com/image/f59d87887585694b1b0bb52b47e5360b.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Indaiatuba Riders'> |
+
+
 
 
 
