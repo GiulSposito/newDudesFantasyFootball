@@ -123,31 +123,31 @@ _Last Update: `r lubridate::now()`_
 
 ## Simulation
 
-- [Matchup Simulations preWaivers](/reports/2024/dudes_simulation_v5_week3_preWaivers.html)
-- [Matchup Simulations posWaivers](/reports/2024/dudes_simulation_v5_week3_posWaivers.html)
+- [Matchup Simulations preWaivers](/reports/2024/dudes_simulation_v5_week4_preWaivers.html)
+- [Matchup Simulations posWaivers](/reports/2024/dudes_simulation_v5_week4_posWaivers.html)
 
 <!--
-- [Matchup Simulations preTNF](/reports/2024/dudes_simulation_v5_week3_preTNF.html)
-- [Matchup Simulations posTNF](/reports/2024/dudes_simulation_v5_week3_posTNF.html)
-- [Matchup Simulations preSundayGames](/reports/2024/dudes_simulation_v5_week3_preSundayGames.html)
-- [Matchup Simulations preSNF](/reports/2024/dudes_simulation_v5_week3_preSNF.html)
-- [Matchup Simulations preMNF](/reports/2024/dudes_simulation_v5_week3_preMNF.html)
+- [Matchup Simulations preTNF](/reports/2024/dudes_simulation_v5_week4_preTNF.html)
+- [Matchup Simulations posTNF](/reports/2024/dudes_simulation_v5_week4_posTNF.html)
+- [Matchup Simulations preSundayGames](/reports/2024/dudes_simulation_v5_week4_preSundayGames.html)
+- [Matchup Simulations preSNF](/reports/2024/dudes_simulation_v5_week4_preSNF.html)
+- [Matchup Simulations preMNF](/reports/2024/dudes_simulation_v5_week4_preMNF.html)
 
 
 
-- [Matchup Simulations posThanksGiving](/reports/2024/dudes_simulation_v5_week3_posThanksGiving.html)
-- [Matchup Simulations preGermanGame](/reports/2024/dudes_simulation_v5_week3_preGermanGame.html)
-- [Matchup Simulations preLondonGame](/reports/2024/dudes_simulation_v5_week3_preLondonGame.html)
-- [Matchup Simulations posSunday1stGames](/reports/2024/dudes_simulation_v5_week3_posSunday1stGames.html)
+- [Matchup Simulations posThanksGiving](/reports/2024/dudes_simulation_v5_week4_posThanksGiving.html)
+- [Matchup Simulations preGermanGame](/reports/2024/dudes_simulation_v5_week4_preGermanGame.html)
+- [Matchup Simulations preLondonGame](/reports/2024/dudes_simulation_v5_week4_preLondonGame.html)
+- [Matchup Simulations posSunday1stGames](/reports/2024/dudes_simulation_v5_week4_posSunday1stGames.html)
 -->
 
 ## Data Base
 
-- [Full PPR Projection Table](/exports/2024/week3_full_ppr.csv)
-- [QB Raw Data](/exports/2024/week3_QB_rawdata.csv)
-- [WR Raw Data](/exports/2024/week3_WR_rawdata.csv)
-- [RB Raw Data](/exports/2024/week3_RB_rawdata.csv)
-- [TE Raw Data](/exports/2024/week3_TE_rawdata.csv)
-- [K Raw Data](/exports/2024/week3_K_rawdata.csv)
-- [DEF Raw Data](/exports/2024/week3_DST_rawdata.csv)
+- [Full PPR Projection Table](/exports/2024/week4_full_ppr.csv)
+- [QB Raw Data](/exports/2024/week4_QB_rawdata.csv)
+- [WR Raw Data](/exports/2024/week4_WR_rawdata.csv)
+- [RB Raw Data](/exports/2024/week4_RB_rawdata.csv)
+- [TE Raw Data](/exports/2024/week4_TE_rawdata.csv)
+- [K Raw Data](/exports/2024/week4_K_rawdata.csv)
+- [DEF Raw Data](/exports/2024/week4_DST_rawdata.csv)
 
