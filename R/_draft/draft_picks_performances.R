@@ -3,7 +3,7 @@ library(glue)
 library(broom)
 library(ggrepel)
 
-draft <- readRDS("./data/draft_2022_picks.rds") %>% 
+draft <- readRDS("./data/draft_picks.rds") %>% 
   rename(playerId=player.id)
 stat <- readRDS("./data/players_points.rds")
 
