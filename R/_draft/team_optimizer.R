@@ -3,7 +3,7 @@ library(glue)
 # library(fitdistrplus)
 
 .team <- "Amparo Bikers"
-.week <- 3
+.week <- 4
 # 
 # # dados dos jogadores
 # players <- 2:4 |>
@@ -115,6 +115,7 @@ ptsproj <- dudes_proj %>%
 # ptsproj |> 
 #   unnest(pts.proj, names_sep="_")
 # 
+
 players_proj <- players %>%
   dplyr::select(-week) %>%
   inner_join(ptsproj, by=c("id","pos")) %>%
