@@ -21,7 +21,7 @@ resources:
   src: cover_03.webp
 params:
   week: 4
-  prefix: preTNF
+  prefix: preMNF
 ---
 
 _Last Update: `r lubridate::now()`_
