@@ -34,7 +34,8 @@ params:
 |:----:|:---------------:|
 | 1    |       42%       |
 | 2    |       71%       |
-| 2    |       71%       |
+| 3    |       71%       |
+| 4    |       71%       |
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 # put rnotbook in the same workdir
