@@ -5,7 +5,7 @@ output:
     orientation: columns
     vertical_layout: fill
 params:
-  week: 6
+  week: 5
 ---
 
 ```{r setup, include=FALSE}
@@ -192,6 +192,37 @@ plotDFAProjections <- function(.proj, .pos, .slice=32) {
     return()
 }
 
+plotDFAProjections2 <- function(.proj, .pos, .slice=32) {
+  g <- .proj |> 
+    filter(pos == .pos) |> 
+    slice_max(dudes.proj, n = .slice) |> 
+    mutate(stats = map(proj, ~broom::tidy(t.test(.x$pts.proj)))) |>
+    unnest(stats) |>
+    mutate(pos_rank=rank(-estimate),
+           pos_rank=reorder(pos_rank,desc(pos_rank)),
+           r_pos = max(conf.high, estimate),
+           nfl.team = glue("{nflTeamAbbr}\nrank against: {rankAgainstPosition}")) |>
+    mutate(across(c(estimate, conf.low, conf.high), round, digits=1)) |> 
+    ggplot(aes(team=nfl.team)) +
+    geom_pointrange(aes(x=pos_rank,
+                    y=estimate, 
+                    ymin=conf.low, 
+                    ymax=conf.high, 
+                    color=fantasy.team), size=1) +
+    geom_text(aes(x=pos_rank, 
+              y=conf.high, 
+              color=fantasy.team, 
+              label=full_name), hjust=-1, nudge_y=3, nudge_x = 0.0, size=3) +
+    scale_colour_manual(values = TEAMS_COLOR_SCALE) +
+    theme_classic() + xlab("Rank") + ylab("Points") +
+    theme( panel.grid.major.x=element_line(colour="#EEEEEE") ) +
+    scale_x_discrete(breaks = seq(1,32,4) ) +
+    ggtitle(.pos) +
+    coord_flip() 
+  
+  return(ggplotly(g))
+}
+
 plotDFAProjections(dudes_projections, "QB", 32)
 
 ```
@@ -240,6 +271,62 @@ DEF {data-navmenu="dudesAnalytics"}
 ```{r def_dfa, fig.width=10}
 
 plotDFAProjections(dudes_projections, "DST",32)
+
+```
+
+QB {data-navmenu="dudesAnalytics2"}
+========================
+
+```{r qb_dfa2, fig.width=10}
+
+plotDFAProjections2(dudes_projections, "QB", 32)
+
+```
+
+WR {data-navmenu="dudesAnalytics2"}
+========================
+
+```{r wr_dfa2, fig.width=10}
+
+plotDFAProjections2(dudes_projections, "WR",(5*14))
+
+```
+
+RB {data-navmenu="dudesAnalytics2"}
+========================
+
+```{r rb_dfa2, fig.width=10}
+
+plotDFAProjections2(dudes_projections, "RB", (5*14))
+
+```
+
+TE {data-navmenu="dudesAnalytics2"}
+========================
+
+```{r te_dfa2, fig.width=10}
+
+plotDFAProjections2(dudes_projections, "TE",(3*14))
+
+```
+
+
+K {data-navmenu="dudesAnalytics2"}
+========================
+
+```{r k_dfa2, fig.width=10}
+
+plotDFAProjections2(dudes_projections, "K",(2*14))
+
+```
+
+
+DEF {data-navmenu="dudesAnalytics2"}
+========================
+
+```{r def_dfa2, fig.width=10}
+
+plotDFAProjections2(dudes_projections, "DST",32)
 
 ```
 
