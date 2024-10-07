@@ -21,7 +21,7 @@ resources:
   src: cover_01.jpg
 params:
   week: 5
-  prefix: preSNF
+  prefix: preMNF
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -129,12 +129,13 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations posTNF](/reports/2024/dudes_simulation_v5_week5_posTNF.html)
 - [Matchup Simulations preLondonGame](/reports/2024/dudes_simulation_v5_week5_preLondonGame.html)
 - [Matchup Simulations preSNF](/reports/2024/dudes_simulation_v5_week5_preSNF.html)
+- [Matchup Simulations preMNF](/reports/2024/dudes_simulation_v5_week5_preMNF.html)
 
 <!--
 
 
 
-- [Matchup Simulations preMNF](/reports/2024/dudes_simulation_v5_week5_preMNF.html)
+
 
 
 
