@@ -68,9 +68,9 @@ The average projected score was 97.21 points this week.
 ### 🏆 Top Player
 
 
-|player                                                                                                                                              |name          |pos |team | points|fantasy                                                                                                                                        |
-|:---------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:---|:----|------:|:----------------------------------------------------------------------------------------------------------------------------------------------|
-|<img src='https://static.www.nfl.com/image/upload/w_65,h_90,c_fill/league/qkcb3qt2fhasfgtfuprd' style='width:45px;height:60px' alt='Ja'Marr Chase'> |Ja'Marr Chase |WR  |CIN  |   41.3|<img src='https://fantasy.nfl.com/image/19b9a9b83996bd9277edd5144b2728cb.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Paulinia Robots'> |
+|player                                                                                                                                             |name         |pos |team | points|fantasy                                                                                                                                        |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------|:------------|:---|:----|------:|:----------------------------------------------------------------------------------------------------------------------------------------------|
+|<img src='https://static.www.nfl.com/image/upload/w_65,h_90,c_fill/league/qkcb3qt2fhasfgtfuprd' style='width:45px;height:60px' alt='JaMarr Chase'> |JaMarr Chase |WR  |CIN  |   41.3|<img src='https://fantasy.nfl.com/image/19b9a9b83996bd9277edd5144b2728cb.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Paulinia Robots'> |
 
 ### 💣 Top Bench
 
@@ -84,7 +84,7 @@ The average projected score was 97.21 points this week.
 
 |player                                                                                                                                              |name          |pos |team | points| total|fantasy                                                                                                                                        |
 |:---------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|:---|:----|------:|-----:|:----------------------------------------------------------------------------------------------------------------------------------------------|
-|<img src='https://static.www.nfl.com/image/upload/w_65,h_90,c_fill/league/qkcb3qt2fhasfgtfuprd' style='width:45px;height:60px' alt='Ja'Marr Chase'> |Ja'Marr Chase |WR  |CIN  |  41.30| 74.72|<img src='https://fantasy.nfl.com/image/19b9a9b83996bd9277edd5144b2728cb.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Paulinia Robots'> |
+|<img src='https://static.www.nfl.com/image/upload/w_65,h_90,c_fill/league/qkcb3qt2fhasfgtfuprd' style='width:45px;height:60px' alt='JaMarr Chase'>  |JaMarr Chase  |WR  |CIN  |  41.30| 74.72|<img src='https://fantasy.nfl.com/image/19b9a9b83996bd9277edd5144b2728cb.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Paulinia Robots'> |
 |<img src='https://static.www.nfl.com/image/upload/w_65,h_90,c_fill/league/cruqs6qpbykh7a2whd7p' style='width:45px;height:60px' alt='Lamar Jackson'> |Lamar Jackson |QB  |BAL  |  33.42| 74.72|<img src='https://fantasy.nfl.com/image/19b9a9b83996bd9277edd5144b2728cb.jpg?&x=50&y=50' style='width:50px;height:50px' alt='Paulinia Robots'> |
 
 

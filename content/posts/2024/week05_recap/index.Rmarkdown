@@ -142,6 +142,7 @@ rosters <- sim$teams |>
   inner_join(points, by = join_by(playerId)) |> 
   inner_join(teams_image, by="teamId") |> 
   inner_join(players_image, by="playerId") |> 
+  mutate( playerName = str_remove_all(playerName, "'")) |> 
   mutate(
     playerImg = glue("<img src='{smallImageUrl}' style='width:45px;height:60px' alt='{playerName}'>"),
     teamLogo = glue("<img src='{imageUrl}' style='width:50px;height:50px' alt='{team}'>"
@@ -183,7 +184,7 @@ rosters |>
   mutate(joinPoints=sum(points)) |>
   ungroup() |>
   filter(joinPoints==max(joinPoints)) |> 
-  select(playerImg, playerName, position, nflTeam, points, joinPoints, teamLogo)  |> 
+  select(playerImg, playerName, position, nflTeam, points, joinPoints, teamLogo)  |>
   set_names(c("player","name", "pos", "team", "points", "total", "fantasy")) |> 
   knitr::kable()
 ```
