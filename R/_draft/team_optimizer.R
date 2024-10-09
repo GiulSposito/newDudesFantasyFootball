@@ -3,7 +3,7 @@ library(glue)
 # library(fitdistrplus)
 
 .team <- "Amparo Bikers"
-.week <- 5
+.week <- 6
 # 
 # # dados dos jogadores
 # players <- 2:4 |>
@@ -24,11 +24,12 @@ players <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>%
     team!="FA",
     week==.week
   ) %>%
-  select(id, playerId=nfl_id, name, pos=position, team = nflTeamAbbr, week, weekPts, weekSeasonPts, teamId, fantasy.team, injuryGameStatus, rankAgainstPosition, byeWeek)
+  select(id, playerId=nfl_id, name, pos=position, team = nflTeamAbbr, week, weekPts, weekSeasonPts, teamId, fantasy.team, injuryGameStatus, rankAgainstPosition, byeWeek) |> 
+  filter(byeWeek != .week)
 # 
 # # projeção de dados "Dudes"
 dudes_proj <- readRDS("./data/points_projection_and_errors.rds") %>%
-  filter(week==3)
+  filter(week==.week)
 
 SIMULATION_SIZE = 1000
 
@@ -165,8 +166,8 @@ starters <- players_proj %>%
 
 ## bench
 bench <- tibble(
-  pos=c("QB","RB","WR","TE"),
-  qtd=c(1,1,3,1)
+  pos=c("RB","WR","TE"),
+  qtd=c(2,3,1)
 ) %>% 
   split(1:nrow(.)) %>% 
   map_df(function(.x, .players){
