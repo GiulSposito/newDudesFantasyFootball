@@ -186,7 +186,7 @@ starters %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPositio
 bench  %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
 releases %>% dplyr::select(id, name, pos, team, fantasy.team, rankAgainstPosition, byeWeek, floor, points, ceiling, weekPts, weekSeasonPts, injuryGameStatus)
 
-releases |> View()
+# releases |> View()
 
 starters$pts.proj %>% reduce(`+`) %>% summary()
 starters$weekPts %>% sum(na.rm = T)
