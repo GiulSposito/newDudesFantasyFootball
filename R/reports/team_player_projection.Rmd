@@ -1,0 +1,146 @@
+---
+title: "It's Football, dudes - Fantasy League"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+params:
+  week: 6
+---
+
+```{r setup, include=FALSE}
+
+# put rnotbook in the same workdir
+knitr::opts_knit$set(root.dir = normalizePath(rprojroot::find_rstudio_root_file())) 
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+```
+
+```{r libs, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(glue)
+library(ggrepel)
+
+.week <- params$week
+TEAMS_COLOR_SCALE <- c("grey", "#B3995D","black","#03202F","#0B2265","#fb9a99","#A5ACAF","#0085CA",
+  "#ff7f00","#203731","#6a3d9a","#A71930","#A71930","#FFB612","#004953")
+
+```
+
+```{r loaddata, cache=FALSE}
+
+# pega projecoes cria algumas colunas auxiliares
+pprojs <- readRDS(glue("./data/week{.week}_players_projections.rds")) %>% 
+  filter(week==.week) %>% 
+  mutate(injuryCod = str_extract_all(injuryGameStatus, "[A-Z]")) %>% 
+  mutate(injuryCod = map_chr(injuryCod, paste, sep="", collapse="")) %>% 
+  mutate( full_name = paste0(first_name, " ", last_name),
+          fantasy.team = as.factor(fantasy.team) ) %>%
+  mutate( 
+    full_name = case_when(
+      !is.na(injuryGameStatus) ~ paste0(full_name, " (", injuryCod, ")"),
+      is.na(injuryGameStatus) ~ full_name
+    )
+  ) %>% 
+  filter( !(team %in% c("FA","FA*")) )  # havia lixo em alguns
+
+projections <- pprojs %>% 
+  inner_join(readRDS(glue("./data/dudesffa_projpoints_week{.week}.rds")), by="id")
+
+
+dudes_projections <- readRDS("./data/points_projection_and_errors.rds") %>% 
+  inner_join(projections, by = c("week", "id", "pos")) %>% 
+  filter(week==.week, byeWeek!=.week) %>%
+  select(season, week,id, name, full_name, pos, nflTeamAbbr, rankAgainstPosition, 
+         fantasy.team, byeWeek, injuryGameStatus, floor, points, 
+         ceiling, sd_pts, data_src, pts.proj) %>% 
+  mutate(adj_factor = case_when(
+    is.na(injuryGameStatus) ~ 1,
+    injuryGameStatus == "Questionable" ~ .5,
+    injuryGameStatus == "Doubtful" ~ .25,
+    T ~ 0
+  )) %>% 
+  mutate(pts.proj = pts.proj * adj_factor) %>% 
+  nest(proj = c(data_src, pts.proj)) %>% 
+  mutate( dudes.proj = map_dbl(proj, ~median(.x$pts.proj, na.rm = T)))
+
+plotProjections <- function(.proj, .pos, .title, .subtitle, .slice=32) {
+  require(magrittr)
+  proj_data <- .proj %>% 
+    select(id, position, pos_rank ) %>% 
+    filter(position==.pos) %>% 
+    distinct() %>% 
+    top_n(-.slice, pos_rank) %>% 
+    select(id)
+  
+  proj_data %>% 
+    inner_join(.proj, by="id") -> proj_data
+  
+  nu_y <- max(proj_data$ceiling, na.rm = T) / 18
+  
+  proj_data %>% 
+    group_by( id ) %>% 
+    mutate( r_pos = max(ceiling, points) ) %>% # posicao do label
+    ungroup() %>% 
+    ggplot(aes(team=team)) +
+    geom_pointrange(aes(x=reorder(pos_rank,desc(pos_rank)),
+                    y=points, 
+                    ymin=floor, 
+                    ymax=ceiling, 
+                    color=fantasy.team), size=1) +
+    geom_text(aes(x=reorder(pos_rank,desc(pos_rank)), 
+              y=r_pos, 
+              color=fantasy.team, 
+              label=full_name), nudge_y = nu_y, nudge_x = 0.0, size=3) +
+    scale_colour_manual(values = TEAMS_COLOR_SCALE) +
+    theme_classic() + xlab("Rank") + ylab("Points") +
+    theme( panel.grid.major.x=element_line(colour="#EEEEEE") ) +
+    scale_x_discrete(breaks = seq(1,32,4) ) +
+    ggtitle(.title,.subtitle) +
+    coord_flip() -> g
+  
+  g %>% 
+    ggplotly() %>% 
+    return()
+  
+}
+
+plotProjections(projections, "QB", "Quaterbacks", "week 9", 14+14+5)
+
+plotDFAProjections2 <- function(.proj, .pos, .slice=32) {
+  g <- .proj |> 
+    filter(pos == .pos) |> 
+    slice_max(dudes.proj, n = .slice) |> 
+    mutate(stats = map(proj, ~broom::tidy(t.test(.x$pts.proj)))) |>
+    unnest(stats) |>
+    mutate(pos_rank=rank(-estimate),
+           pos_rank=reorder(pos_rank,desc(pos_rank)),
+           r_pos = max(conf.high, estimate),
+           nfl.team = glue("{nflTeamAbbr}\nrank against: {rankAgainstPosition}")) |>
+    mutate(across(c(estimate, conf.low, conf.high), round, digits=1)) |> 
+    ggplot(aes(team=nfl.team)) +
+    geom_pointrange(aes(x=pos_rank,
+                    y=estimate, 
+                    ymin=conf.low, 
+                    ymax=conf.high, 
+                    color=fantasy.team), size=1) +
+    geom_text(aes(x=pos_rank, 
+              y=conf.high, 
+              color=fantasy.team, 
+              label=full_name), hjust=-1, nudge_y=3, nudge_x = 0.0, size=3) +
+    scale_colour_manual(values = TEAMS_COLOR_SCALE) +
+    theme_classic() + xlab("Rank") + ylab("Points") +
+    theme( panel.grid.major.x=element_line(colour="#EEEEEE") ) +
+    scale_x_discrete(breaks = seq(1,32,4) ) +
+    ggtitle(.pos) +
+    coord_flip() 
+  
+  return(ggplotly(g))
+}
+
+plotDFAProjections(dudes_projections, "QB", 32)
+
+```
+
