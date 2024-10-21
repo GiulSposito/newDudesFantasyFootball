@@ -21,7 +21,7 @@ resources:
   src: cover_04.jpg
 params:
   week: 7
-  prefix: preSundayGames
+  prefix: preMNF
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -128,6 +128,7 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations posTNF](/reports/2024/dudes_simulation_v5_week7_posTNF.html)
 - [Matchup Simulations preLondonGame](/reports/2024/dudes_simulation_v5_week7_preLondonGame.html)
 - [Matchup Simulations preSundayGames](/reports/2024/dudes_simulation_v5_week7_preSundayGames.html)
+- [Matchup Simulations preMNF](/reports/2024/dudes_simulation_v5_week7_preMNF.html)
 
 <!--
 
@@ -135,7 +136,7 @@ _Last Update: `r lubridate::now()`_
 
 
 - [Matchup Simulations preSNF](/reports/2024/dudes_simulation_v5_week7_preSNF.html)
-- [Matchup Simulations preMNF](/reports/2024/dudes_simulation_v5_week7_preMNF.html)
+
 - [Matchup Simulations posThanksGiving](/reports/2024/dudes_simulation_v5_week7_posThanksGiving.html)
 - [Matchup Simulations preGermanGame](/reports/2024/dudes_simulation_v5_week7_preGermanGame.html)
 - [Matchup Simulations posSunday1stGames](/reports/2024/dudes_simulation_v5_week7_posSunday1stGames.html)
