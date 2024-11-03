@@ -21,7 +21,7 @@ resources:
   src: cover_02.jpg
 params:
   week: 9
-  prefix: posTNF
+  prefix: preSundayGames
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -127,6 +127,7 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations posWaivers](/reports/2024/dudes_simulation_v5_week9_posWaivers.html)
 - [Matchup Simulations preTNF](/reports/2024/dudes_simulation_v5_week9_preTNF.html)
 - [Matchup Simulations posTNF](/reports/2024/dudes_simulation_v5_week9_posTNF.html)
+- [Matchup Simulations preSundayGames](/reports/2024/dudes_simulation_v5_week9_preSundayGames.html)
 
 <!--
 
@@ -134,7 +135,7 @@ _Last Update: `r lubridate::now()`_
 - [Matchup Simulations preSNF](/reports/2024/dudes_simulation_v5_week9_preSNF.html)
 - [Matchup Simulations preMNF](/reports/2024/dudes_simulation_v5_week9_preMNF.html)
 - [Matchup Simulations preLondonGame](/reports/2024/dudes_simulation_v5_week9_preLondonGame.html)
-- [Matchup Simulations preSundayGames](/reports/2024/dudes_simulation_v5_week9_preSundayGames.html)
+
 
 
 
