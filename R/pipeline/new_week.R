@@ -9,11 +9,11 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
-week <- 10
+week <- 12
 .week<-week
 season <- 2024
 config <- read_yaml("./config/config.yml")
-prefix <- "posWaivers"
+prefix <- "posTNF"
 destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6

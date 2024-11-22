@@ -9,7 +9,7 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
-week <- 9
+week <- 11
 season <- 2024
 config <- read_yaml("./config/config.yml")
 prefix <- "final"
