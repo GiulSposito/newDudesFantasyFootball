@@ -3,7 +3,7 @@ library(glue)
 # library(fitdistrplus)
 
 .team <- "Amparo Bikers"
-.week <- 10
+.week <- 12
 # 
 # # dados dos jogadores
 # players <- 2:4 |>
