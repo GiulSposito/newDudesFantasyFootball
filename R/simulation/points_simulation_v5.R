@@ -25,6 +25,13 @@ simulateGames <- function(.week, .season, .ptsproj, .matchup_games, .teams_roste
     select(teamId, teamName=name, rosters) %>% 
     unnest(rosters) %>% 
     filter(week==.week)
+  
+  # em caso de atraso na importacao da estatistica da semana, o "isUndroppable" 
+  # nao retorna na API, codigo abaixo e uma contorno para recriar a coluna
+  # o campo nao e usado, mas manipulado mais para a frente
+  if(!"isUndroppable" %in% names(players_stats)){
+    .players_stats$isUndroppable <- T
+  }
 
   # ESTATISTICAS: pega a pontuacao realizada da semana
   stats <- .players_stats %>% 
