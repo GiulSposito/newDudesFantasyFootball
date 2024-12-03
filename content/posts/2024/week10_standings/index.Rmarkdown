@@ -15,7 +15,7 @@ displayInMenu: no
 displayInList: yes
 resources:
 - name: featuredImage
-  src: cover_01.jpg
+  src: cover_03.webp
   params:
     description: cover
 params:
