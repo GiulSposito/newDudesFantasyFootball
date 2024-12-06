@@ -21,7 +21,7 @@ resources:
   src: cover_02.jpg
 params:
   week: 14
-  prefix: preTNF
+  prefix: posTNF
 ---
 
 _Last Update: `r lubridate::now()`_
