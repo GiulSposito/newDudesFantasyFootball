@@ -12,7 +12,7 @@ options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 week <- 14
 season <- 2024
 config <- read_yaml("./config/config.yml")
-prefix <- "posTNF"
+prefix <- "preMNF"
 destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6
