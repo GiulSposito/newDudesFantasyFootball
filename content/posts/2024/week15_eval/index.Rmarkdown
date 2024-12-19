@@ -24,7 +24,7 @@ params:
   prefix: final
 ---
 
-**Matchup Winner Accuracy: 57%**
+**Matchup Winner Accuracy: 66%**
 
 <!--more-->
 
@@ -44,6 +44,7 @@ params:
 | 12   |       42%       |
 | 13   |       86%       |
 | 14   |       57%       |
+| 14   |       66%       |
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 # put rnotbook in the same workdir

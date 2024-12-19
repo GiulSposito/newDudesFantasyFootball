@@ -28,7 +28,7 @@ params:
 <script src="{{< blogdown/postref >}}index_files/kePrint/kePrint.js"></script>
 <link href="{{< blogdown/postref >}}index_files/lightable/lightable.css" rel="stylesheet" />
 
-**Matchup Winner Accuracy: 57%**
+**Matchup Winner Accuracy: 66%**
 
 <!--more-->
 
@@ -48,6 +48,7 @@ params:
 | 12   |       42%       |
 | 13   |       86%       |
 | 14   |       57%       |
+| 14   |       66%       |
 
 
 
