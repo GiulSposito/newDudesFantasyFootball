@@ -13,7 +13,7 @@ week <- 16
 .week<-week
 season <- 2024
 config <- read_yaml("./config/config.yml")
-prefix <- "preTNF"
+prefix <- "preSundayGames"
 destPath <- "static/reports/2024"
 rep.version <- 5
 sim.version <- 6
