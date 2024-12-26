@@ -2,7 +2,7 @@
 title: 'Week 15 | Matchups Recap and Teams Performances'
 author: Giuliano Sposito
 date: '2024-12-17T01:00:00-03:00'
-slug: s24_w17_recap
+slug: s24_w15_recap
 categories:
   - recap
   - ranking

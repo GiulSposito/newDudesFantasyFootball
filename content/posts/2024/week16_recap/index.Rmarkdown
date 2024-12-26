@@ -1,8 +1,8 @@
 ---
-title: 'Week 15 | Matchups Recap and Teams Performances'
+title: 'Week 16 | Matchups Recap and Teams Performances'
 author: Giuliano Sposito
-date: '2024-12-17T01:00:00-03:00'
-slug: s24_w15_recap
+date: '2024-12-24T01:00:00-03:00'
+slug: s24_w16_recap
 categories:
   - recap
   - ranking
@@ -14,11 +14,11 @@ displayInMenu: no
 displayInList: yes
 resources:
 - name: featuredImage
-  src: "cover_03.webp"
+  src: "cover_04.jpg"
   params:
     description: cover
 params:
-  week: 15
+  week: 16
 ---
 
 <!--more-->
