@@ -1,7 +1,7 @@
 ---
 title: "Trophy Room"
 author: "Giuliano Sposito"
-date: '2025-01-01T00:00:00'
+date: '2025-12-31T12:01:00'
 slug: it-s-football-dudes-trophy-room
 displayInList: yes
 displayInMenu: yes
