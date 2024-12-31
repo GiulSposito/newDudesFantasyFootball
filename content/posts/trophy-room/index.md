@@ -1,7 +1,7 @@
 ---
 title: "Trophy Room"
 author: "Giuliano Sposito"
-date: '2025-12-31T12:01:00'
+date: '2024-12-31T12:01:00'
 slug: it-s-football-dudes-trophy-room
 displayInList: yes
 displayInMenu: yes
@@ -24,7 +24,7 @@ resources:
 
 <span class="emoji">🏆</span> 1st Place: **Paulinia Robots** (Leonel)<br/>
 <span class="emoji">🥈</span> 2nd Place: **Rio Claro Farmers** (Vini)<br/>
-<span class="emoji">🥉</span> 3rd Place: **Indaiatuba Pats** (Abdala)<br/>
+<span class="emoji">🥉</span> 3rd Place: **Indaiatuba Blues** (Mota)<br/>
 <br/>
 <span class="emoji">🥇️</span> Reg Season 1st Place: **Paulinia Robots** (Leonel)<br/>
 <span class="emoji">🎖</span> Highest Scoring: **Limeira Jetsons** (Roander)<br/>
