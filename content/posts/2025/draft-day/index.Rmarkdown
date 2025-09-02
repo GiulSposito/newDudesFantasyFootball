@@ -1,0 +1,121 @@
+---
+title: Season 2025 | It's Draft Day
+author: Giuliano Sposito
+date: '2025-09-02'
+slug: [draft-day-2025]
+categories:
+  - draft
+tags:
+  - draft
+  - projection
+toc: no
+dropCap: no
+displayInMenu: no
+displayInList: yes
+draft: no
+resources:
+- name: featuredImage
+  src: fantasy_draft_2025.jpg
+---
+
+Season 2025 is here! See the league draft winners and losers according NFL Fantasy.
+
+<!--more-->
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+# put rnotbook in the same workdir
+knitr::opts_knit$set(root.dir = normalizePath(rprojroot::find_rstudio_root_file()))
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+## NFL Draft Grades
+ 
+```{r grade}
+
+library(tidyverse)
+library(knitr)
+library(glue)
+library(kableExtra)
+library(ggridges)
+
+draft_recap <- readRDS("./data/draft_recap_rank.rds")
+pick_proj <- readRDS("./data/draft_pick_projections.rds")
+team_proj <- readRDS("./data/draft_teams_projections.rds")
+
+draft_recap %>% 
+  select(-teamId, -imageUrl, -title, -text, -rank_with_t, -ties, -rank) %>% 
+  arrange(desc(champ)) %>% 
+  mutate(across(first_place:champ, function(x) { paste0(round(100*x,1)," %") })) %>% 
+  # mutate(imageUrl = glue("<img src='{imageUrl}' style='width: 50px; height: 50px'/>")) %>% 
+  kable() %>% 
+  kable_styling(font_size = 10)
+
+```
+
+## Dude's Season Points Projection
+
+```{r dudesPoints}
+
+season_pp_site <- readRDS("./data/season_player_proj_sites.rds")
+
+team_proj |> 
+  filter(avg_type=="robust") |> 
+  select(team_id, team.name, round, pick, player.name, id) |> 
+  inner_join(season_pp_site, join_by(id)) |> 
+  select(team_id, team.name, pick, points) |> 
+  group_by(team_id, team.name, pick) |> 
+  nest() |> 
+  mutate(points = map(data, pull, points)) |> 
+  mutate(sim = map(points, sample, size=100, replace=T)) |> 
+  group_by(team_id, team.name) |> 
+  group_split() |> 
+  map_df(function(team){
+    tibble(
+      team_id = team$team_id[1],
+      team_name = team$team.name[1],
+      team_sim = list(reduce(team$sim, `+`))
+    )
+  }) |> 
+  mutate( sim_mean = map_dbl(team_sim, mean),
+          team_name = fct_reorder(team_name, sim_mean) )  |> 
+  unnest(team_sim) |> 
+  ggplot(aes(x=team_sim, y=team_name, fill=team_id)) +
+  geom_density_ridges(scale = 2,
+                      color = "white",
+                      alpha = .7, show.legend = F) +
+  labs(x="Season Points", y="Teams",
+       title="Season Points",subtitle = "Team's starters points projection") +
+  theme_light()
+
+```
+
+## NFL Draft Analysis
+
+```{r draftAnalysis, results="asis"}
+
+out <- draft_recap %>% 
+  split(1:nrow(.)) %>% 
+  map(function(.team, .picks){
+    
+    cat(glue("### <img src='{imageUrl}' style='width: 50px; height: 50px'/> {team}\n\n\n", 
+             team      = .team$teamName,
+             imageUrl  = .team$imageUrl))
+    
+    cat(.team$title)
+    cat("\n\n")
+    cat(.team$text)
+    cat("\n\n")
+    
+    .picks |> 
+      filter(team.id==.team$teamId) |> 
+      select(round, pick, player.name, pos, rank, points) |>
+      kable(format = "html") |> 
+      kable_styling(font_size = 12) |> 
+      cat()
+    
+    cat("\n\n\n")
+    
+  }, .picks=pick_proj)
+
+
+```
