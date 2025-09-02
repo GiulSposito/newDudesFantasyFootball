@@ -7,7 +7,7 @@ library(glue)
 source("./R/api/ffa_league.R")
 config <- yaml::read_yaml("./config/config.yml")
 teams_resp <- ffa_league_teams(config$authToken,config$leagueId)
-year <- 2024
+year <- 2025
 
 # transforma a resposta de lista para dataframe
 teams <- teams_resp$content$games[[1]]$leagues[[1]]$teams %>% 

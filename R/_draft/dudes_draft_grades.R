@@ -1,7 +1,7 @@
 library(tidyverse)
 library(ggridges)
 
-draft_picks <- readRDS("./data/draft_2024_picks.rds") |> 
+draft_picks <- readRDS("./data/draft_2025_picks.rds") |> 
   rename(nfl_id = player.id )
 season_proj <- readRDS("./data/season_projtable.rds") |> 
   filter(avg_type=="robust") |> 

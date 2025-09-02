@@ -5,8 +5,15 @@ score_settings <- yaml::read_yaml("./config/score_settings.yml")
 
 
 preseason_scrap <- scrape_data(pos = c("QB", "RB", "WR", "TE", "DST", "K"),
-                         season = 2024,
+                         season = 2025,
                          week = 0)
+
+
+# checking
+preseason_scrap %>% 
+  map_df(~select(.x, data_src, id), .id="pos") %>% 
+  count(data_src, pos) %>% 
+  pivot_wider(names_from = "pos",values_from="n")
 
 saveRDS(preseason_scrap,"./data/season_scrap.rds")
 
@@ -26,6 +33,6 @@ source("./R/simulation/data_src_proj_table.R")
 season_pp_site <- projections_table_data_sources(preseason_scrap, score_settings)
 
 season_pp_site |>
-  filter(data_src!="FantasySharks") |> 
+  # filter(data_src!="FantasySharks") |> 
   mutate(id=as.integer(id)) |> 
   saveRDS("./data/season_player_proj_sites.rds")
