@@ -125,7 +125,7 @@ WR {data-navmenu="ffanalytics"}
 
 ```{r wr, fig.width=10}
 
-plotProjections(projections, "WR", "Wide Receivers", "week 9",(5*16))
+plotProjections(projections, "WR", "Wide Receivers", "week 9",(6*16))
 
 ```
 
@@ -134,7 +134,7 @@ RB {data-navmenu="ffanalytics"}
 
 ```{r rb, fig.width=10}
 
-plotProjections(projections, "RB", "Running Backs", "week 9", (5*16))
+plotProjections(projections, "RB", "Running Backs", "week 9", (6*16))
 
 ```
 
@@ -143,7 +143,7 @@ TE {data-navmenu="ffanalytics"}
 
 ```{r te, fig.width=10}
 
-plotProjections(projections, "TE", "Tight Ends", "week 9",(3*14))
+plotProjections(projections, "TE", "Tight Ends", "week 9",(4*14))
 
 ```
 
@@ -153,7 +153,7 @@ K {data-navmenu="ffanalytics"}
 
 ```{r k, fig.width=10}
 
-plotProjections(projections, "K", "Kickers", "week 9",(2*14))
+plotProjections(projections, "K", "Kickers", "week 9",(32))
 
 ```
 
@@ -234,7 +234,7 @@ WR {data-navmenu="dudesAnalytics"}
 
 ```{r wr_dfa, fig.width=10}
 
-plotDFAProjections(dudes_projections, "WR",(5*14))
+plotDFAProjections(dudes_projections, "WR",(6*14))
 
 ```
 
@@ -243,7 +243,7 @@ RB {data-navmenu="dudesAnalytics"}
 
 ```{r rb_dfa, fig.width=10}
 
-plotDFAProjections(dudes_projections, "RB", (5*14))
+plotDFAProjections(dudes_projections, "RB", (6*14))
 
 ```
 
@@ -252,7 +252,7 @@ TE {data-navmenu="dudesAnalytics"}
 
 ```{r te_dfa, fig.width=10}
 
-plotDFAProjections(dudes_projections, "TE",(3*14))
+plotDFAProjections(dudes_projections, "TE",(4*14))
 
 ```
 
@@ -262,7 +262,7 @@ K {data-navmenu="dudesAnalytics"}
 
 ```{r k_dfa, fig.width=10}
 
-plotDFAProjections(dudes_projections, "K",(2*14))
+plotDFAProjections(dudes_projections, "K",(32))
 
 ```
 
