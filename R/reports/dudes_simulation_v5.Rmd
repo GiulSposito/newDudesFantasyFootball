@@ -5,8 +5,8 @@ output:
     orientation: rows
     vertical_layout: fill
 params:
-  week: 2
-  prefix: "preMNF"
+  week: 1
+  prefix: "preTNF"
 ---
 
 ```{r setup, include=FALSE}
@@ -162,6 +162,12 @@ Row
 ```{r}
 winGauge(games_summary[7,]$away.teamId,sim_summary)
 winGauge(games_summary[7,]$home.teamId,sim_summary)
+```
+
+### `r games_summary[8,]$game.nickname`
+```{r}
+winGauge(games_summary[8,]$away.teamId,sim_summary)
+winGauge(games_summary[8,]$home.teamId,sim_summary)
 ```
 
 

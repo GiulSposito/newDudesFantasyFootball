@@ -5,7 +5,9 @@ output:
     orientation: columns
     vertical_layout: fill
 params:
-  week: 5
+  week: 1
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +27,7 @@ library(ggrepel)
 
 .week <- params$week
 TEAMS_COLOR_SCALE <- c("grey", "#B3995D","black","#03202F","#0B2265","#fb9a99","#A5ACAF","#0085CA",
-  "#ff7f00","#203731","#6a3d9a","#A71930","#A71930","#FFB612","#004953")
+  "#ff7f00","#203731","#6a3d9a","#A71930","#A71930","#FFB612","#004953","#FF0000", "#00FF00")
 
 ```
 
