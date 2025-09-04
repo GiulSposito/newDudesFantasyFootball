@@ -160,25 +160,25 @@ if (TRUE) { #(week>3) {
 }
 
 # # applica erros de projecao da temporada anterior na projecao da semana
-# if (apply.previous.season.errors) {
-#   
-#   # errors da temporada anterior
-#   s23_proj_errors <- readRDS("./data/season_2023_projections_errors.rds") |> 
-#     select(id, pos, data_src, err_week=week, proj_error=proj.error)
-#   
-#   # aplica todos os erros da temporada anterior e gera 
-#   applied_errors <- ptsproj |>
-#     rename(current_week_proj=pts.proj) |> 
-#     filter(week==.week) |> 
-#     inner_join(s23_proj_errors, by = join_by(data_src, id, pos)) |> 
-#     mutate(data_src=glue("{data_src}_s23_w{err_week}_error"),
-#            pts.proj = current_week_proj + proj_error) |> 
-#     select(week, data_src, id, pos, pts.proj, season)
-#   
-#   # ptsproj 
-#   ptsproj <- ptsproj %>% # projecao dos sites
-#     bind_rows(applied_errors)
-# }
+if (apply.previous.season.errors) {
+
+  # errors da temporada anterior
+  past_proj_errors <- readRDS("./data/season_2024_projections_errors.rds") |>
+    select(id, pos, data_src, err_week=week, proj_error=proj.error)
+
+  # aplica todos os erros da temporada anterior e gera
+  applied_errors <- ptsproj |>
+    rename(current_week_proj=pts.proj) |>
+    filter(week==.week) |>
+    inner_join(past_proj_errors, by = join_by(data_src, id, pos)) |>
+    mutate(data_src=glue("{data_src}_s{season}_w{err_week}_error"),
+           pts.proj = current_week_proj + proj_error) |>
+    select(week, data_src, id, pos, pts.proj, season)
+
+  # ptsproj
+  ptsproj <- ptsproj %>% # projecao dos sites
+    bind_rows(applied_errors)
+}
 
 
 
