@@ -1,5 +1,6 @@
 library(tidyverse)
 library(ggbump)
+library(ggrepel)
 
 picks <- readRDS("./data/draft_2025_picks.rds")
 proj <- readRDS("./data/draft_pick_projections.rds")
@@ -14,10 +15,34 @@ proj |>
   group_by(team.id) |> 
   mutate(points_acc=cumsum(points)) |> 
   ungroup() |> 
-  filter( round <= 10) |> 
+  filter( round <= 5) |> 
   ggplot(aes(x=pick, y=points_acc, group = team.name, colour = team.name)) +
   geom_point() +
   geom_line()
+
+proj |> 
+  ggplot(aes(x=adp, y=pick, colour=team.name)) +
+  geom_point() +
+  ggplot2::stat_smooth(method = "lm", formula = "y~x", se=F) +
+  theme_minimal()
+
+pick_order <- proj |> 
+  filter(round==1) |> 
+  select(team.id, pick) |> 
+  rename(pick_order = pick)
+
+proj |>
+  group_by(team.id) |> 
+  mutate(total_proj = sum(points, na.rm = T)) |>  
+  ungroup() |> 
+  inner_join(pick_order, by="team.id") |> 
+  filter(round==max(round)) |> 
+  ggplot(aes(x=pick_order, y=total_proj, color=team.name)) +
+  geom_point() +
+  geom_text_repel(aes(label=team.name)) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x="Draft Position", y="Season Points Projected")
 
 
 proj |> 
