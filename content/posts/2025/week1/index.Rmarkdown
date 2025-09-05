@@ -21,7 +21,7 @@ resources:
   src: cover_01.jpg
 params:
   week: 1
-  prefix: preTNF
+  prefix: preBR
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -125,6 +125,8 @@ _Last Update: `r lubridate::now()`_
 
 
 - [Matchup Simulations preTNF](/reports/2025/dudes_simulation_v5_week1_preTNF.html)
+- [Matchup Simulations preBrasilGame](/reports/2025/dudes_simulation_v5_week1_preBR.html)
+
 <!--
 - [Matchup Simulations preWaivers](/reports/2025/dudes_simulation_v5_week1_preWaivers.html)
 - [Matchup Simulations posTNF](/reports/2025/dudes_simulation_v5_week1_posTNF.html)
