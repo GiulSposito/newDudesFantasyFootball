@@ -2,8 +2,32 @@ library(tidyverse)
 library(ggbump)
 library(ggrepel)
 
-picks <- readRDS("./data/draft_2025_picks.rds")
+picks <- readRDS("./data/draft_2025_picks.rds") |> 
+  rename(nfl_id=player.id)
 proj <- readRDS("./data/draft_pick_projections.rds")
+
+my_player_ids <- ffanalytics:::player_ids |>
+  mutate( id = as.integer(id), nfl_id = as.integer(nfl_id))
+
+vor_table <- readRDS("./data/season_projtable.rds") |> 
+  filter(avg_type=="robust") |> 
+  arrange(desc(points_vor)) |>
+  select(id, pos, points, floor, ceiling, first_name, last_name, team) |> 
+  mutate(id = as.integer(id)) |> 
+  left_join(my_player_ids, by="id")
+
+
+picks |> 
+  filter(team.id==4)
+
+vor_table |> 
+  anti_join(filter(picks, pick<78), by="nfl_id")
+  
+
+
+vor_picks <- c(14073, 16598, 13132)
+
+
 
 picks |> 
   left_join(proj, by=c("player.id"="nfl_id")) |> 
