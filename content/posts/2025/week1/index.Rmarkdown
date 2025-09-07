@@ -21,7 +21,7 @@ resources:
   src: cover_01.jpg
 params:
   week: 1
-  prefix: preBR
+  prefix: preSundayGames
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -126,13 +126,13 @@ _Last Update: `r lubridate::now()`_
 
 - [Matchup Simulations preTNF](/reports/2025/dudes_simulation_v5_week1_preTNF.html)
 - [Matchup Simulations preBrasilGame](/reports/2025/dudes_simulation_v5_week1_preBR.html)
+- [Matchup Simulations preSundayGames](/reports/2025/dudes_simulation_v5_week1_preSundayGames.html)
 
 <!--
 - [Matchup Simulations preWaivers](/reports/2025/dudes_simulation_v5_week1_preWaivers.html)
 - [Matchup Simulations posTNF](/reports/2025/dudes_simulation_v5_week1_posTNF.html)
 - [Matchup Simulations preMNF](/reports/2025/dudes_simulation_v5_week1_preMNF.html)
 - [Matchup Simulations posWaivers](/reports/2025/dudes_simulation_v5_week1_posWaivers.html)
-- [Matchup Simulations preSundayGames](/reports/2025/dudes_simulation_v5_week1_preSundayGames.html)
 - [Matchup Simulations preSundayGames](/reports/2025/dudes_simulation_v5_week1_preSundayGames.html)
 - [Matchup Simulations preSNF](/reports/2025/dudes_simulation_v5_week1_preSNF.html)
 

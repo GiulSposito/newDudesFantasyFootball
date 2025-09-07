@@ -10,11 +10,11 @@ options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
 week <- 1
-updateScrapProj <- F
+updateScrapProj <- T
+prefix <- "preSundayGames"
 .week<-week
 season <- 2025
 config <- read_yaml("./config/config.yml")
-prefix <- "preBR"
 destPath <- "static/reports/2025"
 rep.version <- 5
 sim.version <- 6
@@ -60,8 +60,8 @@ webScrape <- readRDS(glue("./data/weekly_webscrapes_{week}.rds"))
 # FANTASY: PLAYER STATISTICS ####
 
 # FANTASY API ACCESS CHECK 
-source("./R/import/checkFantasyAPI.R")
-if(!checkFantasyAPI(config$authToken, config$leagueId, week)) stop("Unable to access Fantasy API!")
+# source("./R/import/checkFantasyAPI.R")
+# if(!checkFantasyAPI(config$authToken, config$leagueId, week)) stop("Unable to access Fantasy API!")
 
 # PLAYERS
 source("./R/api/ffa_players.R")
