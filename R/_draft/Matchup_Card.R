@@ -4,15 +4,16 @@ library(htmltools)
 
 # EXEMPLO de dados (substitua pelos seus)
 matchup <- tibble::tibble(
-  handle        = c("@GiulDizzyBR", "@ltogniolli"),
-  team          = c("Monte Alegre", "Paulinia Rockets"),
-  score_current = c(8.00, 18.00),
-  projection    = c(134.05, 138.84),
-  win_prob      = c(0.47, 0.53),     # 0 a 1
+  handle        = c("@Giuliano", "@Abdala"),
+  team          = c("Amparo Bikers", "Indaiatuba Pats"),
+  score_current = c(35, 3),
+  projection    = c(118.4, 110.8),
+  win_prob      = c(0.61, 0.39),     # 0 a 1
+  compl         = c(3/9, 1/9), 
   record        = c("0-0", "0-0"),
   image_url     = c(
-    "https://placehold.co/80x80/png?text=A",
-    "https://placehold.co/80x80/png?text=B"
+    "https://static.www.nfl.com/league/apps/fantasy/logos/avatar/240x240/SF_1.png",
+    "https://fantasy.nfl.com/image/81e9ca9e01ac58835b2c263bb1e39f3f.jpg?&x=50&y=50"
   )
 )
 
@@ -38,7 +39,7 @@ render_matchup <- function(df, file = "matchup.html") {
              tags$div(class = "barwrap",
                       tags$div(class = "bar",
                                tags$div(class = "fill",
-                                        style = paste0("width:", round(row$win_prob*100), "%;"))
+                                        style = paste0("width:", round(row$compl*100), "%;"))
                       ),
                       tags$div(class = "under",
                                tags$span(class = "record", row$record),
@@ -114,4 +115,4 @@ render_matchup <- function(df, file = "matchup.html") {
 }
 
 # gerar o HTML
-render_matchup(matchup, "./export/matchup.html")
+render_matchup(matchup, "./static/reports/2025/matchups.html")
