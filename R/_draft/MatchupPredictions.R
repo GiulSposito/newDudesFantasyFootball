@@ -115,13 +115,13 @@ render_matchup <- function(df, file = "matchup.html") {
     tags$div(class = paste("team", side),
              tags$div(class = "row1",
                       tags$img(src = row$image_url, class = "avatar", alt = row$team),
-                      tags$div(class = "score", sprintf("%.2f", row$score_current))
+                      tags$div(class = "score", sprintf("%.1f", row$score_current))
              ),
              tags$div(class = "handle", row$handle),
              tags$div(class = "team-name", row$team),
              tags$div(class = "proj",
                       tags$span("Proj."),
-                      tags$span(class = "num", sprintf(" %.2f", row$projection))
+                      tags$span(class = "num", sprintf(" %.1f", row$projection))
              ),
              tags$div(class = "barwrap",
                       tags$div(class = "bar",
