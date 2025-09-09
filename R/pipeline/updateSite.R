@@ -9,9 +9,9 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
-week <- 1
-updateScrapProj <- F
-prefix <- "preMNF"
+week <- 2
+updateScrapProj <- T
+prefix <- "preWaivers"
 .week<-week
 season <- 2025
 config <- read_yaml("./config/config.yml")

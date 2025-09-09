@@ -4,8 +4,8 @@ library(glue)
 
 library(htmltools)
 
-.week <- 1
-.prefix <- "preMNF"
+.week <- 2
+.prefix <- "preWaivers"
 
 sim <- readRDS(glue("./data/simulation_v5_week{.week}_{.prefix}.rds"))
 
