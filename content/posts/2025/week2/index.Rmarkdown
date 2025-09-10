@@ -21,7 +21,7 @@ resources:
   src: cover_02.jpg
 params:
   week: 2
-  prefix: preWaivers
+  prefix: posWaivers
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -124,6 +124,7 @@ _Last Update: `r lubridate::now()`_
 ## Simulation
 
 - [Matchup Simulations preWaivers](/reports/2025/dudes_simulation_v5_week2_preWaivers.html)
+- [Matchup Simulations posWaivers](/reports/2025/dudes_simulation_v5_week2_posWaivers.html)
 <!--
 
 - [Matchup Simulations preTNF](/reports/2025/dudes_simulation_v5_week2_preTNF.html)
@@ -134,7 +135,7 @@ _Last Update: `r lubridate::now()`_
 
 - [Matchup Simulations posTNF](/reports/2025/dudes_simulation_v5_week2_posTNF.html)
 
-- [Matchup Simulations posWaivers](/reports/2025/dudes_simulation_v5_week2_posWaivers.html)
+
 - [Matchup Simulations preSundayGames](/reports/2025/dudes_simulation_v5_week2_preSundayGames.html)
 - [Matchup Simulations preSNF](/reports/2025/dudes_simulation_v5_week2_preSNF.html)
 
