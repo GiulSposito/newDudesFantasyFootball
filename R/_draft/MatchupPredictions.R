@@ -1,11 +1,9 @@
-
 library(tidyverse)
 library(glue)
-
 library(htmltools)
 
 .week <- 2
-.prefix <- "posWaivers"
+.prefix <- "preTNF"
 
 sim <- readRDS(glue("./data/simulation_v5_week{.week}_{.prefix}.rds"))
 
