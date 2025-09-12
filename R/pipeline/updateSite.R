@@ -10,8 +10,8 @@ options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
 week <- 2
-updateScrapProj <- T
-prefix <- "preTNF"
+updateScrapProj <- F
+prefix <- "posTNF"
 .week<-week
 season <- 2025
 config <- read_yaml("./config/config.yml")
@@ -277,7 +277,8 @@ if (prefix=="final") {
     saveRDS(glue("./data/rank_week{week}.rds"))
 }
 
-
+source("./R/reports/MatchupPredictionsPanel.R")
+generateMatchupPredictionPanel(week, prefix)
 blogdown::build_site(build_rmd = "timestamp")
 
 
