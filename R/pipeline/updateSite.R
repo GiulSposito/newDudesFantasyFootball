@@ -10,7 +10,7 @@ options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
 week <- 4
-updateScrapProj <- T
+updateScrapProj <- F
 prefix <- "preDublinGame"
 .week<-week
 season <- 2025
