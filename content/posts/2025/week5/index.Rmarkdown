@@ -18,7 +18,7 @@ resources:
 - name: featuredImage
   params:
     description: NFL Kickoff
-  src: cover.jpg
+  src: cover_01.jpg
 params:
   week: 5
   prefix: preWaivers
