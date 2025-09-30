@@ -205,7 +205,8 @@ generateMatchupPredictionPanel <- function(.week, .prefix) {
            away.winProb, away.played, away.players, away.pred.Pts, 
            home.winProb, home.played, home.players, home.pred.Pts) |> 
     mutate(
-      across(c(away.points, home.points, away.pred.Pts, home.pred.Pts), round, digits=1),
+      across(c(away.points, home.points, away.pred.Pts, home.pred.Pts),
+             \(x) round(x, digits=1))
       # across(c(away.winProb, home.winProb), function(.x){ paste0(round(100*.x),"%") })
     )
   
