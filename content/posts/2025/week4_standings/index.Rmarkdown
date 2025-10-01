@@ -104,8 +104,8 @@ ranking %>%
   geom_bump(aes(color=team), smooth = 10, size=1.5, lineend="round", alpha=.5) +
   geom_image(aes(image=imageUrl), size=.04) +
   geom_text(aes(label=record), size=2.5, color="black", nudge_y = -.40) +
-  geom_hline(yintercept = 6.5, linetype="dashed", size=1, color="darkgrey") +
-  geom_text(x=1.2, y=6.65, label="playoff clinch", size=3, color="darkgrey") +
+  geom_hline(yintercept = 8.5, linetype="dashed", size=1, color="darkgrey") +
+  geom_text(x=1.2, y=8.75, label="playoff clinch", size=3, color="darkgrey") +
   scale_colour_manual(values = TEAMS_COLOR_SCALE) +
   ylab("rank") +
   theme_void() +
