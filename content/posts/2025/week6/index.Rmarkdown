@@ -21,7 +21,8 @@ resources:
   src: cover_02.jpg
 params:
   week: 6
-  prefix: preWaivers
+  season: 2025
+  prefix: posWaivers
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -46,6 +47,7 @@ library(tidyverse)
 library(glue)
 
 .week <- params$week
+.season <- params$season
 .prefix <- params$prefix
 
 sim <- readRDS(glue("./data/simulation_v5_week{.week}_{.prefix}.rds"))
@@ -125,8 +127,31 @@ _Last Update: `r lubridate::now()`_
 
 ## Simulation
 
-- [Matchup Simulations preWaivers](/reports/2025/dudes_simulation_v5_week6_preWaivers.html)
+```{r results="asis"}
+# le os arquivos de simulacao da pasta de report
+path <- glue("./static/reports/{.season}")
+files <- list.files(path, 
+           pattern = glue(".*simulation.+week{.week}.+"),
+           full.names = T)
+
+# pega dados de criacao update do arquivo
+info <- file.info(files)
+
+# ordena pela data de criacao (do mais velho para o mais novo) e 
+# percorre a lista gerando os links
+out <- files[order(info$mtime)] |> 
+  map(
+    function(filename){
+      print(glue(" - [Matchup Simulations {.prefix}]({filename})\n")) 
+    }
+  )
+
+
+```
+
+
 <!--
+- [Matchup Simulations preWaivers](/reports/2025/dudes_simulation_v5_week6_preWaivers.html)
 - [Matchup Simulations preWaivers](/reports/2025/dudes_simulation_v5_week6_posWaivers.html)
 - [Matchup Simulations posTNF](/reports/2025/dudes_simulation_v5_week6_posTNF.html)
 - [Matchup Simulations preMNF](/reports/2025/dudes_simulation_v5_week6_preMNF.html)

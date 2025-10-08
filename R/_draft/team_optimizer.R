@@ -3,7 +3,7 @@ library(glue)
 # library(fitdistrplus)
 
 .team <- "Amparo Bikers"
-.week <- 4
+.week <- 5
 # 
 # # dados dos jogadores
 # players <- 2:4 |>
@@ -155,25 +155,25 @@ starters <- tibble(
   map_df(function(.x, .players){
     .players %>% 
       filter(pos==.x$pos) %>%
-      slice_max(points, n=.x$qtd)
+      slice_max(weekSeasonPts, n=.x$qtd)
   }, .players=players_proj)
 
 starters <- players_proj %>% 
   filter(pos %in% c("WR","RB")) %>% 
   anti_join(starters, by=c("id","pos")) %>% 
-  slice_max(points, n=1) %>% 
+  slice_max(weekSeasonPts, n=1) %>% 
   bind_rows(starters,.)
 
 ## bench
 bench <- tibble(
-  pos=c("RB","WR","TE"),
-  qtd=c(2,3,1)
+  pos=c("QB", "RB","WR","TE"),
+  qtd=c(1, 2,2,1)
 ) %>% 
   split(1:nrow(.)) %>% 
   map_df(function(.x, .players){
     .players %>% 
       filter(pos==.x$pos) %>% 
-      slice_max(points, n=.x$qtd)
+      slice_max(weekSeasonPts, n=.x$qtd)
   }, .players = anti_join(players_proj, starters, by=c("id","pos")) )
 
 # releases
