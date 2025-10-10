@@ -130,22 +130,23 @@ _Last Update: `r lubridate::now()`_
 ```{r results="asis"}
 # le os arquivos de simulacao da pasta de report
 path <- glue("./static/reports/{.season}")
-files <- list.files(path, 
-           pattern = glue(".*simulation.+week{.week}.+"),
-           full.names = T)
+files <- list.files(path,
+                    pattern = glue(".*simulation.+week{.week}.+"),
+                    full.names = T)
 
 # pega dados de criacao update do arquivo
 info <- file.info(files)
 
-# ordena pela data de criacao (do mais velho para o mais novo) e 
+# ordena pela data de criacao (do mais velho para o mais novo) e
 # percorre a lista gerando os links
-out <- files[order(info$mtime)] |> 
-  map(
-    function(filename){
-      print(glue(" - [Matchup Simulations {.prefix}]({filename})\n")) 
-    }
-  )
-
+out <- files[order(info$mtime)] |>
+  str_replace("\\./static", "") |> 
+  map(function(filename) {
+    tag <- filename |>
+      str_extract("_([^_]+)\\.html$") |>
+      str_remove("_") 
+    print(glue(" - [Matchup Simulations {tag}]({filename})\n"))
+  })
 
 ```
 
