@@ -130,7 +130,7 @@ ffa_extractPlayersStats <- function(playersStatsResp){
     })) %>% 
     hoist(advanced, rankAgainstPosition = c("opponent","rankAgainstPosition")) 
   
-  stats_pt1 |> 
+  stats_pt2 <- stats_pt1 |> 
     mutate( weekPts = map(weekStats, function(wp){
       wp %>% 
         map(~ purrr::pluck(.x, "pts", .default = NA)) %>% 
@@ -144,7 +144,27 @@ ffa_extractPlayersStats <- function(playersStatsResp){
           weekSeasonPts = if_else(is.na(weekPts), 0, weekPts),
           weekSeasonPts = cumsum(weekSeasonPts)) %>% 
         select(week, weekPts, weekSeasonPts)
-    })) %>% 
+    }))
+  
+  # em alguns casos a api esta retornando uma lista
+  # esse codigo transoforma a lista em um array inteiro
+  if (class(stats_pt2$rankAgainstPosition)=="list") {
+
+    # percorre a lista voltando um vetor de int
+    rap_int <- stats_pt2$rankAgainstPosition %>%
+      map_int(function(.val){
+        # transforma NULL em NA_INT
+        if(is.null(.val)){
+          return(NA_integer_)
+        } else
+          return(as.integer(.val))
+      })
+    
+    stats_pt2$rankAgainstPosition <- rap_int
+
+  }
+  
+  stats_pt2 %>% 
     mutate(across(c(playerId, nflTeamId, byeWeek, rankAgainstPosition), as.integer)) %>% 
     return()
   

@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 # EXECUTION PARAMETERS ####
 week <- 7
 updateScrapProj <- F
-prefix <- "preSNF"
+prefix <- "preMNF"
 .week<-week
 season <- 2025
 config <- read_yaml("./config/config.yml")
@@ -65,6 +65,7 @@ webScrape <- readRDS(glue("./data/weekly_webscrapes_{week}.rds"))
 
 # PLAYERS
 source("./R/api/ffa_players.R")
+
 players_stats <- ffa_players_stats(config$authToken, config$leagueId, season, 1:week) %>%  
   ffa_extractPlayersStats()
 
