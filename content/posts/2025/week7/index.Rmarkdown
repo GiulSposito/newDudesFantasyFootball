@@ -22,7 +22,7 @@ resources:
 params:
   week: 7
   season: 2025
-  prefix: preLondon
+  prefix: preSNF
 ---
 
 _Last Update: `r lubridate::now()`_
