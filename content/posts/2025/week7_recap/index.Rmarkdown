@@ -1,5 +1,5 @@
 ---
-title: 'Week 6 | Matchups Recap and Teams Performances'
+title: 'Week 7 | Matchups Recap and Teams Performances'
 author: Giuliano Sposito
 date: '2025-10-21T01:00:00-03:00'
 slug: s25_w07_recap
