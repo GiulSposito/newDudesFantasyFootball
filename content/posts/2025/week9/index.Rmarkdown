@@ -22,7 +22,7 @@ resources:
 params:
   week: 9
   season: 2025
-  prefix: preWaivers
+  prefix: posWaivers
 ---
 
 _Last Update: `r lubridate::now()`_
