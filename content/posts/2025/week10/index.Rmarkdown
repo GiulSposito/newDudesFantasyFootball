@@ -22,7 +22,7 @@ resources:
 params:
   week: 10
   season: 2025
-  prefix: preWaivers
+  prefix: posWaivers
 ---
 
 _Last Update: `r lubridate::now()`_
@@ -122,7 +122,10 @@ _Last Update: `r lubridate::now()`_
  
 ## Projections
 
-- [Individual Players Projections](/reports/2025/ffa_players_projection_week7.html)
+```{r results="asis"}
+print("- [Individual Players Projections](/reports/2025/ffa_players_projection_week{.week}.html)")
+```
+
 
 ## Simulation
 
