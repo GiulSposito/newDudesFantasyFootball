@@ -123,7 +123,7 @@ _Last Update: `r lubridate::now()`_
 ## Projections
 
 ```{r results="asis"}
-print("- [Individual Players Projections](/reports/2025/ffa_players_projection_week{.week}.html)")
+print(glue(" - [Individual Players Projections](/reports/2025/ffa_players_projection_week{.week}.html)"))
 ```
 
 
