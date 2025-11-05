@@ -134,7 +134,7 @@ resp %>%
   # geom_line(aes(color=teamName), size=2, alpha=.6) +
   geom_bump(aes(color=teamName), smooth = 10, size=1.5, lineend="round", alpha=.6) +
   geom_image(aes(image=imageUrl), size=.04) +
-  geom_text(aes(label=cum_gain), size=2.5, color="black", nudge_y = -.33) +
+  geom_text(aes(label=cum_gain), size=2.5, color="black", nudge_y = -.45) +
   scale_colour_manual(values = TEAMS_COLOR_SCALE) +
   ylab("rank") +
   theme_void()
@@ -256,7 +256,7 @@ rank_history %>%
   # geom_line(aes(color=team), size=2) +
   geom_bump(aes(color=team), smooth = 10, size=1.5, lineend="round", alpha=.7) +
   geom_image(aes(image=imageUrl), size=.04) +
-  geom_text(aes(label=cum_balance), size=2.5, color="black", nudge_y = -.33) +
+  geom_text(aes(label=cum_balance), size=2.5, color="black", nudge_y = -.45) +
   scale_colour_manual(values = TEAMS_COLOR_SCALE) +
   ylab("rank") +
   labs(title="Saldo de pontos dos jogadores negociados") +
