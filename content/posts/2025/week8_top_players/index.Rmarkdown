@@ -17,7 +17,7 @@ resources:
   params:
     description: cover
 params:
-  week: 7
+  week: 8
   ranksize: 20
 ---
 
