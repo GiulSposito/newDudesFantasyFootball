@@ -22,7 +22,7 @@ resources:
 params:
   week: 11
   season: 2025
-  prefix: preTNF
+  prefix: preMNF
 ---
 
 _Last Update: `r lubridate::now()`_
