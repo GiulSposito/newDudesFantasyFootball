@@ -2,7 +2,7 @@
 title: 'Week 11 | Fantasy Top Players'
 author: "Giuliano Sposito"
 date: '2025-11-18T03:00:00-03:00'
-slug: s25_w10_top_players
+slug: s25_w11_top_players
 categories:
   - ranking
 tags:
