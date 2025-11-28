@@ -25,7 +25,7 @@ params:
   prefix: posThanksgiving
 ---
 
-_Last Update: `r lubridate::now()`_
+_Last Update: `r format(lubridate::now(), "%Y-%m-%d %H:%M")`_
 
 <!--more-->
 
