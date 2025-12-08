@@ -22,7 +22,7 @@ resources:
 params:
   week: 14
   season: 2025
-  prefix: preSundayGames
+  prefix: preMNF
 ---
 
 _Last Update: `r format(lubridate::now(), "%Y-%m-%d %H:%M")`_
