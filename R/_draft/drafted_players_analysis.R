@@ -8,7 +8,7 @@ pts <- readRDS("./data/players_points.rds")
 draftTeams <- pts |>
   select(playerId, name, position, week, weekPts, weekSeasonPts) |> 
   inner_join(drafted, by=c("playerId"="player.id")) |> 
-  filter(week==9) 
+  filter(week==14) 
 
 
 getBestTeam <- function(teamPlayers){
@@ -38,7 +38,7 @@ pickRank <- drafted |>
   distinct(pick, team.id)
 
 bestDraftTeam <- draftTeams |> 
-  filter(week==9) |> 
+  filter(week==14) |> 
   group_by(team.id, team.name) |> 
   nest() |> 
   mutate( bestTeam = map(data, getBestTeam),
@@ -54,7 +54,7 @@ bestDraftTeam |>
   coord_flip() +
   theme( legend.position = "none" ) +
   labs(title="Drafted Teams", 
-       subtitle="Best roster configuration of a drafted players by Season Points on Week 9")
+       subtitle="Best roster configuration of a drafted players by Season Points on Week 14")
 
 
 bestDraftTeam |> 
@@ -69,9 +69,9 @@ bestDraftTeam |>
        subtitle="Season Points against Pick Order",
        x="Pick Order")
 
-rankW9 <- readRDS("./data/rank_week9.rds")
+rankW14 <- readRDS("./data/rank_week14.rds")
 
-rankW9 |>
+rankW14 |>
   inner_join(pickRank, c("teamId"="team.id")) |> 
   select(name, season.pts, pick, rank, wins) |> 
   ggplot(aes(x=pick, y=wins, color=name, group=1)) +
@@ -81,13 +81,13 @@ rankW9 |>
   theme_light() +
   theme(legend.position = "none")
 
-rankW9 |>
+rankW14 |>
   inner_join(pickRank, c("teamId"="team.id")) |> 
   select(name, season.pts, pick, rank, wins) |> 
   lm(wins~pick, data=_) |> 
   summary()
 
-rankW9 |>
+rankW14 |>
   inner_join(bestDraftTeam, c("teamId"="team.id")) |> 
   ggplot(aes(x=points, y=season.pts, color=name)) +
   geom_point() +
@@ -97,10 +97,22 @@ rankW9 |>
   theme(legend.position = "none") +
   labs(y="current points", x="drafted points")
 
-rankW9 |>
+rankW14 |>
   inner_join(pickRank, c("teamId"="team.id")) |> 
   mutate(name = fct_reorder(name, pick)) |> 
   ggplot(aes(x=name, y=season.pts)) +
   geom_col(aes(fill=name)) +
   theme_light() +
-  theme(legend.position="none")
+  theme(axis.text = element_text(angle=45, hjust = 1),
+        legend.position="none") +
+  labs(title="Season Points", 
+       subtitle="Season Points against Pick Order",
+       x="Pick Order")
+
+
+
+draftTeams |> 
+  ggplot(aes(pick, weekSeasonPts)) +
+  geom_point(aes(color=position)) +
+  geom_line(color="grey") +
+  theme_minimal()

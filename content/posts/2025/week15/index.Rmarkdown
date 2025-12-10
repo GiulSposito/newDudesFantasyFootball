@@ -22,7 +22,7 @@ resources:
 params:
   week: 15
   season: 2025
-  prefix: preWaivers
+  prefix: posWaivers
 ---
 
 _Last Update: `r format(lubridate::now(), "%Y-%m-%d %H:%M")`_
