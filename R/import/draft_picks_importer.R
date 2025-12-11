@@ -37,4 +37,4 @@ draft <- tibble(
   team.name   = teamNames
 )
 
-saveRDS(draft, "./data/draft_2025_picks.rds")
+saveRDS(draft, "./data/draft_picks.rds")
