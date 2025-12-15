@@ -11,7 +11,7 @@ options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 # EXECUTION PARAMETERS ####
 week <- 15
 updateScrapProj <- F
-prefix <- "posTNF"
+prefix <- "preMNF"
 .week<-week
 season <- 2025
 config <- read_yaml("./config/config.yml")
