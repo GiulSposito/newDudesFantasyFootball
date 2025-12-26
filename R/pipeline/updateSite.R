@@ -9,9 +9,9 @@ library(yaml)
 options(dplyr.summarise.inform = FALSE, blogdown.server.timeout = 600)
 
 # EXECUTION PARAMETERS ####
-week <- 16
-updateScrapProj <- F
-prefix <- "preMNF"
+week <- 17
+updateScrapProj <- T
+prefix <- "posTNF"
 .week<-week
 season <- 2025
 config <- read_yaml("./config/config.yml")
@@ -56,6 +56,12 @@ if (updateScrapProj) {
 # RECOVER PROJECTIONS ####
 proj_table <- readRDS(glue("./data/weekly_proj_table_{week}.rds"))
 webScrape <- readRDS(glue("./data/weekly_webscrapes_{week}.rds"))
+
+# checking
+webScrape %>% 
+  map_df(~select(.x, data_src, id), .id="pos") %>% 
+  count(data_src, pos) %>% 
+  pivot_wider(names_from = "pos",values_from="n")
 
 # FANTASY: PLAYER STATISTICS ####
 
