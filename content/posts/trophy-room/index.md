@@ -1,7 +1,7 @@
 ---
 title: "Trophy Room"
 author: "Giuliano Sposito"
-date: '2024-12-31T12:05:00-03:00'
+date: '2025-12-30T12:05:00-03:00'
 slug: it-s-football-dudes-trophy-room
 displayInList: yes
 displayInMenu: yes
@@ -19,6 +19,16 @@ resources:
 ---
 
 <!--more-->
+
+### Season 2025
+
+<span class="emoji">🏆</span> 1st Place: **Indaiatuba Pats** (Abdala)<br/>
+<span class="emoji">🥈</span> 2nd Place: **Limeira Jetsons** (Roander)<br/>
+<span class="emoji">🥉</span> 3rd Place: **Sorocaba Wild Mules** (Hilton)<br/>
+<br/>
+<span class="emoji">🥇️</span> Reg Season 1st Place: **Paulinia Robots** (Leonel)<br/>
+<span class="emoji">🎖</span> Highest Scoring: **Paulinia Robots** (Leonel)<br/>
+<span class="emoji">🏅</span> Survival Winner: **Sorocaba Wild Mules** (Hilton)<br/>
 
 ### Season 2024
 
